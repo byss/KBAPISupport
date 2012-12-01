@@ -1,0 +1,411 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		43CCF0C8166A15CA003EAE42 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CCF0C7166A15CA003EAE42 /* UIKit.framework */; };
+		43CCF0CA166A15CA003EAE42 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CCF0C9166A15CA003EAE42 /* Foundation.framework */; };
+		43CCF0CC166A15CA003EAE42 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CCF0CB166A15CA003EAE42 /* CoreGraphics.framework */; };
+		43CCF0D2166A15CA003EAE42 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43CCF0D0166A15CA003EAE42 /* InfoPlist.strings */; };
+		43CCF0D4166A15CA003EAE42 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF0D3166A15CA003EAE42 /* main.m */; };
+		43CCF0D8166A15CA003EAE42 /* ADAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF0D7166A15CA003EAE42 /* ADAppDelegate.m */; };
+		43CCF0DA166A15CA003EAE42 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 43CCF0D9166A15CA003EAE42 /* Default.png */; };
+		43CCF0DC166A15CA003EAE42 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 43CCF0DB166A15CA003EAE42 /* Default@2x.png */; };
+		43CCF0DE166A15CA003EAE42 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 43CCF0DD166A15CA003EAE42 /* Default-568h@2x.png */; };
+		43CCF0F9166A167A003EAE42 /* KBAPIConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF0F0166A167A003EAE42 /* KBAPIConnection.m */; };
+		43CCF0FA166A167A003EAE42 /* KBAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF0F2166A167A003EAE42 /* KBAPIRequest.m */; };
+		43CCF0FB166A167A003EAE42 /* KBEntityList.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF0F6166A167A003EAE42 /* KBEntityList.m */; };
+		43CCF0FC166A167A003EAE42 /* KBNetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF0F8166A167A003EAE42 /* KBNetworkIndicator.m */; };
+		43CCF102166A1738003EAE42 /* ADViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF100166A1738003EAE42 /* ADViewController.m */; };
+		43CCF103166A1738003EAE42 /* ADViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43CCF101166A1738003EAE42 /* ADViewController.xib */; };
+		43CCF108166A18EA003EAE42 /* WPArticleHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF107166A18EA003EAE42 /* WPArticleHeader.m */; };
+		43CCF10B166A3F10003EAE42 /* WPOpenSearchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF10A166A3F10003EAE42 /* WPOpenSearchRequest.m */; };
+		43CCF10E166A3FC6003EAE42 /* WPHeadersList.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF10D166A3FC6003EAE42 /* WPHeadersList.m */; };
+		43CCF113166A41DB003EAE42 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF112166A41DB003EAE42 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		43CCF115166A4A8D003EAE42 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CCF114166A4A8C003EAE42 /* libxml2.dylib */; };
+		43CCF118166A4C81003EAE42 /* GDataXMLElement+stuff.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF117166A4C80003EAE42 /* GDataXMLElement+stuff.m */; };
+		43CCF11B166A6AA6003EAE42 /* NSString+stuff.m in Sources */ = {isa = PBXBuildFile; fileRef = 43CCF11A166A6AA5003EAE42 /* NSString+stuff.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		43CCF0C3166A15CA003EAE42 /* KBAPISupport-ARC-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KBAPISupport-ARC-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		43CCF0C7166A15CA003EAE42 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		43CCF0C9166A15CA003EAE42 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		43CCF0CB166A15CA003EAE42 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		43CCF0CF166A15CA003EAE42 /* KBAPISupport-ARC-Demo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KBAPISupport-ARC-Demo-Info.plist"; sourceTree = "<group>"; };
+		43CCF0D1166A15CA003EAE42 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43CCF0D3166A15CA003EAE42 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		43CCF0D5166A15CA003EAE42 /* KBAPISupport-ARC-Demo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KBAPISupport-ARC-Demo-Prefix.pch"; sourceTree = "<group>"; };
+		43CCF0D6166A15CA003EAE42 /* ADAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADAppDelegate.h; sourceTree = "<group>"; };
+		43CCF0D7166A15CA003EAE42 /* ADAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ADAppDelegate.m; sourceTree = "<group>"; };
+		43CCF0D9166A15CA003EAE42 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		43CCF0DB166A15CA003EAE42 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		43CCF0DD166A15CA003EAE42 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		43CCF0EF166A167A003EAE42 /* KBAPIConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPIConnection.h; sourceTree = "<group>"; };
+		43CCF0F0166A167A003EAE42 /* KBAPIConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAPIConnection.m; sourceTree = "<group>"; };
+		43CCF0F1166A167A003EAE42 /* KBAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPIRequest.h; sourceTree = "<group>"; };
+		43CCF0F2166A167A003EAE42 /* KBAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAPIRequest.m; sourceTree = "<group>"; };
+		43CCF0F3166A167A003EAE42 /* KBAPISupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPISupport.h; sourceTree = "<group>"; };
+		43CCF0F4166A167A003EAE42 /* KBEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBEntity.h; sourceTree = "<group>"; };
+		43CCF0F5166A167A003EAE42 /* KBEntityList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBEntityList.h; sourceTree = "<group>"; };
+		43CCF0F6166A167A003EAE42 /* KBEntityList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBEntityList.m; sourceTree = "<group>"; };
+		43CCF0F7166A167A003EAE42 /* KBNetworkIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBNetworkIndicator.h; sourceTree = "<group>"; };
+		43CCF0F8166A167A003EAE42 /* KBNetworkIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBNetworkIndicator.m; sourceTree = "<group>"; };
+		43CCF0FF166A1738003EAE42 /* ADViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADViewController.h; sourceTree = "<group>"; };
+		43CCF100166A1738003EAE42 /* ADViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADViewController.m; sourceTree = "<group>"; };
+		43CCF101166A1738003EAE42 /* ADViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ADViewController.xib; sourceTree = "<group>"; };
+		43CCF106166A18EA003EAE42 /* WPArticleHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPArticleHeader.h; path = Data/WPArticleHeader.h; sourceTree = "<group>"; };
+		43CCF107166A18EA003EAE42 /* WPArticleHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPArticleHeader.m; path = Data/WPArticleHeader.m; sourceTree = "<group>"; };
+		43CCF109166A3F10003EAE42 /* WPOpenSearchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPOpenSearchRequest.h; path = Network/WPOpenSearchRequest.h; sourceTree = "<group>"; };
+		43CCF10A166A3F10003EAE42 /* WPOpenSearchRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPOpenSearchRequest.m; path = Network/WPOpenSearchRequest.m; sourceTree = "<group>"; };
+		43CCF10C166A3FC5003EAE42 /* WPHeadersList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPHeadersList.h; path = Data/WPHeadersList.h; sourceTree = "<group>"; };
+		43CCF10D166A3FC6003EAE42 /* WPHeadersList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPHeadersList.m; path = Data/WPHeadersList.m; sourceTree = "<group>"; };
+		43CCF111166A41DB003EAE42 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
+		43CCF112166A41DB003EAE42 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		43CCF114166A4A8C003EAE42 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		43CCF116166A4C7F003EAE42 /* GDataXMLElement+stuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GDataXMLElement+stuff.h"; sourceTree = "<group>"; };
+		43CCF117166A4C80003EAE42 /* GDataXMLElement+stuff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GDataXMLElement+stuff.m"; sourceTree = "<group>"; };
+		43CCF119166A6AA5003EAE42 /* NSString+stuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+stuff.h"; path = "Data/NSString+stuff.h"; sourceTree = "<group>"; };
+		43CCF11A166A6AA5003EAE42 /* NSString+stuff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+stuff.m"; path = "Data/NSString+stuff.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		43CCF0C0166A15C9003EAE42 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43CCF115166A4A8D003EAE42 /* libxml2.dylib in Frameworks */,
+				43CCF0C8166A15CA003EAE42 /* UIKit.framework in Frameworks */,
+				43CCF0CA166A15CA003EAE42 /* Foundation.framework in Frameworks */,
+				43CCF0CC166A15CA003EAE42 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		43CCF0B8166A15C9003EAE42 = {
+			isa = PBXGroup;
+			children = (
+				43CCF0CD166A15CA003EAE42 /* KBAPISupport-ARC-Demo */,
+				43CCF0C6166A15CA003EAE42 /* Frameworks */,
+				43CCF10F166A41DB003EAE42 /* ThirdParty */,
+				43CCF0C4166A15CA003EAE42 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		43CCF0C4166A15CA003EAE42 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				43CCF0C3166A15CA003EAE42 /* KBAPISupport-ARC-Demo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		43CCF0C6166A15CA003EAE42 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				43CCF0EE166A167A003EAE42 /* Source */,
+				43CCF0C7166A15CA003EAE42 /* UIKit.framework */,
+				43CCF0C9166A15CA003EAE42 /* Foundation.framework */,
+				43CCF0CB166A15CA003EAE42 /* CoreGraphics.framework */,
+				43CCF114166A4A8C003EAE42 /* libxml2.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		43CCF0CD166A15CA003EAE42 /* KBAPISupport-ARC-Demo */ = {
+			isa = PBXGroup;
+			children = (
+				43CCF0D6166A15CA003EAE42 /* ADAppDelegate.h */,
+				43CCF0D7166A15CA003EAE42 /* ADAppDelegate.m */,
+				43CCF105166A18A7003EAE42 /* Data */,
+				43CCF104166A1892003EAE42 /* Network */,
+				43CCF0FE166A1738003EAE42 /* View */,
+				43CCF0CE166A15CA003EAE42 /* Supporting Files */,
+			);
+			path = "KBAPISupport-ARC-Demo";
+			sourceTree = "<group>";
+		};
+		43CCF0CE166A15CA003EAE42 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				43CCF0CF166A15CA003EAE42 /* KBAPISupport-ARC-Demo-Info.plist */,
+				43CCF0D0166A15CA003EAE42 /* InfoPlist.strings */,
+				43CCF0D3166A15CA003EAE42 /* main.m */,
+				43CCF0D5166A15CA003EAE42 /* KBAPISupport-ARC-Demo-Prefix.pch */,
+				43CCF0D9166A15CA003EAE42 /* Default.png */,
+				43CCF0DB166A15CA003EAE42 /* Default@2x.png */,
+				43CCF0DD166A15CA003EAE42 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		43CCF0EE166A167A003EAE42 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				43CCF0F3166A167A003EAE42 /* KBAPISupport.h */,
+				43CCF116166A4C7F003EAE42 /* GDataXMLElement+stuff.h */,
+				43CCF117166A4C80003EAE42 /* GDataXMLElement+stuff.m */,
+				43CCF0EF166A167A003EAE42 /* KBAPIConnection.h */,
+				43CCF0F0166A167A003EAE42 /* KBAPIConnection.m */,
+				43CCF0F1166A167A003EAE42 /* KBAPIRequest.h */,
+				43CCF0F2166A167A003EAE42 /* KBAPIRequest.m */,
+				43CCF0F4166A167A003EAE42 /* KBEntity.h */,
+				43CCF0F5166A167A003EAE42 /* KBEntityList.h */,
+				43CCF0F6166A167A003EAE42 /* KBEntityList.m */,
+				43CCF0F7166A167A003EAE42 /* KBNetworkIndicator.h */,
+				43CCF0F8166A167A003EAE42 /* KBNetworkIndicator.m */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		43CCF0FE166A1738003EAE42 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				43CCF0FF166A1738003EAE42 /* ADViewController.h */,
+				43CCF100166A1738003EAE42 /* ADViewController.m */,
+				43CCF101166A1738003EAE42 /* ADViewController.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		43CCF104166A1892003EAE42 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				43CCF109166A3F10003EAE42 /* WPOpenSearchRequest.h */,
+				43CCF10A166A3F10003EAE42 /* WPOpenSearchRequest.m */,
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
+		43CCF105166A18A7003EAE42 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				43CCF119166A6AA5003EAE42 /* NSString+stuff.h */,
+				43CCF11A166A6AA5003EAE42 /* NSString+stuff.m */,
+				43CCF106166A18EA003EAE42 /* WPArticleHeader.h */,
+				43CCF107166A18EA003EAE42 /* WPArticleHeader.m */,
+				43CCF10C166A3FC5003EAE42 /* WPHeadersList.h */,
+				43CCF10D166A3FC6003EAE42 /* WPHeadersList.m */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		43CCF10F166A41DB003EAE42 /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				43CCF110166A41DB003EAE42 /* XMLSupport */,
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		43CCF110166A41DB003EAE42 /* XMLSupport */ = {
+			isa = PBXGroup;
+			children = (
+				43CCF111166A41DB003EAE42 /* GDataXMLNode.h */,
+				43CCF112166A41DB003EAE42 /* GDataXMLNode.m */,
+			);
+			path = XMLSupport;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		43CCF0C2166A15C9003EAE42 /* KBAPISupport-ARC-Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43CCF0E7166A15CC003EAE42 /* Build configuration list for PBXNativeTarget "KBAPISupport-ARC-Demo" */;
+			buildPhases = (
+				43CCF0BF166A15C9003EAE42 /* Sources */,
+				43CCF0C0166A15C9003EAE42 /* Frameworks */,
+				43CCF0C1166A15C9003EAE42 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "KBAPISupport-ARC-Demo";
+			productName = "KBAPISupport-ARC-Demo";
+			productReference = 43CCF0C3166A15CA003EAE42 /* KBAPISupport-ARC-Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		43CCF0BA166A15C9003EAE42 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = AD;
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Kirill byss Bystrov";
+			};
+			buildConfigurationList = 43CCF0BD166A15C9003EAE42 /* Build configuration list for PBXProject "KBAPISupport-ARC-Demo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 43CCF0B8166A15C9003EAE42;
+			productRefGroup = 43CCF0C4166A15CA003EAE42 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				43CCF0C2166A15C9003EAE42 /* KBAPISupport-ARC-Demo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		43CCF0C1166A15C9003EAE42 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43CCF0D2166A15CA003EAE42 /* InfoPlist.strings in Resources */,
+				43CCF0DA166A15CA003EAE42 /* Default.png in Resources */,
+				43CCF0DC166A15CA003EAE42 /* Default@2x.png in Resources */,
+				43CCF0DE166A15CA003EAE42 /* Default-568h@2x.png in Resources */,
+				43CCF103166A1738003EAE42 /* ADViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		43CCF0BF166A15C9003EAE42 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43CCF0D4166A15CA003EAE42 /* main.m in Sources */,
+				43CCF0D8166A15CA003EAE42 /* ADAppDelegate.m in Sources */,
+				43CCF0F9166A167A003EAE42 /* KBAPIConnection.m in Sources */,
+				43CCF0FA166A167A003EAE42 /* KBAPIRequest.m in Sources */,
+				43CCF0FB166A167A003EAE42 /* KBEntityList.m in Sources */,
+				43CCF0FC166A167A003EAE42 /* KBNetworkIndicator.m in Sources */,
+				43CCF102166A1738003EAE42 /* ADViewController.m in Sources */,
+				43CCF108166A18EA003EAE42 /* WPArticleHeader.m in Sources */,
+				43CCF10B166A3F10003EAE42 /* WPOpenSearchRequest.m in Sources */,
+				43CCF10E166A3FC6003EAE42 /* WPHeadersList.m in Sources */,
+				43CCF113166A41DB003EAE42 /* GDataXMLNode.m in Sources */,
+				43CCF118166A4C81003EAE42 /* GDataXMLElement+stuff.m in Sources */,
+				43CCF11B166A6AA6003EAE42 /* NSString+stuff.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		43CCF0D0166A15CA003EAE42 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43CCF0D1166A15CA003EAE42 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		43CCF0E5166A15CC003EAE42 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		43CCF0E6166A15CC003EAE42 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		43CCF0E8166A15CC003EAE42 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "KBAPISupport-ARC-Demo/KBAPISupport-ARC-Demo-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
+				INFOPLIST_FILE = "KBAPISupport-ARC-Demo/KBAPISupport-ARC-Demo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		43CCF0E9166A15CC003EAE42 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "KBAPISupport-ARC-Demo/KBAPISupport-ARC-Demo-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
+				INFOPLIST_FILE = "KBAPISupport-ARC-Demo/KBAPISupport-ARC-Demo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		43CCF0BD166A15C9003EAE42 /* Build configuration list for PBXProject "KBAPISupport-ARC-Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43CCF0E5166A15CC003EAE42 /* Debug */,
+				43CCF0E6166A15CC003EAE42 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43CCF0E7166A15CC003EAE42 /* Build configuration list for PBXNativeTarget "KBAPISupport-ARC-Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43CCF0E8166A15CC003EAE42 /* Debug */,
+				43CCF0E9166A15CC003EAE42 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 43CCF0BA166A15C9003EAE42 /* Project object */;
+}

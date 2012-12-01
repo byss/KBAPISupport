@@ -1,0 +1,24 @@
+//
+// Prefix header for all source files of the 'KBAPISupport-ARC-Demo' target in the 'KBAPISupport-ARC-Demo' project
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_4_0
+#warning "This project uses features only available in iOS SDK 4.0 and later."
+#endif
+
+#ifdef __OBJC__
+	#import <UIKit/UIKit.h>
+	#import <Foundation/Foundation.h>
+#endif
+
+#import "KBAPISupport.h"
+
+#if KBAPISUPPORT_BOTH_FORMATS
+#	define REQUEST_FORMAT (@"json")
+#elif KBAPISUPPORT_JSON
+#	define REQUEST_FORMAT (@"json")
+#else // #elif KBAPISUPPORT_XML
+#	define REQUEST_FORMAT (@"xml")
+#endif
