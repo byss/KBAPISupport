@@ -7,7 +7,7 @@ Features
 ========
 
 * Currently only GET requests are supported; POST requests would be implemented some other time.
-* This library uses **GDataXML** for XML parsing. It could be downloaded <a href="http://code.google.com/p/gdata-objectivec-client/source/browse/#svn%2Ftrunk%2FSource%2FXMLSupport">here</a>. **GDataXML** depends only on standart **libxml2** headers and binary library. By the way, **GDataXML** uses non-ARC environment, so you should set compile flag `-fno-objc-arc' for `GDataXMLNode.m' file.
+* This library uses **GDataXML** for XML parsing. It could be downloaded <a href="http://code.google.com/p/gdata-objectivec-client/source/browse/#svn%2Ftrunk%2FSource%2FXMLSupport">here</a>. **GDataXML** depends only on standart **libxml2** headers and binary library. By the way, **GDataXML** uses non-ARC environment, so you should set compile flag `-fno-objc-arc` for **GDataXMLNode.m** file.
 * This library uses **NSJSONSerialization** for JSON parsing by default, so iOS 5.0+ is supported. You may use **SBJson** aka **json-framework**, though (<a href="https://github.com/stig/json-framework">get it here</a>), but this library was only tested with **NSJSONSerialization**.
 * This library is suitable for ARC- and non-ARC projects. The author is not quite familliar with ARC mode though so feel free to enchance nasty pieces of code.
 
