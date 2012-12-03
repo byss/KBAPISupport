@@ -69,7 +69,7 @@
 #define KBAPISUPPORT_XML 1
 
 // Turns on or off converting server response from any iOS-supported encoding
-#define KBAPISUPPORT_DECODE 0
+#define KBAPISUPPORT_DECODE 1
 
 // Sets the server response encoding
 #define KBAPISUPPORT_DECODE_FROM (NSWindowsCP1251StringEncoding)
@@ -103,7 +103,6 @@
 ///////////////////////// Just-in-case warning /////////////////////////
 
 #if KBAPISUPPORT_JSON && KBAPISUPPORT_XML
-#	warning Enabling both JSON and XML is not well tested! 
 #	define KBAPISUPPORT_BOTH_FORMATS 1
 #else
 #	define KBAPISUPPORT_BOTH_FORMATS 0

@@ -1,8 +1,8 @@
 //
-//  GDataXMLElement+stuff.h
-//  KBAPISupport
+//  NADAppDelegate.m
+//  KBAPISupport-Non-ARC-Demo
 //
-//  Created by Kirill byss Bystrov on 28.11.12.
+//  Created by Kirill byss Bystrov on 01.12.12.
 //  Copyright (c) 2012 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,14 +24,33 @@
 //  THE SOFTWARE.
 //
 
-#if KBAPISUPPORT_XML
-#	import "GDataXMLNode.h"
+#import "NADAppDelegate.h"
 
-@interface GDataXMLElement (stuff)
+#import "NADSplashVC.h"
 
-- (NSString *) childStringValue: (NSString *) childName;
-- (GDataXMLElement *) firstChildWithName: (NSString *) childName;
-- (id) objectValue;
+NSString *baseAddress = nil;
+NSString *delimiter = nil;
+
+@implementation NADAppDelegate
+
+- (void)dealloc {
+	[_window release];
+	
+	[super dealloc];
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	NADSplashVC *splashVC = [[NADSplashVC alloc] initWithNibName:@"NADSplashVC" bundle:nil];
+	
+	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:splashVC];
+	[splashVC release];
+	
+	self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+	self.window.rootViewController = navController;
+	[navController release];
+	
+	[self.window makeKeyAndVisible];
+	return YES;
+}
 
 @end
-#endif

@@ -48,5 +48,62 @@
 	}
 }
 
+- (id) objectValue {
+	NSString *childName = nil;
+	BOOL parseAsArray = NO;
+	if (!self.attributes.count) {
+		for (GDataXMLNode *node in self.children) {
+			if (node.kind != GDataXMLElementKind) {
+				NSString *result = nil;
+				if (node.kind == GDataXMLTextKind) {
+					result = node.stringValue;
+				}
+
+				return result;
+			}
+			GDataXMLElement *element = (GDataXMLElement *) node;
+			if (childName) {
+				if ([childName isEqualToString:element.name]) {
+					parseAsArray = YES;
+				} else {
+					parseAsArray = NO;
+					break;
+				}
+			} else {
+				childName = element.name;
+			}
+		}
+	}
+	
+	if (parseAsArray) {
+		NSMutableArray *result = [NSMutableArray array];
+		for (GDataXMLElement *element in self.children) {
+			id object = [element objectValue];
+			if (object) {
+				[result addObject:object];
+			} else {
+				return nil;
+			}
+		}
+		
+		return [NSArray arrayWithArray:result];
+	} else {
+		NSMutableDictionary *result = [NSMutableDictionary dictionary];
+		for (GDataXMLNode *attr in self.attributes) {
+			[result setObject:attr.stringValue forKey:attr.name];
+		}
+		for (GDataXMLElement *element in self.children) {
+			id object = [element objectValue];
+			if (object) {
+				[result setObject:object forKey:element.name];
+			} else {
+				return nil;
+			}
+		}
+		
+		return [NSDictionary dictionaryWithDictionary:result];
+	}
+}
+
 @end
 #endif

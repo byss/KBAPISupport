@@ -43,7 +43,7 @@ There is main header file called **KBAPISupport.h**, where all other headers are
 Usage
 =====
 
-* #import "KBAPISupport.h"
+* \#import "KBAPISupport.h"
 	
 	Please import just this header to use this library. Other headers depend (sometimes, heavily) on macros, defined in this header.
 	

@@ -36,6 +36,11 @@
 #	import "GDataXMLNode.h"
 #endif
 
+#if KBAPISUPPORT_BOTH_FORMATS
+NSString *const KBJSONErrorKey = @"KBJSONErrorKey";
+NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
+#endif
+
 @interface KBAPIConnection () {
 @private
 	NSMutableData *_buffer;
@@ -161,7 +166,7 @@
 #		if KBAPISUPPORT_JSON && !KBAPISUPPORT_USE_SBJSON
 	unichar *decodedBytes = malloc (decodedString.length * sizeof (unichar));
 	[decodedString getCharacters:decodedBytes range: NSMakeRange (0, decodedString.length)];
-	NSData *decodedData = [NSData dataWithBytesNoCopy:decodedBytes length:decodedString.length freeWhenDone:YES];
+	NSData *decodedData = [NSData dataWithBytesNoCopy:decodedBytes length:(decodedString.length * sizeof (unichar)) freeWhenDone:YES];
 	decodedBytes = NULL;
 #			undef PREPARED_JSON
 #			define PREPARED_JSON (decodedData) //// >1 ////
@@ -237,7 +242,7 @@
 #endif
 
 #if KBAPISUPPORT_BOTH_FORMATS
-		NSError *cumulativeError = [NSError errorWithDomain:@"KBAPIConnection" code:0 userInfo:@{NSUnderlyingErrorKey: @[JSONError, XMLError]}];
+		NSError *cumulativeError = [NSError errorWithDomain:@"KBAPIConnection" code:0 userInfo:@{NSLocalizedDescriptionKey: @"Response is neither JSON nor XML.", KBJSONErrorKey: (JSONError ? JSONError : [NSNull null]), KBXMLErrorKey: (XMLError ? XMLError : [NSNull null])}];
 #	define REPORTED_ERROR (cumulativeError) //// >2 ////
 #elif KBAPISUPPORT_JSON
 #	define REPORTED_ERROR (JSONError) //// >2 ////

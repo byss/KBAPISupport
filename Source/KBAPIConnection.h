@@ -47,6 +47,11 @@ enum _KBAPIConnectionResponseType {
 };
 #endif
 
+#if KBAPISUPPORT_BOTH_FORMATS
+extern NSString *const KBJSONErrorKey;
+extern NSString *const KBXMLErrorKey;
+#endif
+
 @protocol KBAPIConnectionDelegate <NSObject>
 @required
 - (void) connection: (KBAPIConnection *) connection didFailWithError:(NSError *)error;

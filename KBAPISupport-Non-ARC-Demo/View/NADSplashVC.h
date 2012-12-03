@@ -1,8 +1,8 @@
 //
-//  GDataXMLElement+stuff.h
-//  KBAPISupport
+//  NADSplashVC.h
+//  KBAPISupport-Non-ARC-Demo
 //
-//  Created by Kirill byss Bystrov on 28.11.12.
+//  Created by Kirill byss Bystrov on 01.12.12.
 //  Copyright (c) 2012 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,14 +24,14 @@
 //  THE SOFTWARE.
 //
 
-#if KBAPISUPPORT_XML
-#	import "GDataXMLNode.h"
+#import <UIKit/UIKit.h>
 
-@interface GDataXMLElement (stuff)
+@interface NADSplashVC: UIViewController <KBAPIConnectionDelegate>
 
-- (NSString *) childStringValue: (NSString *) childName;
-- (GDataXMLElement *) firstChildWithName: (NSString *) childName;
-- (id) objectValue;
+@property (retain, nonatomic) IBOutlet UILabel *label;
+@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityView;
+@property (retain, nonatomic) IBOutlet UIButton *button;
+
+- (IBAction)loadIndex;
 
 @end
-#endif
