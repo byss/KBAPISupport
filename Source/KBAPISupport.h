@@ -57,7 +57,7 @@
 ///////////////////////// Config /////////////////////////
 
 // Turns on or off KBAPISupport debug messages
-#define KBAPISUPPORT_DEBUG 1
+#define KBAPISUPPORT_DEBUG 0
 
 // Turns on or off JSON objects support (using NSJSONSerialization)
 #define KBAPISUPPORT_JSON 1
@@ -69,7 +69,7 @@
 #define KBAPISUPPORT_XML 1
 
 // Turns on or off converting server response from any iOS-supported encoding
-#define KBAPISUPPORT_DECODE 1
+#define KBAPISUPPORT_DECODE 0
 
 // Sets the server response encoding
 #define KBAPISUPPORT_DECODE_FROM (NSWindowsCP1251StringEncoding)
