@@ -57,7 +57,7 @@
 ///////////////////////// Config /////////////////////////
 
 // Turns on or off KBAPISupport debug messages
-#define KBAPISUPPORT_DEBUG 0
+#define KBAPISUPPORT_DEBUG 1
 
 // Turns on or off JSON objects support (using NSJSONSerialization)
 #define KBAPISUPPORT_JSON 1
@@ -117,5 +117,9 @@
 #import "KBEntity.h"
 #import "KBEntityList.h"
 #import "KBNetworkIndicator.h"
+#if !__has_feature(objc_arc)
+#	import "KBAutoField.h"
+#	import "KBAutoEntity.h"
+#endif
 
 ///////////////////////// THE END /////////////////////////
