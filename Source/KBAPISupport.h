@@ -57,7 +57,7 @@
 ///////////////////////// Config /////////////////////////
 
 // Turns on or off KBAPISupport debug messages
-#define KBAPISUPPORT_DEBUG 1
+#define KBAPISUPPORT_DEBUG 0
 
 // Turns on or off JSON objects support (using NSJSONSerialization)
 #define KBAPISUPPORT_JSON 1
