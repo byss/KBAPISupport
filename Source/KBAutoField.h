@@ -86,7 +86,13 @@
 
 @end
 
-@interface KBAutoIntegerField: KBAutoFieldBase
+@interface KBAutoTimestampField: KBAutoFieldBase
+
+- (void) gotIntValue: (NSInteger) value forObject: (id) object;
+
+@end
+
+@interface KBAutoIntegerField: KBAutoTimestampField
 
 @property (nonatomic, assign) BOOL isUnsigned;
 

@@ -120,6 +120,74 @@ DEALLOC_MACRO_2(fieldName, sourceFieldName)
 
 @end
 
+#pragma mark - KBAutoTimestampField
+
+@implementation KBAutoTimestampField
+
+- (void) setDateFromTimestamp: (NSInteger) timestamp forObject: (id) object {
+	NSDate *value = [NSDate dateWithTimeIntervalSince1970:timestamp];
+	SEL setter = [self setter];
+	if ([object respondsToSelector:setter]) {
+		[object performSelector:setter withObject:value];
+	}
+}
+
+- (void) gotIntValue: (NSInteger) value forObject: (id) object {
+	[self setDateFromTimestamp:value forObject:object];
+}
+
+#if KBAPISUPPORT_JSON
+- (BOOL) setFieldInObject: (id) object fromJSON: (id) JSON {
+	if (![super setFieldInObject:object fromJSON:JSON]) {
+		return NO;
+	}
+	
+	NSString *sourceFieldName = [self realSourceFieldName];
+	
+	id fieldValue = [JSON objectForKey:sourceFieldName];
+	if ([fieldValue isKindOfClass:[NSNumber class]]) {
+		[self gotIntValue:[fieldValue integerValue] forObject:object];
+	} else if ([fieldValue isKindOfClass:[NSString class]]) {
+		NSInteger value = [fieldValue integerValue];
+		[self gotIntValue:value forObject:object];
+	} else {
+		[self gotIntValue:0 forObject:object];
+	}
+	
+	return YES;
+}
+#endif
+
+#if KBAPISUPPORT_XML
+- (BOOL) setFieldInObject: (id) object fromXML: (GDataXMLElement *) XML {
+	if (![super setFieldInObject:object fromXML:XML]) {
+		return NO;
+	}
+	
+	NSInteger value;
+	NSString *sourceFieldName = [self realSourceFieldName];
+	if (self.isAttribute) {
+		GDataXMLNode *attr = [XML attributeForName:sourceFieldName];
+		if (!attr) {
+			return NO;
+		}
+		value = [[attr stringValue] integerValue];
+	} else {
+		NSString *stringValue = [XML childStringValue:sourceFieldName];
+		if (!stringValue) {
+			return NO;
+		}
+		value = [stringValue integerValue];
+	}
+	
+	[self gotIntValue:value forObject:object];
+	
+	return YES;
+}
+#endif
+
+@end
+
 #pragma mark - KBAutoIntegerField
 
 @implementation KBAutoIntegerField
@@ -163,65 +231,9 @@ DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)f
 	[invocation invoke];
 }
 
-#if KBAPISUPPORT_JSON
-- (BOOL) setFieldInObject: (id) object fromJSON: (id) JSON {
-	if (![super setFieldInObject:object fromJSON:JSON]) {
-		return NO;
-	}
-	
-	NSString *sourceFieldName = [self realSourceFieldName];
-	
-	id fieldValue = [JSON objectForKey:sourceFieldName];
-	if ([fieldValue isKindOfClass:[NSNumber class]]) {
-		if (self.isUnsigned) {
-			[self setIntValue:[fieldValue unsignedIntegerValue] forObject:object];
-		} else {
-			[self setIntValue:[fieldValue integerValue] forObject:object];
-		}
-	} else if ([fieldValue isKindOfClass:[NSString class]]) {
-		NSInteger value = [fieldValue integerValue];
-		if (self.isUnsigned) {
-			value = MAX (0, value);
-		}
-		[self setIntValue:value forObject:object];
-	} else {
-		[self setIntValue:0 forObject:object];
-	}
-	
-	return YES;
+- (void) gotIntValue:(NSInteger)value forObject:(id)object {
+	[self setIntValue:((self.isUnsigned && (value < 0)) ? 0 : value) forObject:object];
 }
-#endif
-
-#if KBAPISUPPORT_XML
-- (BOOL) setFieldInObject: (id) object fromXML: (GDataXMLElement *) XML {
-	if (![super setFieldInObject:object fromXML:XML]) {
-		return NO;
-	}
-	
-	NSInteger value;
-	NSString *sourceFieldName = [self realSourceFieldName];
-	if (self.isAttribute) {
-		GDataXMLNode *attr = [XML attributeForName:sourceFieldName];
-		if (!attr) {
-			return NO;
-		}
-		value = [[attr stringValue] integerValue];
-	} else {
-		NSString *stringValue = [XML childStringValue:sourceFieldName];
-		if (!stringValue) {
-			return NO;
-		}
-		value = [stringValue integerValue];
-	}
-
-	if (self.isUnsigned) {
-		value = MAX (0, value);
-	}
-	[self setIntValue:value forObject:object];
-	
-	return YES;
-}
-#endif
 
 @end
 
