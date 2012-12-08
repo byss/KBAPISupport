@@ -45,4 +45,16 @@
 	return nil;
 }
 
+- (KBAPIRequestMethod) requestMethod {
+	return KBAPIRequestMethodGET;
+}
+
+- (NSString *) bodyString {
+	return nil;
+}
+
+- (NSData *) bodyData {
+	return [[self bodyString] dataUsingEncoding:NSUTF8StringEncoding];
+}
+
 @end

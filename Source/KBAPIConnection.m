@@ -52,9 +52,30 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 
 @property (nonatomic, retain) KBAPIRequest *_request;
 
++ (NSString *) methodName: (KBAPIRequestMethod) method;
+
 @end
 
 @implementation KBAPIConnection
+
++ (NSString *) methodName: (KBAPIRequestMethod) method {
+	switch (method) {
+		case KBAPIRequestMethodGET:
+			return @"GET";
+			
+		case KBAPIRequestMethodPOST:
+			return @"POST";
+			
+		case KBAPIRequestMethodPUT:
+			return @"PUT";
+			
+		case KBAPIRequestMethodDELETE:
+			return @"DELETE";
+			
+		default:
+			return @"GET";
+	}
+}
 
 #if KBAPISUPPORT_BOTH_FORMATS
 + (instancetype) connectionWithRequest: (KBAPIRequest *) request delegate: (id <KBAPIConnectionDelegate>) delegate responseType: (KBAPIConnectionResponseType) responseType {
@@ -113,8 +134,10 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 - (void) start {
 	F_START
 	
+	KBAPIRequest *theRequest = self._request;
+	
 	if (!_expected) {
-		Class expected = [[self._request class] expected];
+		Class expected = [[theRequest class] expected];
 		if ([expected conformsToProtocol:@protocol(KBEntity)]) {
 #if __has_feature(objc_arc)
 		_expected = expected;
@@ -124,10 +147,18 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 		}
 	}
 	
-	MLOG (@"request: %@", self._request.URL);
+	MLOG (@"request: %@", theRequest.URL);
 	
 	[KBNetworkIndicator requestStarted];
-	[NSURLConnection connectionWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self._request.URL]] delegate:self];
+	
+	NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:theRequest.URL]];
+	req.HTTPMethod = [[self class] methodName:theRequest.requestMethod];
+	NSData *bodyData = theRequest.bodyData;
+	if (bodyData) {
+		req.HTTPBody = bodyData;
+	}
+	
+	[NSURLConnection connectionWithRequest:req delegate:self];
 	
 	F_END
 }

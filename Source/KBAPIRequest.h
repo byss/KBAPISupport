@@ -30,6 +30,15 @@
 #	warning Please #import "KBAPISupport.h".
 #endif
 
+typedef enum _KBAPIRequestMethod KBAPIRequestMethod;
+
+enum _KBAPIRequestMethod {
+	KBAPIRequestMethodGET,
+	KBAPIRequestMethodPOST,
+	KBAPIRequestMethodPUT,
+	KBAPIRequestMethodDELETE,
+};
+
 @interface KBAPIRequest : NSObject
 
 @property (nonatomic, readonly) NSString *URL;
@@ -38,5 +47,8 @@
 + (Class) expected;
 
 - (NSString *) URL;
+- (KBAPIRequestMethod) requestMethod;
+- (NSString *) bodyString;
+- (NSData *) bodyData;
 
 @end
