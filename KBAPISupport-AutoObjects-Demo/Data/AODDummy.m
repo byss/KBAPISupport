@@ -29,9 +29,7 @@
 @implementation AODDummy
 
 + (NSArray *) autoFields {
-	KBAutoStringField *field = [[[KBAutoStringField alloc] init] autorelease];
-	field.fieldName = @"field";
-	return @[field];
+	return @[[KBAutoStringField autoFieldWithFieldName:@"field"]];
 }
 
 - (void) dealloc {

@@ -33,6 +33,44 @@
 #	import "GDataXMLElement+stuff.h"
 #endif
 
+#define AUTOFIELD_CONVINIENCE_CREATOR_0(nameSuffix, other...) \
++ (instancetype) autoField##nameSuffix  { \
+	return [[[self alloc] init##other] autorelease]; \
+}
+
+#define AUTOFIELD_CONVINIENCE_CREATOR_1(argName, capArgName, argType, other...) \
+	AUTOFIELD_CONVINIENCE_CREATOR_0(With##capArgName: (argType) argName other, With##capArgName: (argType) argName other)
+
+#define AUTOFIELD_CONVINIENCE_CREATOR_2(argName, capArgName, argType, arg2Name, arg2Type, other...) \
+	AUTOFIELD_CONVINIENCE_CREATOR_1(argName, capArgName, argType, arg2Name: (arg2Type) arg2Name other)
+
+#define AUTOFIELD_CONVINIENCE_CREATOR_3(argName, capArgName, argType, arg2Name, arg2Type, arg3Name, arg3Type, other...) \
+	AUTOFIELD_CONVINIENCE_CREATOR_2(argName, capArgName, argType, arg2Name, arg2Type, arg3Name: (arg3Type) arg3Name other)
+
+#define AUTOFIELD_CONVINIENCE_CREATOR_4(argName, capArgName, argType, arg2Name, arg2Type, arg3Name, arg3Type, arg4Name, arg4Type, other...) \
+	AUTOFIELD_CONVINIENCE_CREATOR_3(argName, capArgName, argType, arg2Name, arg2Type, arg3Name, arg3Type, arg4Name: (arg4Type) arg4Name other)
+
+#define DELEGATE_INITIALIZATION_0(defaultArgs) \
+- (id) init { \
+	return [self init##defaultArgs]; \
+}
+
+#define DELEGATE_INITIALIZATION(convinienceInit, defaultArgs) \
+- (id) init##convinienceInit { \
+	return [self init##convinienceInit defaultArgs]; \
+}
+
+#define DEALLOC_MACRO_1(field, other...) \
+- (void) dealloc { \
+	[_##field release]; \
+	other \
+	\
+	[super dealloc]; \
+}
+
+#define DEALLOC_MACRO_2(field1, field2, other...) \
+	DEALLOC_MACRO_1(field1, [_##field2 release];)
+
 #pragma mark - KBAutoFieldBase
 
 @interface KBAutoFieldBase ()
@@ -44,20 +82,41 @@
 
 @implementation KBAutoFieldBase
 
-- (id) init {
+#if KBAPISUPPORT_XML
+#	define ADDN_ARGS isAttribute: (BOOL) isAttribute
+#	define ADDN_DEFAULTS isAttribute:NO
+#	define ADDN_INIT _isAttribute = isAttribute;
+#else
+#	define ADDN_ARGS
+#	define ADDN_DEFAULTS
+#	define ADDN_INIT
+#endif
+
+AUTOFIELD_CONVINIENCE_CREATOR_0 ()
+AUTOFIELD_CONVINIENCE_CREATOR_1 (fieldName, FieldName, NSString *)
+AUTOFIELD_CONVINIENCE_CREATOR_2 (fieldName, FieldName, NSString *, sourceFieldName, NSString *)
+
+#if KBAPISUPPORT_XML
+AUTOFIELD_CONVINIENCE_CREATOR_3 (fieldName, FieldName, NSString *, sourceFieldName, NSString *, isAttribute, BOOL)
+#endif
+
+DELEGATE_INITIALIZATION_0 (WithFieldName:nil sourceFieldName:nil ADDN_DEFAULTS)
+DELEGATE_INITIALIZATION (WithFieldName:(NSString *)fieldName, sourceFieldName:nil ADDN_DEFAULTS)
+#if KBAPISUPPORT_XML
+DELEGATE_INITIALIZATION (WithFieldName:(NSString *)fieldName sourceFieldName:(NSString *) sourceFieldName, ADDN_DEFAULTS)
+#endif
+
+- (id) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName ADDN_ARGS {
 	if (self = [super init]) {
-		_isAttribute = NO;
+		_fieldName = [fieldName retain];
+		_sourceFieldName = [sourceFieldName retain];
+		ADDN_INIT
 	}
 	
 	return self;
 }
 
-- (void) dealloc {
-	[_fieldName release];
-	[_sourceFieldName release];
-	
-	[super dealloc];
-}
+DEALLOC_MACRO_2(fieldName, sourceFieldName)
 
 - (SEL) setter {
 	return NSSelectorFromString ([NSString stringWithFormat:@"set%@:", [self.fieldName capitalizedString]]);
@@ -101,9 +160,27 @@
 
 @implementation KBAutoIntegerField
 
-- (id) init {
-	if (self = [super init]) {
-		_isUnsigned = NO;
+AUTOFIELD_CONVINIENCE_CREATOR_1 (isUnsigned, Unsigned, BOOL)
+AUTOFIELD_CONVINIENCE_CREATOR_2 (isUnsigned, Unsigned, BOOL, fieldName, NSString *)
+AUTOFIELD_CONVINIENCE_CREATOR_3 (isUnsigned, Unsigned, BOOL, fieldName, NSString *, sourceFieldName, NSString *)
+
+#if KBAPISUPPORT_XML
+AUTOFIELD_CONVINIENCE_CREATOR_4 (isUnsigned, Unsigned, BOOL, fieldName, NSString *, sourceFieldName, NSString *, isAttribute, BOOL)
+#endif
+
+DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned, fieldName:nil sourceFieldName:nil ADDN_DEFAULTS)
+DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)fieldName, sourceFieldName:nil ADDN_DEFAULTS)
+#if KBAPISUPPORT_XML
+DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)fieldName sourceFieldName:(NSString *) sourceFieldName, ADDN_DEFAULTS)
+#endif
+
+- (id) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName ADDN_ARGS {
+	return [self initWithUnsigned:NO fieldName:fieldName sourceFieldName:sourceFieldName ADDN_ARGS];
+}
+
+- (id) initWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName ADDN_ARGS {
+	if (self = [super initWithFieldName:fieldName sourceFieldName:sourceFieldName ADDN_ARGS]) {
+		_isUnsigned = isUnsigned;
 	}
 	
 	return self;
@@ -250,11 +327,33 @@
 
 @implementation KBAutoObjectField
 
-- (void) dealloc {
-	[_objectClass release];
-	
-	[super dealloc];
+AUTOFIELD_CONVINIENCE_CREATOR_1 (objectClass, ObjectClass, Class)
+AUTOFIELD_CONVINIENCE_CREATOR_2 (objectClass, ObjectClass, Class, fieldName, NSString *)
+AUTOFIELD_CONVINIENCE_CREATOR_3 (objectClass, ObjectClass, Class, fieldName, NSString *, sourceFieldName, NSString *)
+
+#if KBAPISUPPORT_XML
+AUTOFIELD_CONVINIENCE_CREATOR_4 (objectClass, ObjectClass, Class, fieldName, NSString *, sourceFieldName, NSString *, isAttribute, BOOL)
+#endif
+
+DELEGATE_INITIALIZATION (WithObjectClass: (Class) objectClass, fieldName:nil sourceFieldName:nil ADDN_DEFAULTS)
+DELEGATE_INITIALIZATION (WithObjectClass: (Class) objectClass fieldName:(NSString *)fieldName, sourceFieldName:nil ADDN_DEFAULTS)
+#if KBAPISUPPORT_XML
+DELEGATE_INITIALIZATION (WithObjectClass: (Class) objectClass fieldName:(NSString *)fieldName sourceFieldName:(NSString *) sourceFieldName, ADDN_DEFAULTS)
+#endif
+
+- (id) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName ADDN_ARGS {
+	return [self initWithObjectClass:nil fieldName:fieldName sourceFieldName:sourceFieldName ADDN_ARGS];
 }
+
+- (id) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName ADDN_ARGS {
+	if (self = [super initWithFieldName:fieldName sourceFieldName:sourceFieldName ADDN_ARGS]) {
+		_objectClass = [objectClass retain];
+	}
+	
+	return self;
+}
+
+DEALLOC_MACRO_1 (objectClass)
 
 - (void) setObjectValue: (id) value forObject: (id) object {
 	SEL setter = [self setter];

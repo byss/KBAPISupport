@@ -69,11 +69,42 @@
 @property (nonatomic, retain) NSString *fieldName;
 @property (nonatomic, retain) NSString *sourceFieldName;
 
++ (instancetype) autoField;
++ (instancetype) autoFieldWithFieldName: (NSString *) fieldName;
++ (instancetype) autoFieldWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
+#if KBAPISUPPORT_XML
++ (instancetype) autoFieldWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
+#endif
+
+- (id) initWithFieldName: (NSString *) fieldName;
+// designated initializer when XML is off
+- (id) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
+#if KBAPISUPPORT_XML
+// designated initializer when XML is on
+- (id) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
+#endif
+
 @end
 
 @interface KBAutoIntegerField: KBAutoFieldBase
 
 @property (nonatomic, assign) BOOL isUnsigned;
+
++ (instancetype) autoFieldWithUnsigned: (BOOL) isUnsigned;
++ (instancetype) autoFieldWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName;
++ (instancetype) autoFieldWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
+#if KBAPISUPPORT_XML
++ (instancetype) autoFieldWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
+#endif
+
+- (id) initWithUnsigned: (BOOL) isUnsigned;
+- (id) initWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName;
+// designated initializer when XML is off
+- (id) initWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
+#if KBAPISUPPORT_XML
+// designated initializer when XML is on
+- (id) initWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
+#endif
 
 @end
 
@@ -84,6 +115,22 @@
 @interface KBAutoObjectField: KBAutoFieldBase
 
 @property (nonatomic, retain) Class objectClass;
+
++ (instancetype) autoFieldWithObjectClass: (Class) objectClass;
++ (instancetype) autoFieldWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName;
++ (instancetype) autoFieldWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
+#if KBAPISUPPORT_XML
++ (instancetype) autoFieldWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
+#endif
+
+- (id) initWithObjectClass: (Class) objectClass;
+- (id) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName;
+// designated initializer when XML is off
+- (id) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
+#if KBAPISUPPORT_XML
+// designated initializer when XML is on
+- (id) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
+#endif
 
 @end
 

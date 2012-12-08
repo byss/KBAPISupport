@@ -121,7 +121,7 @@
 		43AA26E41670E1E7004010E6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				43AA27131670E3E5004010E6 /* Source */,
+				43AA27131670E3E5004010E6 /* KBAPISupport */,
 				43AA26E51670E1E7004010E6 /* UIKit.framework */,
 				43AA26E71670E1E7004010E6 /* Foundation.framework */,
 				43AA26E91670E1E7004010E6 /* CoreGraphics.framework */,
@@ -163,16 +163,16 @@
 			path = "KBAPISupport-AutoObjects-Demo/View";
 			sourceTree = "<group>";
 		};
-		43AA27131670E3E5004010E6 /* Source */ = {
+		43AA27131670E3E5004010E6 /* KBAPISupport */ = {
 			isa = PBXGroup;
 			children = (
+				43AA271A1670E3E5004010E6 /* KBAPISupport.h */,
 				43AA27141670E3E5004010E6 /* GDataXMLElement+stuff.h */,
 				43AA27151670E3E5004010E6 /* GDataXMLElement+stuff.m */,
 				43AA27161670E3E5004010E6 /* KBAPIConnection.h */,
 				43AA27171670E3E5004010E6 /* KBAPIConnection.m */,
 				43AA27181670E3E5004010E6 /* KBAPIRequest.h */,
 				43AA27191670E3E5004010E6 /* KBAPIRequest.m */,
-				43AA271A1670E3E5004010E6 /* KBAPISupport.h */,
 				43AA271B1670E3E5004010E6 /* KBAutoEntity.h */,
 				43AA271C1670E3E5004010E6 /* KBAutoEntity.m */,
 				43AA271D1670E3E5004010E6 /* KBAutoField.h */,
@@ -183,6 +183,7 @@
 				43AA27221670E3E5004010E6 /* KBNetworkIndicator.h */,
 				43AA27231670E3E5004010E6 /* KBNetworkIndicator.m */,
 			);
+			name = KBAPISupport;
 			path = Source;
 			sourceTree = "<group>";
 		};

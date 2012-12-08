@@ -34,32 +34,18 @@ static NSArray *_autoFields = nil;
 @implementation AODMain
 
 + (void) initialize {
+	_autoFields = [@[
 #if SWAP_FIELD1_AND_FIELD2
-	KBAutoStringField *field1 = [[KBAutoStringField alloc] init];
-	KBAutoIntegerField *field2 = [[KBAutoIntegerField alloc] init];
+								 [KBAutoStringField autoFieldWithFieldName:@"field1"],
+								 [KBAutoIntegerField autoFieldWithUnsigned:YES fieldName:@"field2"],
 #else
-	KBAutoIntegerField *field1 = [[KBAutoIntegerField alloc] init];
-	KBAutoStringField *field2 = [[KBAutoStringField alloc] init];
+								 [KBAutoIntegerField autoFieldWithUnsigned:YES fieldName:@"field1"],
+								 [KBAutoStringField autoFieldWithFieldName:@"field2"],
 #endif
-	field1.fieldName = @"field1";
-	field2.fieldName = @"field2";
-	
-	KBAutoIntegerField *field3 = [[KBAutoIntegerField alloc] init];
-	field3.fieldName = @"field3";
-	field3.sourceFieldName = @"field_three";
-	
-	KBAutoObjectField *field4 = [[KBAutoObjectField alloc] init];
-	field4.fieldName = @"field4";
-	field4.objectClass = [AODDummy class];
-	
-	KBAutoObjectField *field5 = [[KBAutoObjectField alloc] init];
-	field5.fieldName = @"field5";
-	field5.objectClass = [AODDummyList class];
-	
-	_autoFields = [@[field1, field2, field3, field4, field5] retain];
-	for (id field in _autoFields) {
-		[field release];
-	}
+								 [KBAutoIntegerField autoFieldWithFieldName:@"field3" sourceFieldName:@"field_three"],
+								 [KBAutoObjectField autoFieldWithObjectClass:[AODDummy class] fieldName:@"field4"],
+								 [KBAutoObjectField autoFieldWithObjectClass:[AODDummyList class] fieldName:@"field5"],
+	] retain];
 }
 
 + (NSArray *) autoFields {
