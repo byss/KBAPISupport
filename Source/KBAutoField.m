@@ -33,43 +33,17 @@
 #	import "GDataXMLElement+stuff.h"
 #endif
 
-#define AUTOFIELD_CONVINIENCE_CREATOR_0(nameSuffix, other...) \
-+ (instancetype) autoField##nameSuffix  { \
-	return [[[self alloc] init##other] autorelease]; \
-}
+#import "KBAutoFieldMacros.gen.h"
 
-#define AUTOFIELD_CONVINIENCE_CREATOR_1(argName, capArgName, argType, other...) \
-	AUTOFIELD_CONVINIENCE_CREATOR_0(With##capArgName: (argType) argName other, With##capArgName: (argType) argName other)
-
-#define AUTOFIELD_CONVINIENCE_CREATOR_2(argName, capArgName, argType, arg2Name, arg2Type, other...) \
-	AUTOFIELD_CONVINIENCE_CREATOR_1(argName, capArgName, argType, arg2Name: (arg2Type) arg2Name other)
-
-#define AUTOFIELD_CONVINIENCE_CREATOR_3(argName, capArgName, argType, arg2Name, arg2Type, arg3Name, arg3Type, other...) \
-	AUTOFIELD_CONVINIENCE_CREATOR_2(argName, capArgName, argType, arg2Name, arg2Type, arg3Name: (arg3Type) arg3Name other)
-
-#define AUTOFIELD_CONVINIENCE_CREATOR_4(argName, capArgName, argType, arg2Name, arg2Type, arg3Name, arg3Type, arg4Name, arg4Type, other...) \
-	AUTOFIELD_CONVINIENCE_CREATOR_3(argName, capArgName, argType, arg2Name, arg2Type, arg3Name, arg3Type, arg4Name: (arg4Type) arg4Name other)
-
-#define DELEGATE_INITIALIZATION_0(defaultArgs) \
-- (id) init { \
-	return [self init##defaultArgs]; \
-}
-
-#define DELEGATE_INITIALIZATION(convinienceInit, defaultArgs) \
-- (id) init##convinienceInit { \
-	return [self init##convinienceInit defaultArgs]; \
-}
-
-#define DEALLOC_MACRO_1(field, other...) \
-- (void) dealloc { \
-	[_##field release]; \
-	other \
-	\
-	[super dealloc]; \
-}
-
-#define DEALLOC_MACRO_2(field1, field2, other...) \
-	DEALLOC_MACRO_1(field1, [_##field2 release];)
+#if KBAPISUPPORT_XML
+#	define ADDN_ARGS isAttribute: (BOOL) isAttribute
+#	define ADDN_DEFAULTS isAttribute:NO
+#	define ADDN_INIT _isAttribute = isAttribute;
+#else
+#	define ADDN_ARGS
+#	define ADDN_DEFAULTS
+#	define ADDN_INIT
+#endif
 
 #pragma mark - KBAutoFieldBase
 
@@ -81,16 +55,6 @@
 @end
 
 @implementation KBAutoFieldBase
-
-#if KBAPISUPPORT_XML
-#	define ADDN_ARGS isAttribute: (BOOL) isAttribute
-#	define ADDN_DEFAULTS isAttribute:NO
-#	define ADDN_INIT _isAttribute = isAttribute;
-#else
-#	define ADDN_ARGS
-#	define ADDN_DEFAULTS
-#	define ADDN_INIT
-#endif
 
 AUTOFIELD_CONVINIENCE_CREATOR_0 ()
 AUTOFIELD_CONVINIENCE_CREATOR_1 (fieldName, FieldName, NSString *)
