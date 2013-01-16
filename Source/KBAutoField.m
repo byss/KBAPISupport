@@ -83,7 +83,9 @@ DELEGATE_INITIALIZATION (WithFieldName:(NSString *)fieldName sourceFieldName:(NS
 DEALLOC_MACRO_2(fieldName, sourceFieldName)
 
 - (SEL) setter {
-	return NSSelectorFromString ([NSString stringWithFormat:@"set%@:", [self.fieldName capitalizedString]]);
+	NSString *first = [self.fieldName substringToIndex:1];
+	NSString *other = [self.fieldName substringFromIndex:1];
+	return NSSelectorFromString ([NSString stringWithFormat:@"set%@%@:", [first uppercaseString], other]);
 }
 
 - (NSString *) realSourceFieldName {

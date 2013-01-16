@@ -162,7 +162,7 @@ if DEALLOC_MACRO_MAX > 0:
 for n in xrange (2, DEALLOC_MACRO_MAX + 1):
 	fout.write ('''\
 #define DEALLOC_MACRO_{n}({SIGNATURE}, other...) \\
-		DEALLOC_MACRO_{prev}({PREV_SIGNATURE}, [_##field2 release];)
+		DEALLOC_MACRO_{prev}({PREV_SIGNATURE}, [_##field{n} release]; other)
 
 '''.format (
 	n = n,
