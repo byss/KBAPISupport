@@ -177,21 +177,21 @@
 
 #pragma mark - KBAPIConnection delegate
 
-- (void) connection:(KBAPIConnection *)connection didFailWithError:(NSError *)error {
-	MLOG(@"error: %@", error);
+- (void) apiConnection:(KBAPIConnection *)connection didFailWithError:(NSError *)error {
+	KBAPISUPPORT_LOG (@"error: %@", error);
 	UIAlertView *av = [[[UIAlertView alloc] initWithTitle:@"Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
 	[av show];
 
 	self.view.userInteractionEnabled = YES;
 }
 
-- (void) connection:(KBAPIConnection *)connection didReceiveJSON:(id)JSON {
+- (void) apiConnection:(KBAPIConnection *)connection didReceiveJSON:(id)JSON {
 	[self pushNewVCWithContents:JSON];
 
 	self.view.userInteractionEnabled = YES;
 }
 
-- (void) connection:(KBAPIConnection *)connection didReceiveXML:(GDataXMLDocument *)XML {
+- (void) apiConnection:(KBAPIConnection *)connection didReceiveXML:(GDataXMLDocument *)XML {
 	id response = [XML.rootElement objectValue];
 	if (response) {
 		[self pushNewVCWithContents:response];

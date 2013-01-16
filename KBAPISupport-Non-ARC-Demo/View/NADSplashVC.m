@@ -61,17 +61,17 @@
 	[self loadIndex];
 }
 
-- (void) connection:(KBAPIConnection *)connection didFailWithError:(NSError *)error {
-	MLOG(@"error: %@", error);
+- (void) apiConnection:(KBAPIConnection *)connection didFailWithError:(NSError *)error {
+	KBAPISUPPORT_LOG (@"error: %@", error);
 	UIAlertView *av = [[[UIAlertView alloc] initWithTitle:@"Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
 	[av show];
 	[self loadingFailed];
 }
 
-- (void) connection:(KBAPIConnection *)connection didReceiveJSON:(id)JSON {
+- (void) apiConnection:(KBAPIConnection *)connection didReceiveJSON:(id)JSON {
 	F_START
 	
-	MLOG(@"JSON: %@", JSON);
+	KBAPISUPPORT_LOG (@"JSON: %@", JSON);
 	if (![JSON isKindOfClass:[NSDictionary class]]) {
 		[self loadingFailed];
 
@@ -140,7 +140,7 @@
 	}
 	
 	NSArray *urls = [self assembleField:@"" withArrayIdx:0 values:values];
-	MLOG(@"urls: %@", urls);
+	KBAPISUPPORT_LOG (@"urls: %@", urls);
 	
 	NADViewController *vc = [[NADViewController alloc] init];
 	vc.containsURLs = YES;

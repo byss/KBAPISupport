@@ -76,20 +76,20 @@
 
 ///////////////////////// Debug macros /////////////////////////
 
-#ifndef MLOG
+#ifndef KBAPISUPPORT_LOG
 #	if KBAPISUPPORT_DEBUG && defined (DEBUG)
-#		define MLOG(fmt, args...) NSLog (@"%s (%d): " fmt, __PRETTY_FUNCTION__, __LINE__, ##args)
+#		define KBAPISUPPORT_LOG(fmt, args...) NSLog (@"%s (%d): " fmt, __PRETTY_FUNCTION__, __LINE__, ##args)
 #	else
-#		define MLOG(...)
+#		define KBAPISUPPORT_LOG(...)
 #	endif
 #endif
 
 #ifndef F_START
-#	define F_START MLOG (@">>>");
+#	define F_START KBAPISUPPORT_LOG (@">>>");
 #endif
 
 #ifndef F_END
-#	define F_END MLOG (@"<<<");
+#	define F_END KBAPISUPPORT_LOG (@"<<<");
 #endif
 
 #define BUG_HERE NSLog (@"Execution reached line %d in %s (func %s). Possible bug.", __LINE__, __FILE__, __PRETTY_FUNCTION__);

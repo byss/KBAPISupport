@@ -44,14 +44,14 @@
 	[[KBAPIConnection connectionWithRequest:req delegate:self] start];
 }
 
-- (void) connection:(KBAPIConnection *)connection didFailWithError:(NSError *)error {
-	MLOG(@"error: %@", error);
+- (void) apiConnection:(KBAPIConnection *)connection didFailWithError:(NSError *)error {
+	KBAPISUPPORT_LOG (@"error: %@", error);
 	UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[av show];
 }
 
-- (void) connection:(KBAPIConnection *)connection didReceiveResponse:(id<KBEntity>)response {
-	MLOG(@"response: %@", [response class]);
+- (void) apiConnection:(KBAPIConnection *)connection didReceiveResponse:(id<KBEntity>)response {
+	KBAPISUPPORT_LOG (@"response: %@", [response class]);
 	_list = response;
 	[self.tableView reloadData];
 }
@@ -78,7 +78,7 @@
 	F_START
 	
 	WPArticleHeader *header = [_list entityForIndex:indexPath.row];
-	MLOG(@"%@ %@", header.link, [header.link class]);
+	KBAPISUPPORT_LOG (@"%@ %@", header.link, [header.link class]);
 	[[UIApplication sharedApplication] openURL:header.link];
 	
 	F_END

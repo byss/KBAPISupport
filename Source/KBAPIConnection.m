@@ -147,7 +147,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 		}
 	}
 	
-	MLOG (@"request: %@", theRequest.URL);
+	KBAPISUPPORT_LOG (@"request: %@", theRequest.URL);
 	
 	[KBNetworkIndicator requestStarted];
 	
@@ -165,24 +165,24 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 	_buffer.length = 0;
-	MLOG(@"HTTP code: %d", ((NSHTTPURLResponse *) response).statusCode);
+	KBAPISUPPORT_LOG (@"HTTP code: %d", ((NSHTTPURLResponse *) response).statusCode);
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
 	[_buffer appendData:data];
-	MLOG(@"Received %d bytes", data.length);
+	KBAPISUPPORT_LOG (@"Received %d bytes", data.length);
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	[KBNetworkIndicator requestFinished];
-	MLOG(@"error: %@", error);
-	[self.delegate connection:self didFailWithError:error];
+	KBAPISUPPORT_LOG (@"error: %@", error);
+	[self.delegate apiConnection:self didFailWithError:error];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	F_START
 	
-	MLOG(@"Request OK");
+	KBAPISUPPORT_LOG (@"Request OK");
 	[KBNetworkIndicator requestFinished];
 	
 #define PREPARED_JSON (_buffer) //// >1 ////
@@ -192,7 +192,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 	bytes [_buffer.length] = 0;
 #	if KBAPISUPPORT_DECODE
 	NSString *decodedString = [NSString stringWithCString:bytes encoding:KBAPISUPPORT_DECODE_FROM];
-	MLOG (@"response: %@", decodedString);
+	KBAPISUPPORT_LOG (@"response: %@", decodedString);
 	// maybe there is some method like -(NSData *)dataWithData:(NSData *) fromEncoding:(NSStringEncoding)from toEncoding:(NSStringEncoding)to ?
 #		if KBAPISUPPORT_JSON && !KBAPISUPPORT_USE_SBJSON
 	unichar *decodedBytes = malloc (decodedString.length * sizeof (unichar));
@@ -205,7 +205,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #	elif KBAPISUPPORT_USE_SBJSON
 	NSString *decodedString = [NSString stringWithUTF8String:bytes];
 #	else // KBAPISUPPORT_DECODE
-	MLOG(@"response: %s", bytes);
+	KBAPISUPPORT_LOG (@"response: %s", bytes);
 	free (bytes);
 #	endif // KBAPISUPPORT_DECODE
 #endif // (defined (DEBUG) && KBAPISUPPORT_DEBUG) || KBAPISUPPORT_DECODE
@@ -266,10 +266,10 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #endif
 
 #if KBAPISUPPORT_JSON
-		MLOG(@"JSON error: %@", JSONError);
+		KBAPISUPPORT_LOG (@"JSON error: %@", JSONError);
 #endif
 #if KBAPISUPPORT_XML
-		MLOG(@"XML error: %@", XMLError);
+		KBAPISUPPORT_LOG (@"XML error: %@", XMLError);
 #endif
 
 #if KBAPISUPPORT_BOTH_FORMATS
@@ -284,8 +284,8 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #	error You shall not pass!
 #endif
 
-		MLOG (@"error: %@", REPORTED_ERROR);
-		[self.delegate connection:self didFailWithError:REPORTED_ERROR];
+		KBAPISUPPORT_LOG (@"error: %@", REPORTED_ERROR);
+		[self.delegate apiConnection:self didFailWithError:REPORTED_ERROR];
 
 #undef REPORTED_ERROR //// <2 ////
 
@@ -296,7 +296,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 	_buffer.length = 0;
 	
 	if (_expected) {
-		if ([self.delegate respondsToSelector:@selector(connection:didReceiveResponse:)]) {
+		if ([self.delegate respondsToSelector:@selector(apiConnection:didReceiveResponse:)]) {
 			id <KBEntity> responseObject = nil;
 #if KBAPISUPPORT_BOTH_FORMATS
 			if (self.responseType == KBAPIConnectionResponseTypeAuto) {
@@ -317,7 +317,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #endif
 			
 			if (responseObject) {
-				[self.delegate connection:self didReceiveResponse:responseObject];
+				[self.delegate apiConnection:self didReceiveResponse:responseObject];
 			} else {
 				NSString *formatString = (
 #if KBAPISUPPORT_BOTH_FORMATS
@@ -337,16 +337,16 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #endif
 				);
 				NSError *error = [NSError errorWithDomain:@"KBAPIConnection" code:-1 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Cannot build %@ from %@ object.", _expected, formatString]}];
-				MLOG(@"error: %@", error);
-				[self.delegate connection:self didFailWithError:error];
+				KBAPISUPPORT_LOG (@"error: %@", error);
+				[self.delegate apiConnection:self didFailWithError:error];
 			}
 #if KBAPISUPPORT_JSON
-		} else if (JSONResponse && [self.delegate respondsToSelector:@selector(connection:didReceiveJSON:)]) {
-			[self.delegate connection:self didReceiveJSON:JSONResponse];
+		} else if (JSONResponse && [self.delegate respondsToSelector:@selector(apiConnection:didReceiveJSON:)]) {
+			[self.delegate apiConnection:self didReceiveJSON:JSONResponse];
 #endif
 #if KBAPISUPPORT_XML
-		} else if (XMLResponse && [self.delegate respondsToSelector:@selector(connection:didReceiveXML:)]) {
-			[self.delegate connection:self didReceiveXML:XMLResponse];
+		} else if (XMLResponse && [self.delegate respondsToSelector:@selector(apiConnection:didReceiveXML:)]) {
+			[self.delegate apiConnection:self didReceiveXML:XMLResponse];
 #endif
 		} else {
 			BUG_HERE
@@ -358,16 +358,16 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 		_expected = nil;
 #if KBAPISUPPORT_JSON
 	} else if (JSONResponse) {
-		[self.delegate connection:self didReceiveJSON:JSONResponse];
+		[self.delegate apiConnection:self didReceiveJSON:JSONResponse];
 #endif
 #if KBAPISUPPORT_XML
 	} else if (XMLResponse) {
-		[self.delegate connection:self didReceiveXML:XMLResponse];
+		[self.delegate apiConnection:self didReceiveXML:XMLResponse];
 #endif
 	} else {
 		NSError *error = [NSError errorWithDomain:@"KBAPIConnection" code:-2 userInfo:@{NSLocalizedDescriptionKey: @"The delegate receives only error messages, so here's one."}];
-		MLOG (@"error: %@", error);
-		[self.delegate connection:self didFailWithError:error];
+		KBAPISUPPORT_LOG (@"error: %@", error);
+		[self.delegate apiConnection:self didFailWithError:error];
 	}
 	
 	F_END

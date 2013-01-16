@@ -59,8 +59,8 @@
 	[self.activityView startAnimating];
 }
 
-- (void) connection:(KBAPIConnection *)connection didFailWithError:(NSError *)error {
-	MLOG(@"error: %@", error);
+- (void) apiConnection:(KBAPIConnection *)connection didFailWithError:(NSError *)error {
+	KBAPISUPPORT_LOG (@"error: %@", error);
 	UIAlertView *av = [[[UIAlertView alloc] initWithTitle:@"Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
 	[av show];
 	[self.activityView stopAnimating];
@@ -76,7 +76,7 @@
 	}
 }
 
-- (void) connection:(KBAPIConnection *)connection didReceiveResponse:(id<KBEntity>)response {
+- (void) apiConnection:(KBAPIConnection *)connection didReceiveResponse:(id<KBEntity>)response {
 	[self.activityView stopAnimating];
 	if ([response isKindOfClass:[AODMain class]]) {
 		AODMain *main = response;
