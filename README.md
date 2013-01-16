@@ -172,3 +172,7 @@ Another handy method is shown here, *+(Class)expected* method, may be used to au
 
 * **KBEntityList**. API answers include arrays of similar elements very often, so there is some generic list container. Subclasses should overload method *+(Class)entityClass* to enable list autoconstructing (this method must return Class of list's elements). If you use XML you should also overload *+(NSString *)entityTag;* method to specify tag name of the list's children.
 
+Extended Usage
+==============
+
+For more usage example please refer to KBAPISupport-*-Demo projects.

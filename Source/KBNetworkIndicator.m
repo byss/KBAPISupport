@@ -40,7 +40,7 @@ static NSUInteger requestsCount = 0;
 + (void) requestFinished {
 	@synchronized (self) {
 		if (requestsCount) {
-			if (!(requestsCount--)) {
+			if (!(--requestsCount)) {
 				[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 			}
 		} else {
