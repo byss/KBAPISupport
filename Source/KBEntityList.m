@@ -24,7 +24,7 @@
 //  THE SOFTWARE.
 //
 
-#import "KBEntityList.h"
+#import "KBAPISupport.h"
 
 #if KBAPISUPPORT_XML
 #	import "GDataXMLNode.h"

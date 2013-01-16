@@ -24,7 +24,7 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPIConnection.h"
+#import "KBAPISupport.h"
 
 #import "KBAPIRequest.h"
 #import "KBEntity.h"

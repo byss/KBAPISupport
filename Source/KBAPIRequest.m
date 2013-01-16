@@ -24,7 +24,7 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPIRequest.h"
+#import "KBAPISupport.h"
 
 @implementation KBAPIRequest
 

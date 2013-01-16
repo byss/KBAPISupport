@@ -24,7 +24,7 @@
 //  THE SOFTWARE.
 //
 
-#import "KBNetworkIndicator.h"
+#import "KBAPISupport.h"
 
 static NSUInteger requestsCount = 0;
 

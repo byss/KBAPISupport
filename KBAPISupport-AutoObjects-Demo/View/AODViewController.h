@@ -26,6 +26,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "KBAPISupport.h"
+
 @interface AODViewController : UIViewController <KBAPIConnectionDelegate>
 
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityView;

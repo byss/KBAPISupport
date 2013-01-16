@@ -110,7 +110,9 @@
 
 ///////////////////////// All included! /////////////////////////
 
-#define IMPORTED_FROM_KBAPISUPPORT_H
+#ifndef IMPORTED_FROM_KBAPISUPPORT_H
+#	define IMPORTED_FROM_KBAPISUPPORT_H
+#endif
 
 #import "KBAPIConnection.h"
 #import "KBAPIRequest.h"
@@ -121,5 +123,7 @@
 #	import "KBAutoField.h"
 #	import "KBAutoEntity.h"
 #endif
+
+#undef IMPORTED_FROM_KBAPISUPPORT_H
 
 ///////////////////////// THE END /////////////////////////

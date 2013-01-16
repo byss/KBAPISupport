@@ -28,14 +28,11 @@
 
 #import <objc/objc-runtime.h>
 
+#import "KBAPISupport.h"
+
 #if KBAPISUPPORT_XML
 #	import "GDataXMLNode.h"
 #	import "GDataXMLElement+stuff.h"
-#endif
-
-#import "KBAutoFieldMacros.gen.h"
-
-#if KBAPISUPPORT_XML
 #	define ADDN_ARGS isAttribute: (BOOL) isAttribute
 #	define ADDN_DEFAULTS isAttribute:NO
 #	define ADDN_INIT _isAttribute = isAttribute;
@@ -44,6 +41,8 @@
 #	define ADDN_DEFAULTS
 #	define ADDN_INIT
 #endif
+
+#import "KBAutoFieldMacros.gen.h"
 
 #pragma mark - KBAutoFieldBase
 

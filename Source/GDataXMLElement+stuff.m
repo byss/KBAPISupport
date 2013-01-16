@@ -24,6 +24,8 @@
 //  THE SOFTWARE.
 //
 
+#import "KBAPISupport.h"
+
 #if KBAPISUPPORT_XML
 #	import "GDataXMLElement+stuff.h"
 
