@@ -24,7 +24,7 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPISupport.h"
+#import "KBNetworkIndicator.h"
 
 #import "KBAPISupport-debug.h"
 
