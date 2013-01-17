@@ -24,7 +24,7 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPISupport.h"
+#import "KBAutoEntity.h"
 
 @class AODDummy;
 @class AODDummyList;

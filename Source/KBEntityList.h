@@ -26,11 +26,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "KBEntity.h"
+#import "KBAPISupport-config.h"
 
-#ifndef IMPORTED_FROM_KBAPISUPPORT_H
-#	warning Please #import "KBAPISupport.h".
-#endif
+#import "KBEntity.h"
 
 #if KBAPISUPPORT_XML
 @class GDataXMLElement;

@@ -34,6 +34,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		43138E9B16A841330065EBA7 /* KBAPISupport-config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KBAPISupport-config.h"; sourceTree = "<group>"; };
+		43138E9C16A841330065EBA7 /* KBAPISupport-debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KBAPISupport-debug.h"; sourceTree = "<group>"; };
 		4385B8801672DB2A001E6773 /* KBAutoFieldMacros.gen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAutoFieldMacros.gen.h; sourceTree = "<group>"; };
 		43AA26E11670E1E7004010E6 /* KBAPISupport-AutoObjects-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KBAPISupport-AutoObjects-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		43AA26E51670E1E7004010E6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -168,6 +170,8 @@
 			isa = PBXGroup;
 			children = (
 				43AA271A1670E3E5004010E6 /* KBAPISupport.h */,
+				43138E9B16A841330065EBA7 /* KBAPISupport-config.h */,
+				43138E9C16A841330065EBA7 /* KBAPISupport-debug.h */,
 				43AA27141670E3E5004010E6 /* GDataXMLElement+stuff.h */,
 				43AA27151670E3E5004010E6 /* GDataXMLElement+stuff.m */,
 				43AA27161670E3E5004010E6 /* KBAPIConnection.h */,

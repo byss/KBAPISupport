@@ -1,9 +1,9 @@
 //
-//  KBAPISupport.h
+//  KBAPISupport-debug.h
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 01.12.12.
-//  Copyright (c) 2012 Kirill byss Bystrov. All rights reserved.
+//  Created by Kirill byss Bystrov on 17.01.13.
+//  Copyright (c) 2013 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,23 @@
 //
 
 #import "KBAPISupport-config.h"
-#import "KBAPIConnection.h"
-#import "KBAPIRequest.h"
-#import "KBEntity.h"
-#import "KBEntityList.h"
-#import "KBNetworkIndicator.h"
-#if !__has_feature(objc_arc)
-#	import "KBAutoField.h"
-#	import "KBAutoEntity.h"
+
+///////////////////////// Debug macros /////////////////////////
+
+#ifndef KBAPISUPPORT_LOG
+#	if KBAPISUPPORT_DEBUG && defined (DEBUG)
+#		define KBAPISUPPORT_LOG(fmt, args...) NSLog (@"%s (%d): " fmt, __PRETTY_FUNCTION__, __LINE__, ##args)
+#	else
+#		define KBAPISUPPORT_LOG(...)
+#	endif
 #endif
+
+#ifndef F_START
+#	define F_START KBAPISUPPORT_LOG (@">>>");
+#endif
+
+#ifndef F_END
+#	define F_END KBAPISUPPORT_LOG (@"<<<");
+#endif
+
+#define BUG_HERE NSLog (@"Execution reached line %d in %s (func %s). Possible bug.", __LINE__, __FILE__, __PRETTY_FUNCTION__);

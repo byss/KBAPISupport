@@ -30,6 +30,7 @@
 #import "GDataXMLElement+stuff.h"
 
 #import "NADConcreteDataRequest.h"
+#import "KBAPISupport-debug.h"
 
 @implementation NADViewController {
 @private

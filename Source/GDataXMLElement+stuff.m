@@ -24,10 +24,9 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPISupport.h"
+#import "GDataXMLElement+stuff.h"
 
 #if KBAPISUPPORT_XML
-#	import "GDataXMLElement+stuff.h"
 
 @implementation GDataXMLElement (stuff)
 

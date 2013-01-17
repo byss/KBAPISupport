@@ -24,7 +24,7 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPISupport.h"
+#import "KBEntityList.h"
 
 @interface AODDummyList: KBEntityList
 

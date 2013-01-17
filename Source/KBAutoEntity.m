@@ -26,7 +26,7 @@
 
 #if !__has_feature(objc_arc)
 
-#import "KBAPISupport.h"
+#import "KBAutoEntity.h"
 
 #if KBAPISUPPORT_XML
 #	import "GDataXMLNode.h"

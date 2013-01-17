@@ -26,6 +26,8 @@
 
 #import "KBAPISupport.h"
 
+#import "KBAPISupport-debug.h"
+
 static NSUInteger requestsCount = 0;
 
 @implementation KBNetworkIndicator

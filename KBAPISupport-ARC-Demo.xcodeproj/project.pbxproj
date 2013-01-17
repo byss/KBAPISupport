@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43138EB816A844050065EBA7 /* KBAutoEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 43138EB416A844050065EBA7 /* KBAutoEntity.m */; };
+		43138EB916A844050065EBA7 /* KBAutoField.m in Sources */ = {isa = PBXBuildFile; fileRef = 43138EB616A844050065EBA7 /* KBAutoField.m */; };
 		43CCF0C8166A15CA003EAE42 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CCF0C7166A15CA003EAE42 /* UIKit.framework */; };
 		43CCF0CA166A15CA003EAE42 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CCF0C9166A15CA003EAE42 /* Foundation.framework */; };
 		43CCF0CC166A15CA003EAE42 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CCF0CB166A15CA003EAE42 /* CoreGraphics.framework */; };
@@ -32,6 +34,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		43138EB016A843FD0065EBA7 /* KBAPISupport-config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KBAPISupport-config.h"; sourceTree = "<group>"; };
+		43138EB116A843FD0065EBA7 /* KBAPISupport-debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KBAPISupport-debug.h"; sourceTree = "<group>"; };
+		43138EB316A844050065EBA7 /* KBAutoEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAutoEntity.h; sourceTree = "<group>"; };
+		43138EB416A844050065EBA7 /* KBAutoEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAutoEntity.m; sourceTree = "<group>"; };
+		43138EB516A844050065EBA7 /* KBAutoField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAutoField.h; sourceTree = "<group>"; };
+		43138EB616A844050065EBA7 /* KBAutoField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAutoField.m; sourceTree = "<group>"; };
+		43138EB716A844050065EBA7 /* KBAutoFieldMacros.gen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAutoFieldMacros.gen.h; sourceTree = "<group>"; };
 		43CCF0C3166A15CA003EAE42 /* KBAPISupport-ARC-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KBAPISupport-ARC-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		43CCF0C7166A15CA003EAE42 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		43CCF0C9166A15CA003EAE42 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -149,6 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				43CCF0F3166A167A003EAE42 /* KBAPISupport.h */,
+				43138EB016A843FD0065EBA7 /* KBAPISupport-config.h */,
+				43138EB116A843FD0065EBA7 /* KBAPISupport-debug.h */,
 				43CCF116166A4C7F003EAE42 /* GDataXMLElement+stuff.h */,
 				43CCF117166A4C80003EAE42 /* GDataXMLElement+stuff.m */,
 				43CCF0EF166A167A003EAE42 /* KBAPIConnection.h */,
@@ -160,6 +171,11 @@
 				43CCF0F6166A167A003EAE42 /* KBEntityList.m */,
 				43CCF0F7166A167A003EAE42 /* KBNetworkIndicator.h */,
 				43CCF0F8166A167A003EAE42 /* KBNetworkIndicator.m */,
+				43138EB316A844050065EBA7 /* KBAutoEntity.h */,
+				43138EB416A844050065EBA7 /* KBAutoEntity.m */,
+				43138EB516A844050065EBA7 /* KBAutoField.h */,
+				43138EB616A844050065EBA7 /* KBAutoField.m */,
+				43138EB716A844050065EBA7 /* KBAutoFieldMacros.gen.h */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -293,6 +309,8 @@
 				43CCF113166A41DB003EAE42 /* GDataXMLNode.m in Sources */,
 				43CCF118166A4C81003EAE42 /* GDataXMLElement+stuff.m in Sources */,
 				43CCF11B166A6AA6003EAE42 /* NSString+stuff.m in Sources */,
+				43138EB816A844050065EBA7 /* KBAutoEntity.m in Sources */,
+				43138EB916A844050065EBA7 /* KBAutoField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -26,7 +26,10 @@
 
 #if !__has_feature(objc_arc)
 
-#import "KBAPISupport.h"
+#import "KBAutoField.h"
+
+#import "KBEntity.h"
+#import "KBAutoFieldMacros.gen.h"
 
 #if KBAPISUPPORT_XML
 #	import "GDataXMLNode.h"
@@ -39,8 +42,6 @@
 #	define ADDN_DEFAULTS
 #	define ADDN_INIT
 #endif
-
-#import "KBAutoFieldMacros.gen.h"
 
 #pragma mark - KBAutoFieldBase
 

@@ -24,17 +24,19 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPISupport.h"
-
+#import "KBAPIConnection.h"
 #import "KBAPIRequest.h"
 #import "KBEntity.h"
 #import "KBNetworkIndicator.h"
+
 #if KBAPISUPPORT_USE_SBJSON
 #	import "SBJsonParser.h"
 #endif
 #if KBAPISUPPORT_XML
 #	import "GDataXMLNode.h"
 #endif
+
+#import "KBAPISupport-debug.h"
 
 #if KBAPISUPPORT_BOTH_FORMATS
 NSString *const KBJSONErrorKey = @"KBJSONErrorKey";

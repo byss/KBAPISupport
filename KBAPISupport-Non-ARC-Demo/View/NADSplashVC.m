@@ -30,6 +30,8 @@
 
 #import "NADIndexRequest.h"
 
+#import "KBAPISupport-debug.h"
+
 @implementation NADSplashVC
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {

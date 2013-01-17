@@ -26,9 +26,7 @@
 
 #import <Foundation/Foundation.h>
 
-#ifndef IMPORTED_FROM_KBAPISUPPORT_H
-#	warning Please #import "KBAPISupport.h".
-#endif
+#import "KBAPISupport-config.h"
 
 typedef enum _KBAPIRequestMethod KBAPIRequestMethod;
 

@@ -31,6 +31,8 @@
 #import "AODDummy.h"
 #import "AODDummyList.h"
 
+#import "KBAPISupport-debug.h"
+
 @implementation AODViewController
 
 - (void)dealloc {

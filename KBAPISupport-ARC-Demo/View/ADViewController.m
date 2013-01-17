@@ -30,6 +30,8 @@
 #import "WPHeadersList.h"
 #import "WPOpenSearchRequest.h"
 
+#import "KBAPISupport-debug.h"
+
 @implementation ADViewController {
 @private
 	WPHeadersList *_list;
