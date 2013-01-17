@@ -6,15 +6,16 @@ This mini-library is used to access various types of HTTP-based APIs.
 Features
 ========
 
-* Currently only GET requests are supported; POST requests would be implemented some other time.
+* Support for GET/POST/PUT/DELETE HTTP requests.
 * This library uses **GDataXML** for XML parsing. It could be downloaded <a href="http://code.google.com/p/gdata-objectivec-client/source/browse/#svn%2Ftrunk%2FSource%2FXMLSupport">here</a>. **GDataXML** depends only on standart **libxml2** headers and binary library. By the way, **GDataXML** uses non-ARC environment, so you should set compile flag `-fno-objc-arc` for **GDataXMLNode.m** file.
 * This library uses **NSJSONSerialization** for JSON parsing by default, so iOS 5.0+ is supported. You may use **SBJson** aka **json-framework**, though (<a href="https://github.com/stig/json-framework">get it here</a>), but this library was only tested with **NSJSONSerialization**.
-* This library is suitable for ARC- and non-ARC projects. The author is not quite familliar with ARC mode though so feel free to enchance nasty pieces of code.
+* Autoconstructing objects from JSON/XML using AutoObjects.
+* This library is suitable for ARC- and non-ARC projects (AutoObjects are supported only in non-ARC environment). The author is not quite familliar with ARC mode though so feel free to enchance nasty pieces of code.
 
 Config
 ======
 
-There is main header file called **KBAPISupport.h**, where all other headers are #imported. Also it has some useful debug macros, minimal sanity checks and some configuration preprocessor directives:
+There is main header file called **KBAPISupport.h**, where all other headers are #imported. Amongst other, there is **KBAPISupport-config.h**, where all configuration is done:
 
 * \#define KBAPISUPPORT\_DEBUG 0
 
@@ -30,7 +31,7 @@ There is main header file called **KBAPISupport.h**, where all other headers are
 
 * \#define KBAPISUPPORT\_XML 1
 
-	You should enable this option if you want to parse XML server responses.
+	You should enable this option if you want to parse XML server responses. Depends on **GDataXMLNode.h**.
 
 * \#define KBAPISUPPORT\_DECODE 0
 
@@ -45,7 +46,7 @@ Usage
 
 * \#import "KBAPISupport.h"
 	
-	Please import just this header to use this library. Other headers depend (sometimes, heavily) on macros, defined in this header.
+	This would import all KBAPISupport features, excluding GDataXMLElement category and debug macros. Suitable for including in prefix precompiled header. You may also #import single header files.
 	
 * **KBAPISupport** doesn't provide any API interfaces by itself, you should extend the **KBAPIRequest** class. Every child must overload at least *-(NSString *)URL* method so that HTTP request could be performed. Of course you may add some arbitrary request properties resulting in different URL string. For example, Wikipedia API search request class may be implemented like this:
 
@@ -85,7 +86,7 @@ Another handy method is shown here, *+(Class)expected* method, may be used to au
 
 * **KBEntity**. This protocol has only one or two required methods: *+(instancetype)entityFromJSON:(id)JSON* and *+(instancetype)entityFromXML:(GDataXMLElement *)XML*. Of course if you set KBAPISUPPORT\_JSON to zero or KBAPISUPPORT\_XML to zero then first and second methods would disappear, respectively. If a class implements corresponding method for creating it from JSON or XML then it could be autoconstructed in response to some request.
 
-* **KBAPIConnection**. This is the most important class in the library. To use it you must first create **KBAPIRequest**, after it you need to create KBAPIConnection with this request and set the delegate tp receive API events such as errors, JSON, XML or autoconstructed objects receiving. Here is an example of receiving flagconfig response from Wikipedia API:
+* **KBAPIConnection**. This is the most important class in the library. To use it you must first create **KBAPIRequest**, then you should create **KBAPIConnection** with this request and set the delegate to receive API events such as errors, JSON, XML or autoconstructed objects receiving. Here is an example of reading flagconfig response from Wikipedia API:
 
 ```  objective-c
 
@@ -172,7 +173,9 @@ Another handy method is shown here, *+(Class)expected* method, may be used to au
 
 * **KBEntityList**. API answers include arrays of similar elements very often, so there is some generic list container. Subclasses should overload method *+(Class)entityClass* to enable list autoconstructing (this method must return Class of list's elements). If you use XML you should also overload *+(NSString *)entityTag;* method to specify tag name of the list's children.
 
+* **KBAutoEntity**. You may inherit your object from **KBAutoEntity** to use AutoObjects feature. Detailed description would be added later.
+
 Extended Usage
 ==============
 
-For more usage example please refer to KBAPISupport-*-Demo projects.
+For more usage examples please refer to KBAPISupport-*-Demo projects.
