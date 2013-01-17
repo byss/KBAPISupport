@@ -26,8 +26,6 @@
 
 #if !__has_feature(objc_arc)
 
-#import <objc/objc-runtime.h>
-
 #import "KBAPISupport.h"
 
 #if KBAPISUPPORT_XML
