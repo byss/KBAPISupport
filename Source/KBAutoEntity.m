@@ -41,7 +41,7 @@
 #if KBAPISUPPORT_JSON
 + (instancetype) entityFromJSON: (id) JSON {
 	KBAutoEntity *result = [[[self alloc] init] autorelease];
-	for (id <KBAutoField> autoField in [[self class] autoFields]) {
+	for (id <KBAutoField> autoField in [self autoFields]) {
 		if (![autoField setFieldInObject:result fromJSON:JSON]) {
 			return nil;
 		}
@@ -53,7 +53,7 @@
 #if KBAPISUPPORT_XML
 + (instancetype) entityFromXML: (GDataXMLElement *) XML {
 	KBAutoEntity *result = [[[self alloc] init] autorelease];
-	for (id <KBAutoField> autoField in [[self class] autoFields]) {
+	for (id <KBAutoField> autoField in [self autoFields]) {
 		if (![autoField setFieldInObject:result fromXML:XML]) {
 			return nil;
 		}
