@@ -255,17 +255,18 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #endif
 
 #if KBAPISUPPORT_BOTH_FORMATS
-	if (((self.responseType == KBAPIConnectionResponseTypeJSON) && !JSONResponse) ||
+	if ((((self.responseType == KBAPIConnectionResponseTypeJSON) && !JSONResponse) ||
 	    ((self.responseType == KBAPIConnectionResponseTypeXML) && !XMLResponse) ||
 	    ((self.responseType == KBAPIConnectionResponseTypeAuto) && ((JSONResponse == nil) == (XMLResponse == nil)))
-	   ) {
+	   ) &&
 #elif KBAPISUPPORT_JSON
-	if (!JSONResponse) {
+	if (!JSONResponse &&
 #elif KBAPISUPPORT_XML
-	if (!XMLResponse) {
+	if (!XMLResponse &&
 #else
 #	error There is no error.
 #endif
+			(![self.delegate respondsToSelector:@selector(apiConnection:didReceiveData:)])) {
 
 #if KBAPISUPPORT_JSON
 		KBAPISUPPORT_LOG (@"JSON error: %@", JSONError);
@@ -348,8 +349,6 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 		} else if (XMLResponse && [self.delegate respondsToSelector:@selector(apiConnection:didReceiveXML:)]) {
 			[self.delegate apiConnection:self didReceiveXML:XMLResponse];
 #endif
-		} else if ([self.delegate respondsToSelector:@selector(apiConnection:didReceiveData:)]) {
-			[self.delegate apiConnection:self didReceiveData:_buffer];
 		} else {
 			BUG_HERE
 		}
