@@ -63,6 +63,7 @@ extern NSString *const KBXMLErrorKey;
 - (void) apiConnection:(KBAPIConnection *)connection didReceiveXML: (GDataXMLDocument *) XML;
 #endif
 - (void) apiConnection:(KBAPIConnection *)connection didReceiveResponse: (id <KBEntity>) response;
+- (void) apiConnection:(KBAPIConnection *)connection didReceiveData: (NSData *) data;
 
 @end
 

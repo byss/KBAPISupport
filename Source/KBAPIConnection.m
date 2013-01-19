@@ -295,8 +295,6 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 		return;
 	}
 	
-	_buffer.length = 0;
-	
 	if (_expected) {
 		if ([self.delegate respondsToSelector:@selector(apiConnection:didReceiveResponse:)]) {
 			id <KBEntity> responseObject = nil;
@@ -350,6 +348,8 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 		} else if (XMLResponse && [self.delegate respondsToSelector:@selector(apiConnection:didReceiveXML:)]) {
 			[self.delegate apiConnection:self didReceiveXML:XMLResponse];
 #endif
+		} else if ([self.delegate respondsToSelector:@selector(apiConnection:didReceiveData:)]) {
+			[self.delegate apiConnection:self didReceiveData:_buffer];
 		} else {
 			BUG_HERE
 		}
@@ -359,19 +359,23 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #endif
 		_expected = nil;
 #if KBAPISUPPORT_JSON
-	} else if (JSONResponse) {
+	} else if (JSONResponse && [self.delegate respondsToSelector:@selector(apiConnection:didReceiveJSON:)]) {
 		[self.delegate apiConnection:self didReceiveJSON:JSONResponse];
 #endif
 #if KBAPISUPPORT_XML
-	} else if (XMLResponse) {
+	} else if (XMLResponse && [self.delegate respondsToSelector:@selector(apiConnection:didReceiveXML:)]) {
 		[self.delegate apiConnection:self didReceiveXML:XMLResponse];
 #endif
+	} else if ([self.delegate respondsToSelector:@selector(apiConnection:didReceiveData:)]) {
+		[self.delegate apiConnection:self didReceiveData:_buffer];
 	} else {
 		NSError *error = [NSError errorWithDomain:@"KBAPIConnection" code:-2 userInfo:@{NSLocalizedDescriptionKey: @"The delegate receives only error messages, so here's one."}];
 		KBAPISUPPORT_LOG (@"error: %@", error);
 		[self.delegate apiConnection:self didFailWithError:error];
 	}
 	
+	_buffer.length = 0;
+		
 	F_END
 }
 
