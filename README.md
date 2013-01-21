@@ -178,4 +178,4 @@ Another handy method is shown here, *+(Class)expected* method, may be used to au
 Extended Usage
 ==============
 
-For more usage examples please refer to KBAPISupport-*-Demo projects.
+For more usage examples please refer to KBAPISupport Demo projects at https://github.com/byss/KBAPISupport.
