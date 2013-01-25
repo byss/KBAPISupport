@@ -164,20 +164,18 @@ DEALLOC_MACRO_2(fieldName, sourceFieldName)
 		return NO;
 	}
 	
-	NSInteger value;
+	NSInteger value = 0;
 	NSString *sourceFieldName = [self realSourceFieldName];
 	if (self.isAttribute) {
 		GDataXMLNode *attr = [XML attributeForName:sourceFieldName];
-		if (!attr) {
-			return NO;
+		if (attr) {
+			value = [[attr stringValue] integerValue];
 		}
-		value = [[attr stringValue] integerValue];
 	} else {
 		NSString *stringValue = [XML childStringValue:sourceFieldName];
-		if (!stringValue) {
-			return NO;
+		if (stringValue) {
+			value = [stringValue integerValue];
 		}
-		value = [stringValue integerValue];
 	}
 	
 	[self gotIntValue:value forObject:object];
@@ -276,18 +274,16 @@ DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)f
 		return NO;
 	}
 	
-	NSString *value;
+	NSString *value = nil;
 	NSString *sourceFieldName = [self realSourceFieldName];
 	if (self.isAttribute) {
 		GDataXMLNode *attr = [XML attributeForName:sourceFieldName];
-		if (!attr) {
-			return NO;
+		if (attr) {
+			value = [attr stringValue];
 		}
-		value = [attr stringValue];
 	} else {
-		value = [XML childStringValue:sourceFieldName];
-		if (!value) {
-			return NO;
+		if (value) {
+			value = [XML childStringValue:sourceFieldName];
 		}
 	}
 
@@ -353,9 +349,6 @@ DEALLOC_MACRO_1 (objectClass)
 
 	id fieldValue = [JSON objectForKey:sourceFieldName];
 	id value = [objectClass entityFromJSON:fieldValue];
-	if (!value) {
-		return NO;
-	}
 	[self setObjectValue:value forObject:object];
 	
 	return YES;
@@ -379,15 +372,9 @@ DEALLOC_MACRO_1 (objectClass)
 		return NO;
 	} else {
 		fieldValue = [XML firstChildWithName:sourceFieldName];
-		if (!fieldValue) {
-			return NO;
-		}
 	}
 
 	id value = [objectClass entityFromXML:fieldValue];
-	if (!value) {
-		return NO;
-	}
 	[self setObjectValue:value forObject:object];
 	
 	return YES;
