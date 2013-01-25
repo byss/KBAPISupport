@@ -33,7 +33,11 @@
 - (NSString *) childStringValue: (NSString *) childName {
 	GDataXMLElement *firstChild = [self firstChildWithName:childName];
 	if (firstChild) {
-		return firstChild.stringValue;
+		NSMutableString *result = [NSMutableString string];
+		for (GDataXMLNode *node in firstChild.children) {
+			[result appendString:node.XMLString];
+		}
+		return result;
 	} else {
 		return nil;
 	}
