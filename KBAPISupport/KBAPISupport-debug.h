@@ -36,12 +36,14 @@
 #	endif
 #endif
 
-#ifndef F_START
-#	define F_START KBAPISUPPORT_LOG (@">>>");
+#ifndef KBAPISUPPORT_F_START
+#	define KBAPISUPPORT_F_START KBAPISUPPORT_LOG (@">>>");
 #endif
 
-#ifndef F_END
-#	define F_END KBAPISUPPORT_LOG (@"<<<");
+#ifndef KBAPISUPPORT_F_END
+#	define KBAPISUPPORT_F_END KBAPISUPPORT_LOG (@"<<<");
 #endif
 
-#define BUG_HERE NSLog (@"Execution reached line %d in %s (func %s). Possible bug.", __LINE__, __FILE__, __PRETTY_FUNCTION__);
+#ifndef KBAPISUPPORT_BUG_HERE
+#	define KBAPISUPPORT_BUG_HERE NSLog (@"Execution reached line %d in %s (func %s). Possible bug.", __LINE__, __FILE__, __PRETTY_FUNCTION__);
+#endif

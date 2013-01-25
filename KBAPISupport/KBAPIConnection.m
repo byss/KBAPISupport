@@ -134,7 +134,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 }
 
 - (void) start {
-	F_START
+	KBAPISUPPORT_F_START
 	
 	KBAPIRequest *theRequest = self._request;
 	
@@ -162,7 +162,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 	
 	[NSURLConnection connectionWithRequest:req delegate:self];
 	
-	F_END
+	KBAPISUPPORT_F_END
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
@@ -182,7 +182,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	F_START
+	KBAPISUPPORT_F_START
 	
 	KBAPISUPPORT_LOG (@"Request OK");
 	[KBNetworkIndicator requestFinished];
@@ -292,7 +292,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 
 #undef REPORTED_ERROR //// <2 ////
 
-		F_END
+		KBAPISUPPORT_F_END
 		return;
 	}
 	
@@ -350,7 +350,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 			[self.delegate apiConnection:self didReceiveXML:XMLResponse];
 #endif
 		} else {
-			BUG_HERE
+			KBAPISUPPORT_BUG_HERE
 		}
 
 #if !__has_feature(objc_arc)
@@ -375,7 +375,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 	
 	_buffer.length = 0;
 		
-	F_END
+	KBAPISUPPORT_F_END
 }
 
 @end

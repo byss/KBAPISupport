@@ -46,7 +46,7 @@ static NSUInteger requestsCount = 0;
 				[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 			}
 		} else {
-			BUG_HERE
+			KBAPISUPPORT_BUG_HERE
 		}
 	}
 }
