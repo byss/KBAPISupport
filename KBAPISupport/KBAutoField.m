@@ -282,9 +282,7 @@ DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)f
 			value = [attr stringValue];
 		}
 	} else {
-		if (value) {
-			value = [XML childStringValue:sourceFieldName];
-		}
+		value = [XML childStringValue:sourceFieldName];
 	}
 
 	[self setStringValue:value forObject:object];
@@ -366,7 +364,7 @@ DEALLOC_MACRO_1 (objectClass)
 		return NO;
 	}
 
-	GDataXMLElement *fieldValue;
+	GDataXMLElement *fieldValue = nil;
 	NSString *sourceFieldName = [self realSourceFieldName];
 	if (self.isAttribute) {
 		return NO;
