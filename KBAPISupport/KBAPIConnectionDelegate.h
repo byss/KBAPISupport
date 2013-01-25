@@ -1,8 +1,8 @@
 //
-//  KBNetworkIndicator.h
+//  KBAPIConnectionDelegate.h
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 28.11.12.
+//  Created by Kirill byss Bystrov on 26.11.12.
 //  Copyright (c) 2012 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,9 +26,27 @@
 
 #import <Foundation/Foundation.h>
 
-@interface KBNetworkIndicator: NSObject
+@protocol KBEntity;
 
-+ (void) requestStarted;
-+ (void) requestFinished;
+@class KBAPIConnection;
+#if KBAPISUPPORT_XML
+@class GDataXMLDocument;
+#endif
+
+@protocol KBAPIConnectionDelegate <NSObject>
+@required
+- (void) apiConnection: (KBAPIConnection *) connection didFailWithError:(NSError *)error;
+
+// These methods are @optional. However, you should implement one of them to use KBAPIConnection.
+@optional
+#if KBAPISUPPORT_JSON
+- (void) apiConnection:(KBAPIConnection *)connection didReceiveJSON: (id) JSON;
+#endif
+#if KBAPISUPPORT_XML
+- (void) apiConnection:(KBAPIConnection *)connection didReceiveXML: (GDataXMLDocument *) XML;
+#endif
+- (void) apiConnection:(KBAPIConnection *)connection didReceiveResponse: (id <KBEntity>) response;
+- (void) apiConnection:(KBAPIConnection *)connection didReceiveData: (NSData *) data;
 
 @end
+

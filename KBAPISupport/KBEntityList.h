@@ -34,7 +34,7 @@
 @class GDataXMLElement;
 #endif
 
-@interface KBEntityList : NSObject <KBEntity>
+@interface KBEntityList: NSObject <KBEntity>
 
 #if KBAPISUPPORT_XML
 + (NSString *) entityTag;

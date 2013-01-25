@@ -37,7 +37,7 @@ enum _KBAPIRequestMethod {
 	KBAPIRequestMethodDELETE,
 };
 
-@interface KBAPIRequest : NSObject
+@interface KBAPIRequest: NSObject
 
 @property (nonatomic, readonly) NSString *URL;
 

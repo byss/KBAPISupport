@@ -25,6 +25,7 @@
 //
 
 #import "KBAPISupport-config.h"
+#import "KBAPIConnectionDelegate.h"
 #import "KBAPIConnection.h"
 #import "KBAPIRequest.h"
 #import "KBEntity.h"

@@ -27,13 +27,9 @@
 #import <Foundation/Foundation.h>
 
 #import "KBAPISupport-config.h"
+#import "KBAPIConnectionDelegate.h"
 
-@protocol KBEntity;
 @class KBAPIRequest;
-@class KBAPIConnection;
-#if KBAPISUPPORT_XML
-@class GDataXMLDocument;
-#endif
 
 #if KBAPISUPPORT_BOTH_FORMATS
 typedef enum _KBAPIConnectionResponseType KBAPIConnectionResponseType;
@@ -50,24 +46,7 @@ extern NSString *const KBJSONErrorKey;
 extern NSString *const KBXMLErrorKey;
 #endif
 
-@protocol KBAPIConnectionDelegate <NSObject>
-@required
-- (void) apiConnection: (KBAPIConnection *) connection didFailWithError:(NSError *)error;
-
-// These methods are @optional. However, you should implement one of them to use KBAPIConnection.
-@optional
-#if KBAPISUPPORT_JSON
-- (void) apiConnection:(KBAPIConnection *)connection didReceiveJSON: (id) JSON;
-#endif
-#if KBAPISUPPORT_XML
-- (void) apiConnection:(KBAPIConnection *)connection didReceiveXML: (GDataXMLDocument *) XML;
-#endif
-- (void) apiConnection:(KBAPIConnection *)connection didReceiveResponse: (id <KBEntity>) response;
-- (void) apiConnection:(KBAPIConnection *)connection didReceiveData: (NSData *) data;
-
-@end
-
-@interface KBAPIConnection : NSObject
+@interface KBAPIConnection: NSObject
 
 @property (nonatomic, retain) id <KBAPIConnectionDelegate> delegate;
 #if KBAPISUPPORT_BOTH_FORMATS
