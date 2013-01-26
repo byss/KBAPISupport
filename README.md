@@ -7,7 +7,7 @@ Features
 ========
 
 * Support for GET/POST/PUT/DELETE HTTP requests.
-* This library uses **GDataXML** for XML parsing. It could be downloaded <a href="http://code.google.com/p/gdata-objectivec-client/source/browse/#svn%2Ftrunk%2FSource%2FXMLSupport">here</a>. **GDataXML** depends only on standart **libxml2** headers and binary library. By the way, **GDataXML** uses non-ARC environment, so you should set compile flag `-fno-objc-arc` for **GDataXMLNode.m** file.
+* This library uses **GDataXML** for XML parsing, its sources are already included in library. **GDataXML** depends only on standart **libxml2** headers and binary library. By the way, **GDataXML** uses non-ARC environment, so you should set compile flag `-fno-objc-arc` for **GDataXMLNode.m** file.
 * This library uses **NSJSONSerialization** for JSON parsing by default, so iOS 5.0+ is supported. You may use **SBJson** aka **json-framework**, though (<a href="https://github.com/stig/json-framework">get it here</a>), but this library was only tested with **NSJSONSerialization**.
 * Autoconstructing objects from JSON/XML using AutoObjects.
 * This library is suitable for ARC- and non-ARC projects (AutoObjects are supported only in non-ARC environment). The author is not quite familliar with ARC mode though so feel free to enchance nasty pieces of code.
@@ -43,6 +43,8 @@ There is main header file called **KBAPISupport.h**, where all other headers are
 	
 Usage
 =====
+
+* First you need to import the library project as subproject. Right-click on desired project group, then select **KBAPISupport.xcodeproj**. After that add the library to your target dependencies: select your project in the left pane, select your target, select 'Build Phases' tab, expand 'Target Dependencies' and click "plus" sign. You may also need to add library headers to search path. To achieve this, select 'Build Settings' tab, find 'Search Paths' section and append appropriate search path to 'Header Search Path' array.
 
 * \#import "KBAPISupport.h"
 	

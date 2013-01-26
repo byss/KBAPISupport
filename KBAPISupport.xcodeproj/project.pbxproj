@@ -1,0 +1,315 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		43F2E0AF16B3424B004B0199 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F2E0AE16B3424B004B0199 /* Foundation.framework */; };
+		43F2E10416B35126004B0199 /* GDataXMLElement+stuff.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0F116B35126004B0199 /* GDataXMLElement+stuff.m */; };
+		43F2E10516B35126004B0199 /* KBAPIConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0F316B35126004B0199 /* KBAPIConnection.m */; };
+		43F2E10616B35126004B0199 /* KBAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0F616B35126004B0199 /* KBAPIRequest.m */; };
+		43F2E10716B35126004B0199 /* KBAutoEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0FB16B35126004B0199 /* KBAutoEntity.m */; };
+		43F2E10816B35126004B0199 /* KBAutoField.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0FD16B35126004B0199 /* KBAutoField.m */; };
+		43F2E10916B35126004B0199 /* KBEntityList.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10116B35126004B0199 /* KBEntityList.m */; };
+		43F2E10A16B35126004B0199 /* KBNetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10316B35126004B0199 /* KBNetworkIndicator.m */; };
+		43F2E10E16B36FDA004B0199 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10D16B36FDA004B0199 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		43F2E11016B37013004B0199 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F2E10F16B37013004B0199 /* libxml2.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		43F2E0A916B3424B004B0199 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		43F2E0AB16B3424B004B0199 /* libKBAPISupport.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKBAPISupport.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		43F2E0AE16B3424B004B0199 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		43F2E0F016B35126004B0199 /* GDataXMLElement+stuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GDataXMLElement+stuff.h"; sourceTree = "<group>"; };
+		43F2E0F116B35126004B0199 /* GDataXMLElement+stuff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GDataXMLElement+stuff.m"; sourceTree = "<group>"; };
+		43F2E0F216B35126004B0199 /* KBAPIConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPIConnection.h; sourceTree = "<group>"; };
+		43F2E0F316B35126004B0199 /* KBAPIConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAPIConnection.m; sourceTree = "<group>"; };
+		43F2E0F416B35126004B0199 /* KBAPIConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPIConnectionDelegate.h; sourceTree = "<group>"; };
+		43F2E0F516B35126004B0199 /* KBAPIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPIRequest.h; sourceTree = "<group>"; };
+		43F2E0F616B35126004B0199 /* KBAPIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAPIRequest.m; sourceTree = "<group>"; };
+		43F2E0F716B35126004B0199 /* KBAPISupport-config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KBAPISupport-config.h"; sourceTree = "<group>"; };
+		43F2E0F816B35126004B0199 /* KBAPISupport-debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KBAPISupport-debug.h"; sourceTree = "<group>"; };
+		43F2E0F916B35126004B0199 /* KBAPISupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPISupport.h; sourceTree = "<group>"; };
+		43F2E0FA16B35126004B0199 /* KBAutoEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAutoEntity.h; sourceTree = "<group>"; };
+		43F2E0FB16B35126004B0199 /* KBAutoEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAutoEntity.m; sourceTree = "<group>"; };
+		43F2E0FC16B35126004B0199 /* KBAutoField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAutoField.h; sourceTree = "<group>"; };
+		43F2E0FD16B35126004B0199 /* KBAutoField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAutoField.m; sourceTree = "<group>"; };
+		43F2E0FE16B35126004B0199 /* KBAutoFieldMacros.gen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAutoFieldMacros.gen.h; sourceTree = "<group>"; };
+		43F2E0FF16B35126004B0199 /* KBEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBEntity.h; sourceTree = "<group>"; };
+		43F2E10016B35126004B0199 /* KBEntityList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBEntityList.h; sourceTree = "<group>"; };
+		43F2E10116B35126004B0199 /* KBEntityList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBEntityList.m; sourceTree = "<group>"; };
+		43F2E10216B35126004B0199 /* KBNetworkIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBNetworkIndicator.h; sourceTree = "<group>"; };
+		43F2E10316B35126004B0199 /* KBNetworkIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBNetworkIndicator.m; sourceTree = "<group>"; };
+		43F2E10C16B36FDA004B0199 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
+		43F2E10D16B36FDA004B0199 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		43F2E10F16B37013004B0199 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		43F2E0A816B3424B004B0199 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43F2E11016B37013004B0199 /* libxml2.dylib in Frameworks */,
+				43F2E0AF16B3424B004B0199 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		43F2E0A016B3424B004B0199 = {
+			isa = PBXGroup;
+			children = (
+				43F2E0B016B3424B004B0199 /* KBAPISupport */,
+				43F2E10B16B36FDA004B0199 /* GDataXML */,
+				43F2E0AD16B3424B004B0199 /* Frameworks */,
+				43F2E0AC16B3424B004B0199 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		43F2E0AC16B3424B004B0199 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				43F2E0AB16B3424B004B0199 /* libKBAPISupport.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		43F2E0AD16B3424B004B0199 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				43F2E10F16B37013004B0199 /* libxml2.dylib */,
+				43F2E0AE16B3424B004B0199 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		43F2E0B016B3424B004B0199 /* KBAPISupport */ = {
+			isa = PBXGroup;
+			children = (
+				43F2E0F916B35126004B0199 /* KBAPISupport.h */,
+				43F2E0F716B35126004B0199 /* KBAPISupport-config.h */,
+				43F2E0F816B35126004B0199 /* KBAPISupport-debug.h */,
+				43F2E0F016B35126004B0199 /* GDataXMLElement+stuff.h */,
+				43F2E0F116B35126004B0199 /* GDataXMLElement+stuff.m */,
+				43F2E0F216B35126004B0199 /* KBAPIConnection.h */,
+				43F2E0F316B35126004B0199 /* KBAPIConnection.m */,
+				43F2E0F416B35126004B0199 /* KBAPIConnectionDelegate.h */,
+				43F2E0F516B35126004B0199 /* KBAPIRequest.h */,
+				43F2E0F616B35126004B0199 /* KBAPIRequest.m */,
+				43F2E0FA16B35126004B0199 /* KBAutoEntity.h */,
+				43F2E0FB16B35126004B0199 /* KBAutoEntity.m */,
+				43F2E0FC16B35126004B0199 /* KBAutoField.h */,
+				43F2E0FD16B35126004B0199 /* KBAutoField.m */,
+				43F2E0FE16B35126004B0199 /* KBAutoFieldMacros.gen.h */,
+				43F2E0FF16B35126004B0199 /* KBEntity.h */,
+				43F2E10016B35126004B0199 /* KBEntityList.h */,
+				43F2E10116B35126004B0199 /* KBEntityList.m */,
+				43F2E10216B35126004B0199 /* KBNetworkIndicator.h */,
+				43F2E10316B35126004B0199 /* KBNetworkIndicator.m */,
+			);
+			path = KBAPISupport;
+			sourceTree = "<group>";
+		};
+		43F2E10B16B36FDA004B0199 /* GDataXML */ = {
+			isa = PBXGroup;
+			children = (
+				43F2E10C16B36FDA004B0199 /* GDataXMLNode.h */,
+				43F2E10D16B36FDA004B0199 /* GDataXMLNode.m */,
+			);
+			path = GDataXML;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		43F2E0AA16B3424B004B0199 /* KBAPISupport */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43F2E0B916B3424B004B0199 /* Build configuration list for PBXNativeTarget "KBAPISupport" */;
+			buildPhases = (
+				43F2E0D716B34361004B0199 /* Prepare Sources */,
+				43F2E0A716B3424B004B0199 /* Sources */,
+				43F2E0A816B3424B004B0199 /* Frameworks */,
+				43F2E0A916B3424B004B0199 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KBAPISupport;
+			productName = KBAPISupport;
+			productReference = 43F2E0AB16B3424B004B0199 /* libKBAPISupport.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		43F2E0A216B3424B004B0199 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
+			buildConfigurationList = 43F2E0A516B3424B004B0199 /* Build configuration list for PBXProject "KBAPISupport" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 43F2E0A016B3424B004B0199;
+			productRefGroup = 43F2E0AC16B3424B004B0199 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				43F2E0AA16B3424B004B0199 /* KBAPISupport */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		43F2E0D716B34361004B0199 /* Prepare Sources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Prepare Sources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "${SRCROOT}/${PRODUCT_NAME}/KBAPISupport-prepare.sh";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		43F2E0A716B3424B004B0199 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43F2E10416B35126004B0199 /* GDataXMLElement+stuff.m in Sources */,
+				43F2E10516B35126004B0199 /* KBAPIConnection.m in Sources */,
+				43F2E10616B35126004B0199 /* KBAPIRequest.m in Sources */,
+				43F2E10716B35126004B0199 /* KBAutoEntity.m in Sources */,
+				43F2E10816B35126004B0199 /* KBAutoField.m in Sources */,
+				43F2E10916B35126004B0199 /* KBEntityList.m in Sources */,
+				43F2E10A16B35126004B0199 /* KBNetworkIndicator.m in Sources */,
+				43F2E10E16B36FDA004B0199 /* GDataXMLNode.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		43F2E0B716B3424B004B0199 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		43F2E0B816B3424B004B0199 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		43F2E0BA16B3424B004B0199 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/KBAPISupport.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		43F2E0BB16B3424B004B0199 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/KBAPISupport.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		43F2E0A516B3424B004B0199 /* Build configuration list for PBXProject "KBAPISupport" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43F2E0B716B3424B004B0199 /* Debug */,
+				43F2E0B816B3424B004B0199 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43F2E0B916B3424B004B0199 /* Build configuration list for PBXNativeTarget "KBAPISupport" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43F2E0BA16B3424B004B0199 /* Debug */,
+				43F2E0BB16B3424B004B0199 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 43F2E0A216B3424B004B0199 /* Project object */;
+}
