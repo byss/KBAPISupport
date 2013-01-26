@@ -26,6 +26,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "KBAPISupport-config.h"
+
 @protocol KBEntity;
 
 @class KBAPIConnection;
