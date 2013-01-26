@@ -2,12 +2,18 @@
 
 # Reports warning to stderr
 print_warning() {
-	echo 'Warning:' "$@" >&2
+	local f=${f:-"${BASH_SOURCE}"}
+	local l=${l:-"${BASH_LINENO}"}
+
+	echo "$f: $l: Warning:" "$@" >&2
 }
 
 # Reports error to stderr and dies
 fatal_error() {
-	echo 'Error:' "$@" >&2
+	local f=${f:-"${BASH_SOURCE}"}
+	local l=${l:-"${BASH_LINENO}"}
+	
+	echo "$f: $l: error:" "$@" >&2
 	exit 1
 }
 
@@ -39,12 +45,18 @@ vars_error_message() {
 
 # Reports error in variables values and dies
 variables_error() {
+	local f=${f:-"${BASH_SOURCE}"}
+	local l=${l:-"${BASH_LINENO}"}
+	
 	local message=$(vars_error_message "$@")
 	fatal_error "${message}"
 }
 
 # Reports error in one variable and dies
 variable_error() {
+	local f=${f:-"${BASH_SOURCE}"}
+	local l=${l:-"${BASH_LINENO}"}
+
 	variables_error '1' "$@"
 }
 
@@ -162,12 +174,12 @@ else # default action: build
 			variables_error 2 'AUTOGEN_HEADER_GEN' 'is not executable, cannot generate' 'AUTOGEN_HEADER'
 		fi
 		
-		pushd "${SOURCES_ROOT}"
-		"${AUTOGEN_HEADER_GEN}"
+		pushd "${SOURCES_ROOT}" >/dev/null 2>&1
+		"${AUTOGEN_HEADER_GEN}" >/dev/null 2>&1
 		result="$?"
-		popd
+		popd >/dev/null 2>&1
 		if [ "$result" -ne 0 ]; then
-			variable_error 'AUTOGEN_HEADER_GEN' 'failed to generate' 'AUTOGEN_HEADER'
+			variables_error 2 'AUTOGEN_HEADER_GEN' 'failed to generate' 'AUTOGEN_HEADER'
 		fi
 	fi
 	
