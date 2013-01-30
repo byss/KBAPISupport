@@ -41,10 +41,19 @@ There is main header file called **KBAPISupport.h**, where all other headers are
 
 	It has effect only if KBAPISUPPORT_DECODE is nonzero. Set the server encoding here to convert responses to Apple's Unicode.
 	
+Including library into your project
+===================================
+
+* Import the library project as subproject: right-click on desired project group, then select **KBAPISupport.xcodeproj**.
+
+* Add the library to your target dependencies: select your project in the left pane, select your target, select 'Build Phases' tab, expand 'Target Dependencies' and click "plus" sign.
+
+* If you are using XML, then you should append *-ObjC* to your linker flags. Open build settings of your target, locate 'Other Linker Flags' option in 'Linking' section and add *-ObjC* to the value of the option.
+
+* You may also need to add library headers to search path. To achieve this, select 'Build Settings' tab, find 'Search Paths' section and append appropriate search path to 'Header Search Path' array.
+	
 Usage
 =====
-
-* First you need to import the library project as subproject. Right-click on desired project group, then select **KBAPISupport.xcodeproj**. After that add the library to your target dependencies: select your project in the left pane, select your target, select 'Build Phases' tab, expand 'Target Dependencies' and click "plus" sign. You may also need to add library headers to search path. To achieve this, select 'Build Settings' tab, find 'Search Paths' section and append appropriate search path to 'Header Search Path' array.
 
 * \#import "KBAPISupport.h"
 	
