@@ -26,18 +26,20 @@
 
 #import "KBAPIRequest.h"
 
+#import "ARCSupport.h"
+
 @implementation KBAPIRequest
 
 + (instancetype) request {
 	KBAPIRequest *result = [[self alloc] init];
-#if __has_feature(objc_arc)
-	return result;
-#else
-	return [result autorelease];
-#endif
+	return KB_AUTORELEASE (result);
 }
 
 + (Class) expected {
+	return nil;
+}
+
++ (Class) error {
 	return nil;
 }
 

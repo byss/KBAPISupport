@@ -1,9 +1,9 @@
 //
-//  KBAPIRequest.h
+//  KBAutoError.m
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 26.11.12.
-//  Copyright (c) 2012 Kirill byss Bystrov. All rights reserved.
+//  Created by Kirill byss Bystrov on 31.01.13.
+//  Copyright (c) 2013 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,30 +24,12 @@
 //  THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+#if !__has_feature(objc_arc)
 
-#import "KBAPISupport-config.h"
+#import "KBAutoError.h"
 
-typedef enum _KBAPIRequestMethod KBAPIRequestMethod;
-
-enum _KBAPIRequestMethod {
-	KBAPIRequestMethodGET,
-	KBAPIRequestMethodPOST,
-	KBAPIRequestMethodPUT,
-	KBAPIRequestMethodDELETE,
-};
-
-@interface KBAPIRequest: NSObject
-
-@property (nonatomic, readonly) NSString *URL;
-
-+ (instancetype) request;
-+ (Class) expected;
-+ (Class) error;
-
-- (NSString *) URL;
-- (KBAPIRequestMethod) requestMethod;
-- (NSString *) bodyString;
-- (NSData *) bodyData;
+@implementation KBAutoError
 
 @end
+
+#endif // !__has_feature(objc_arc)

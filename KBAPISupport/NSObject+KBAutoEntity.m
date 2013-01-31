@@ -1,8 +1,8 @@
 //
-//  KBAPIRequest.h
+//  NSObject+KBAutoEntity.m
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 26.11.12.
+//  Created by Kirill byss Bystrov on 06.12.12.
 //  Copyright (c) 2012 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,30 +24,44 @@
 //  THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+#if !__has_feature(objc_arc)
 
-#import "KBAPISupport-config.h"
+#import "NSObject+KBAutoEntity.h"
 
-typedef enum _KBAPIRequestMethod KBAPIRequestMethod;
+#if KBAPISUPPORT_XML
+#	import "GDataXMLNode.h"
+#endif
 
-enum _KBAPIRequestMethod {
-	KBAPIRequestMethodGET,
-	KBAPIRequestMethodPOST,
-	KBAPIRequestMethodPUT,
-	KBAPIRequestMethodDELETE,
-};
+@implementation NSObject (KBAutoEntity)
 
-@interface KBAPIRequest: NSObject
++ (NSArray *) autoFields {
+	return nil;
+}
 
-@property (nonatomic, readonly) NSString *URL;
+#if KBAPISUPPORT_JSON
++ (instancetype) entityFromJSON: (id) JSON {
+	id <KBEntity> result = [[[self alloc] init] autorelease];
+	for (id <KBAutoField> autoField in [self autoFields]) {
+		if (![autoField setFieldInObject:result fromJSON:JSON]) {
+			return nil;
+		}
+	}
+	return result;
+}
+#endif
 
-+ (instancetype) request;
-+ (Class) expected;
-+ (Class) error;
-
-- (NSString *) URL;
-- (KBAPIRequestMethod) requestMethod;
-- (NSString *) bodyString;
-- (NSData *) bodyData;
+#if KBAPISUPPORT_XML
++ (instancetype) entityFromXML: (GDataXMLElement *) XML {
+	id <KBEntity> result = [[[self alloc] init] autorelease];
+	for (id <KBAutoField> autoField in [self autoFields]) {
+		if (![autoField setFieldInObject:result fromXML:XML]) {
+			return nil;
+		}
+	}
+	return result;
+}
+#endif
 
 @end
+
+#endif // !__has_feature(objc_arc)

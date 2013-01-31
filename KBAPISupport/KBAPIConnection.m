@@ -27,7 +27,9 @@
 #import "KBAPIConnection.h"
 #import "KBAPIRequest.h"
 #import "KBEntity.h"
+#import "KBError.h"
 #import "KBNetworkIndicator.h"
+#import "ARCSupport.h"
 
 #if KBAPISUPPORT_USE_SBJSON
 #	import "SBJsonParser.h"
@@ -47,6 +49,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 @private
 	NSMutableData *_buffer;
 	Class _expected;
+	Class _error;
 #if KBAPISUPPORT_USE_SBJSON
 	SBJSonParser *_parser;
 #endif
@@ -91,11 +94,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 	KBAPIConnection *result = [[self alloc] init];
 	result._request = request;
 	result.delegate = delegate;
-#if __has_feature(objc_arc)
-	return result;
-#else
-	return [result autorelease];
-#endif
+	return KB_AUTORELEASE (result);
 }
 
 - (id) init {
@@ -113,6 +112,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 	[_buffer release];
 	[__request release];
 	[_expected release];
+	[_error release];
 	[_delegate release];
 #	if KBAPISUPPORT_USE_SBJSON
 	[_parser release];
@@ -123,12 +123,15 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #endif
 
 - (void) startForClass:(Class)clazz {
+	[self startForClass:clazz error:nil];
+}
+
+- (void) startForClass:(Class)clazz error:(Class)error {
 	if ([clazz conformsToProtocol:@protocol(KBEntity)]) {
-#if __has_feature(objc_arc)
-		_expected = clazz;
-#else
-		_expected = [clazz retain];
-#endif
+		_expected = KB_RETAIN (clazz);
+	}
+	if ([error isSubclassOfClass:[KBError class]]) {
+		_error = KB_RETAIN (error);
 	}
 	[self start];
 }
@@ -141,11 +144,13 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 	if (!_expected) {
 		Class expected = [[theRequest class] expected];
 		if ([expected conformsToProtocol:@protocol(KBEntity)]) {
-#if __has_feature(objc_arc)
-		_expected = expected;
-#else
-		_expected = [expected retain];
-#endif
+			_expected = KB_RETAIN (expected);
+		}
+	}
+	if (!_error) {
+		Class error = [[theRequest class] error];
+		if ([error isSubclassOfClass:[KBError class]]) {
+			_error = KB_RETAIN (error);
 		}
 	}
 	
@@ -246,9 +251,6 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #	else
 		XMLResponse = [[GDataXMLDocument alloc] initWithData:_buffer options:0 error:&XMLError];
 #	endif
-#	if !__has_feature(objc_arc)
-		XMLResponse = [XMLResponse autorelease];
-#	endif
 #	if KBAPISUPPORT_BOTH_FORMATS
 	}
 #	endif
@@ -320,26 +322,48 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 			if (responseObject) {
 				[self.delegate apiConnection:self didReceiveResponse:responseObject];
 			} else {
-				NSString *formatString = (
+				KBError *error = nil;
+				if (_error) {
 #if KBAPISUPPORT_BOTH_FORMATS
-					JSONResponse ?
+					if (JSONResponse) {
 #endif
 #if KBAPISUPPORT_JSON
-						@"JSON"
+						error = [_error entityFromJSON:JSONResponse];
 #endif
 #if KBAPISUPPORT_BOTH_FORMATS
-					: (XMLResponse ?
+					} else if (XMLResponse) {
 #endif
 #if KBAPISUPPORT_XML
-						@"XML"
+						error = [_error entityFromXML:XMLResponse.rootElement];
 #endif
 #if KBAPISUPPORT_BOTH_FORMATS
-					:	@"this damn")
+					}
 #endif
-				);
-				NSError *error = [NSError errorWithDomain:@"KBAPIConnection" code:-1 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Cannot build %@ from %@ object.", _expected, formatString]}];
-				KBAPISUPPORT_LOG (@"error: %@", error);
-				[self.delegate apiConnection:self didFailWithError:error];
+				}
+				if (error) {
+					[self.delegate apiConnection:self didFailWithError:error];
+				} else {
+					NSString *formatString = (
+#if KBAPISUPPORT_BOTH_FORMATS
+						JSONResponse ?
+#endif
+#if KBAPISUPPORT_JSON
+							@"JSON"
+#endif
+#if KBAPISUPPORT_BOTH_FORMATS
+						: (XMLResponse ?
+#endif
+#if KBAPISUPPORT_XML
+							@"XML"
+#endif
+#if KBAPISUPPORT_BOTH_FORMATS
+						:	@"this damn")
+#endif
+					);
+					NSError *genericError = [NSError errorWithDomain:@"KBAPIConnection" code:-1 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Cannot build %@ from %@ object.", _expected, formatString]}];
+					KBAPISUPPORT_LOG (@"error: %@", genericError);
+					[self.delegate apiConnection:self didFailWithError:genericError];
+				}
 			}
 #if KBAPISUPPORT_JSON
 		} else if (JSONResponse && [self.delegate respondsToSelector:@selector(apiConnection:didReceiveJSON:)]) {
@@ -353,10 +377,10 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 			KBAPISUPPORT_BUG_HERE
 		}
 
-#if !__has_feature(objc_arc)
-		[_expected release];
-#endif
+		KB_RELEASE (_expected);
+		KB_RELEASE (_error);
 		_expected = nil;
+		_error = nil;
 #if KBAPISUPPORT_JSON
 	} else if (JSONResponse && [self.delegate respondsToSelector:@selector(apiConnection:didReceiveJSON:)]) {
 		[self.delegate apiConnection:self didReceiveJSON:JSONResponse];
@@ -372,7 +396,10 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 		KBAPISUPPORT_LOG (@"error: %@", error);
 		[self.delegate apiConnection:self didFailWithError:error];
 	}
-	
+
+#if KBAPISUPPORT_XML
+	KB_RELEASE (XMLResponse);
+#endif
 	_buffer.length = 0;
 		
 	KBAPISUPPORT_F_END

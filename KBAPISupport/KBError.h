@@ -1,8 +1,8 @@
 //
-//  KBAutoEntity.m
+//  KBError.h
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 06.12.12.
+//  Created by Kirill byss Bystrov on 31.01.13.
 //  Copyright (c) 2012 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,44 +24,11 @@
 //  THE SOFTWARE.
 //
 
-#if !__has_feature(objc_arc)
+#import <Foundation/Foundation.h>
 
-#import "KBAutoEntity.h"
+#import "KBEntity.h"
+#import "KBAPISupport-config.h"
 
-#if KBAPISUPPORT_XML
-#	import "GDataXMLNode.h"
-#endif
-
-@implementation KBAutoEntity
-
-+ (NSArray *) autoFields {
-	return nil;
-}
-
-#if KBAPISUPPORT_JSON
-+ (instancetype) entityFromJSON: (id) JSON {
-	KBAutoEntity *result = [[[self alloc] init] autorelease];
-	for (id <KBAutoField> autoField in [self autoFields]) {
-		if (![autoField setFieldInObject:result fromJSON:JSON]) {
-			return nil;
-		}
-	}
-	return result;
-}
-#endif
-
-#if KBAPISUPPORT_XML
-+ (instancetype) entityFromXML: (GDataXMLElement *) XML {
-	KBAutoEntity *result = [[[self alloc] init] autorelease];
-	for (id <KBAutoField> autoField in [self autoFields]) {
-		if (![autoField setFieldInObject:result fromXML:XML]) {
-			return nil;
-		}
-	}
-	return result;
-}
-#endif
+@interface KBError: NSError <KBEntity>
 
 @end
-
-#endif // !__has_feature(objc_arc)

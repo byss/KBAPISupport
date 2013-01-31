@@ -25,6 +25,7 @@
 //
 
 #import "KBEntityList.h"
+#import "ARCSupport.h"
 
 #if KBAPISUPPORT_XML
 #	import "GDataXMLNode.h"
@@ -96,11 +97,7 @@
 	}
 	
 	KBEntityList *result = [[self alloc] initWithJSON:JSON];
-#	if __has_feature(objc_arc)
-	return result;
-#	else
-	return [result autorelease];
-#	endif
+	return KB_AUTORELEASE (result);
 }
 
 - (id) initWithJSON:(id)JSON {
@@ -124,11 +121,7 @@
 	Class entityClass = [self entityClass];
 	if (entityTag && entityClass) {
 		KBEntityList *result = [[self alloc] initWithXML:XML];
-#	if __has_feature(objc_arc)
-		return result;
-#	else
-		return [result autorelease];
-#	endif
+		return KB_AUTORELEASE (result);
 	} else {
 		return nil;
 	}

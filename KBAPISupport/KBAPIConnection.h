@@ -60,5 +60,6 @@ extern NSString *const KBXMLErrorKey;
 
 - (void) start;
 - (void) startForClass: (Class) clazz;
+- (void) startForClass: (Class) clazz error: (Class) error;
 
 @end

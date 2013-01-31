@@ -1,9 +1,9 @@
 //
-//  KBAPIRequest.h
+//  ARCSupport.h
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 26.11.12.
-//  Copyright (c) 2012 Kirill byss Bystrov. All rights reserved.
+//  Created by Kirill byss Bystrov on 31.01.13.
+//  Copyright (c) 2013 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,30 +24,12 @@
 //  THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-
-#import "KBAPISupport-config.h"
-
-typedef enum _KBAPIRequestMethod KBAPIRequestMethod;
-
-enum _KBAPIRequestMethod {
-	KBAPIRequestMethodGET,
-	KBAPIRequestMethodPOST,
-	KBAPIRequestMethodPUT,
-	KBAPIRequestMethodDELETE,
-};
-
-@interface KBAPIRequest: NSObject
-
-@property (nonatomic, readonly) NSString *URL;
-
-+ (instancetype) request;
-+ (Class) expected;
-+ (Class) error;
-
-- (NSString *) URL;
-- (KBAPIRequestMethod) requestMethod;
-- (NSString *) bodyString;
-- (NSData *) bodyData;
-
-@end
+#if __has_feature(objc_arc)
+#	define KB_RETAIN(obj) (obj)
+#	define KB_AUTORELEASE(obj) (obj)
+#	define KB_RELEASE(obj)
+#else
+#	define KB_RETAIN(obj) ([(obj) retain])
+#	define KB_AUTORELEASE(obj) ([(obj) autorelease])
+#	define KB_RELEASE(obj) ([(obj) release])
+#endif

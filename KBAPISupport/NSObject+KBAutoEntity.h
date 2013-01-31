@@ -1,8 +1,8 @@
 //
-//  KBAPIRequest.h
+//  NSObject+KBAutoEntity.h
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 26.11.12.
+//  Created by Kirill byss Bystrov on 06.12.12.
 //  Copyright (c) 2012 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,30 +24,23 @@
 //  THE SOFTWARE.
 //
 
+#if !__has_feature(objc_arc)
+
 #import <Foundation/Foundation.h>
 
 #import "KBAPISupport-config.h"
 
-typedef enum _KBAPIRequestMethod KBAPIRequestMethod;
+#if KBAPISUPPORT_XML
+@class GDataXMLElement;
+#endif
 
-enum _KBAPIRequestMethod {
-	KBAPIRequestMethodGET,
-	KBAPIRequestMethodPOST,
-	KBAPIRequestMethodPUT,
-	KBAPIRequestMethodDELETE,
-};
+#import "KBEntity.h"
+#import "KBAutoField.h"
 
-@interface KBAPIRequest: NSObject
+@interface NSObject (KBAutoEntity) <KBEntity>
 
-@property (nonatomic, readonly) NSString *URL;
-
-+ (instancetype) request;
-+ (Class) expected;
-+ (Class) error;
-
-- (NSString *) URL;
-- (KBAPIRequestMethod) requestMethod;
-- (NSString *) bodyString;
-- (NSData *) bodyData;
++ (NSArray *) autoFields;
 
 @end
+
+#endif // !__has_feature(objc_arc)

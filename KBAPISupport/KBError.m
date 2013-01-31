@@ -1,8 +1,8 @@
 //
-//  KBAPIRequest.h
+//  KBError.m
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 26.11.12.
+//  Created by Kirill byss Bystrov on 31.01.13.
 //  Copyright (c) 2012 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,30 +24,23 @@
 //  THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+#import "KBError.h"
+#if KBAPISUPPORT_XML
+#	import "GDataXMLNode.h"
+#endif
 
-#import "KBAPISupport-config.h"
+@implementation KBError
 
-typedef enum _KBAPIRequestMethod KBAPIRequestMethod;
+#if KBAPISUPPORT_JSON
++ (instancetype) entityFromJSON:(id)JSON {
+	return nil;
+}
+#endif
 
-enum _KBAPIRequestMethod {
-	KBAPIRequestMethodGET,
-	KBAPIRequestMethodPOST,
-	KBAPIRequestMethodPUT,
-	KBAPIRequestMethodDELETE,
-};
-
-@interface KBAPIRequest: NSObject
-
-@property (nonatomic, readonly) NSString *URL;
-
-+ (instancetype) request;
-+ (Class) expected;
-+ (Class) error;
-
-- (NSString *) URL;
-- (KBAPIRequestMethod) requestMethod;
-- (NSString *) bodyString;
-- (NSData *) bodyData;
+#if KBAPISUPPORT_XML
++ (instancetype) entityFromXML:(GDataXMLElement *)XML {
+	return nil;
+}
+#endif
 
 @end

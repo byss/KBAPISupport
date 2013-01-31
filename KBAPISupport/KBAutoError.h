@@ -1,9 +1,9 @@
 //
-//  KBAutoEntity.h
+//  KBAutoError.h
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 06.12.12.
-//  Copyright (c) 2012 Kirill byss Bystrov. All rights reserved.
+//  Created by Kirill byss Bystrov on 31.01.13.
+//  Copyright (c) 2013 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,20 +26,13 @@
 
 #if !__has_feature(objc_arc)
 
-#import <Foundation/Foundation.h>
+#import "KBError.h"
 
-#import "KBAPISupport-config.h"
+#import "NSObject+KBAutoEntity.h"
 
-#if KBAPISUPPORT_XML
-@class GDataXMLElement;
-#endif
+// Just merges AutoObject & NSError definitions
 
-#import "KBEntity.h"
-#import "KBAutoField.h"
-
-@interface KBAutoEntity: NSObject <KBEntity>
-
-+ (NSArray *) autoFields;
+@interface KBAutoError: KBError
 
 @end
 
