@@ -194,4 +194,18 @@ For more usage examples please refer to KBAPISupport Demo projects at https://gi
 Documentation
 =============
 
-Documentation could be generated using **AppleDoc** (https://github.com/tomaz/appledoc). You may use following command: `appledoc --project-name 'KBAPISupport' --project-company 'Kirill byss Bystrov' --company-id 'ru.byss' --keep-undocumented-objects --keep-undocumented-members --search-undocumented-doc --no-repeat-first-par --no-merge-categories --output ~/Documents/Projects/KBAPISupport-appledoc --ignore .m .`.
+Documentation could be generated using **AppleDoc** (https://github.com/tomaz/appledoc). You may use following command:
+```
+appledoc \
+	--project-name 'KBAPISupport' \
+	--project-company 'Kirill byss Bystrov' \
+	--company-id 'ru.byss' \
+	--keep-undocumented-objects \
+	--keep-undocumented-members \
+	--search-undocumented-doc \
+	--no-repeat-first-par \
+	--no-merge-categories \
+	--output ~/KBAPISupport-appledoc \
+	--ignore .m \
+	.
+```
