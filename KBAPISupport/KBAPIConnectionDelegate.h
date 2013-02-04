@@ -35,19 +35,78 @@
 @class GDataXMLDocument;
 #endif
 
+/** KBAPIConnection instances' delegates must implement this protocol to receive
+  * connection-related events. Note, that all methods from "Handling responses"
+  * section are optional, but the delegate should implement one of the methods
+  * to actually use the KBAPIConnection instances.
+  * 
+  * Delegate's methods are checked in the following order:
+  * 
+  * 1. If the connection has expected response class, then the apiConnection:didReceiveResponse:
+  * is tried.
+  * 2. One of apiConnection:didReceiveJSON: and apiConnection:didReceiveXML: is tried,
+  * depending on the response type.
+  * 3. apiConnection:didReceiveData: is tried.
+  */
 @protocol KBAPIConnectionDelegate <NSObject>
 @required
+
+/** ---------------------
+  * @name Errors handling
+  * ---------------------
+  */
+  
+/** Called when connection receives error.
+  *
+  * This method is called not only on network errors, but also on malformed JSON
+  * or XML response or when object cannot be constructed from given source.
+  *
+  * @param connection Connection which received error.
+  * @param error Error information.
+  */
 - (void) apiConnection: (KBAPIConnection *) connection didFailWithError:(NSError *)error;
 
-// These methods are @optional. However, you should implement one of them to use KBAPIConnection.
 @optional
+
+/** ------------------------
+  * @name Handling responses
+  * ------------------------
+  */
+
 #if KBAPISUPPORT_JSON
+/** Connection received JSON object.
+  *
+  * This method is only defined when KBAPISupport is compiled with JSON support.
+  *
+  * @param connection Connection which received response.
+  * @param JSON The response object.
+  */
 - (void) apiConnection:(KBAPIConnection *)connection didReceiveJSON: (id) JSON;
 #endif
+
 #if KBAPISUPPORT_XML
+/** Connection received XML object.
+  *
+  * This method is only defined when KBAPISupport is compiled with XML support.
+  *
+  * @param connection Connection which received response.
+  * @param XML The response XML document.
+  */
 - (void) apiConnection:(KBAPIConnection *)connection didReceiveXML: (GDataXMLDocument *) XML;
 #endif
+
+/** Connection received some response and constructed response object.
+  *
+  * @param connection Connection which received response.
+  * @param response Constructed response object.
+  */
 - (void) apiConnection:(KBAPIConnection *)connection didReceiveResponse: (id <KBEntity>) response;
+
+/** Connection received arbitrary data.
+  *
+  * @param connection Connection which received response.
+  * @param data Raw received data.
+  */
 - (void) apiConnection:(KBAPIConnection *)connection didReceiveData: (NSData *) data;
 
 @end

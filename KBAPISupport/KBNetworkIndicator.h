@@ -26,9 +26,18 @@
 
 #import <Foundation/Foundation.h>
 
+/** This class is used to manage the network activity indicator. */
 @interface KBNetworkIndicator: NSObject
 
+/** ---------------------------
+  * @name Counting API requests
+  * ---------------------------
+  */
+
+/** Call this method when new network activity begins. */
 + (void) requestStarted;
+
+/** Call this method when new network activity finishes. */
 + (void) requestFinished;
 
 @end

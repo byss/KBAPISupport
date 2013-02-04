@@ -27,19 +27,107 @@
 #import "KBError.h"
 #if KBAPISUPPORT_XML
 #	import "GDataXMLNode.h"
+#	import "GDataXMLElement+stuff.h"
 #endif
+
+NSString *const kKBErrorDomain = @"ru.byss.KBAPISupport.KBError";
 
 @implementation KBError
 
++ (NSString *) errorCodeField {
+	return nil;
+}
+
++ (NSString *) errorDescriptionField {
+	return nil;
+}
+
++ (NSString *) errorDomainField {
+	return nil;
+}
+
++ (NSString *) defaultErrorDomain {
+	return nil;
+}
+
+#if KBAPISUPPORT_XML
++ (BOOL) errorCodeFieldIsAttirbute {
+	return NO;
+}
+
++ (BOOL) errorDescriptionFieldIsAttribute {
+	return NO;
+}
+
++ (BOOL) errorDomainFieldIsAttribute {
+	return NO;
+}
+#endif
+
 #if KBAPISUPPORT_JSON
 + (instancetype) entityFromJSON:(id)JSON {
-	return nil;
+	NSString *errorCodeField = [self errorCodeField];
+	NSString *errorDescriptionField = [self errorDescriptionField];
+	if (!(errorCodeField && errorDescriptionField)) {
+		return nil;
+	}
+	if (![JSON isKindOfClass:[NSDictionary class]]) {
+		return nil;
+	}
+	
+	NSString *errorDomainField = [self errorDomainField];
+	NSString *errorDomain = nil;
+	if (errorDomainField) {
+		errorDomain = [JSON objectForKey:errorDomainField];
+	}
+	if (!errorDomain) {
+		errorDomain = [self defaultErrorDomain];
+	}
+	if (!errorDomain) {
+		errorDomain = kKBErrorDomain;
+	}
+	NSInteger errorCode = 0;
+	id errorCodeObj = [JSON objectForKey:errorCodeField];
+	if ([errorCodeObj isKindOfClass:[NSString class]] || [errorCodeObj isKindOfClass:[NSNumber class]]) {
+		errorCode = [errorCodeObj integerValue];
+	}
+	NSString *errorDescription = [JSON objectForKey:errorDescriptionField];
+	NSDictionary *userInfo = nil;
+	if (errorDescription) {
+		userInfo = @{NSLocalizedDescriptionKey: errorDescription};
+	}
+	
+	return [KBError errorWithDomain:errorDomain code:errorCode userInfo:userInfo];
 }
 #endif
 
 #if KBAPISUPPORT_XML
 + (instancetype) entityFromXML:(GDataXMLElement *)XML {
-	return nil;
+	NSString *errorCodeField = [self errorCodeField];
+	NSString *errorDescriptionField = [self errorDescriptionField];
+	if (!(errorCodeField && errorDescriptionField)) {
+		return nil;
+	}
+	
+	NSString *errorDomainField = [self errorDomainField];
+	NSString *errorDomain = nil;
+	if (errorDomainField) {
+		errorDomain = ([self errorDomainFieldIsAttribute] ? ([XML attributeForName:errorDomainField].stringValue) : [XML childStringValue:errorDomainField]);
+	}
+	if (!errorDomain) {
+		errorDomain = [self defaultErrorDomain];
+	}
+	if (!errorDomain) {
+		errorDomain = kKBErrorDomain;
+	}
+	NSInteger errorCode = ([self errorCodeFieldIsAttirbute] ? ([XML attributeForName:errorCodeField].stringValue.integerValue) : ([XML childStringValue:errorCodeField].integerValue));
+	NSString *errorDescription = ([self errorDescriptionFieldIsAttribute] ? ([XML attributeForName:errorDescriptionField].stringValue) : [XML childStringValue:errorDescriptionField]);
+	NSDictionary *userInfo = nil;
+	if (errorDescription) {
+		userInfo = @{NSLocalizedDescriptionKey: errorDescription};
+	}
+	
+	return [KBError errorWithDomain:errorDomain code:errorCode userInfo:userInfo];
 }
 #endif
 

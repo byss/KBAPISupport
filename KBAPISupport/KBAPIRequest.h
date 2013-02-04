@@ -30,24 +30,65 @@
 
 typedef enum _KBAPIRequestMethod KBAPIRequestMethod;
 
+/** Request HTTP method type. */
 enum _KBAPIRequestMethod {
+	/** HTTP GET. */
 	KBAPIRequestMethodGET,
+	/** HTTP POST. */
 	KBAPIRequestMethodPOST,
+	/** HTTP PUT. */
 	KBAPIRequestMethodPUT,
+	/** HTTP DELETE. */
 	KBAPIRequestMethodDELETE,
 };
 
+/** Base class for API requests objects.
+  *
+  * Your subclass must override at least the URL property.
+  */
 @interface KBAPIRequest: NSObject
 
+/** --------------------------
+  * @name Request HTTP options
+  * --------------------------
+  */
+
+/** The request's URL. */
 @property (nonatomic, readonly) NSString *URL;
+/** The request's HTTP method.
+  * 
+  * KBAPIRequestMethodGET by default.
+  */
+@property (nonatomic, readonly) KBAPIRequestMethod requestMethod;
+/** The request's HTTP body, represented as string. */
+@property (nonatomic, readonly) NSString *bodyString;
+/** The request's HTTP body data.
+  * 
+  * By default is the value of bodyString encoded as UTF-8.
+  */
+@property (nonatomic, readonly) NSData *bodyData;
 
+/** ------------------------
+  * @name Creating instances
+  * ------------------------
+  */
+
+/** Creates and initializes instance.
+  * 
+  * @return Newly created instance.
+  */
 + (instancetype) request;
-+ (Class) expected;
-+ (Class) error;
 
-- (NSString *) URL;
-- (KBAPIRequestMethod) requestMethod;
-- (NSString *) bodyString;
-- (NSData *) bodyData;
+/** Expected response object class.
+  *
+  * Override this method in child class to use reponse objects autoconstructing.
+  */
++ (Class) expected;
+
+/** Expected response error object class.
+  *
+  * Override this method in child class to use reponse errors autoconstructing.
+  */
++ (Class) error;
 
 @end

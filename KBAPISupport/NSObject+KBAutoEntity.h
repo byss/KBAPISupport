@@ -37,8 +37,15 @@
 #import "KBEntity.h"
 #import "KBAutoField.h"
 
+/** This category is used for autoconstructing reponse objects by their fields
+  * descriptions.
+  */
 @interface NSObject (KBAutoEntity) <KBEntity>
 
+/** Override this method to define the object's autoconstructed fields list.
+  * 
+  * @return Array of id &lt; KBAutoField &gt;.
+  */
 + (NSArray *) autoFields;
 
 @end

@@ -29,10 +29,38 @@
 #if KBAPISUPPORT_XML
 #	import "GDataXMLNode.h"
 
+/** Convinience methods for GDataXMLElement.
+  */
 @interface GDataXMLElement (stuff)
 
+/** Returns value of child XML element interpreted as string.
+  *
+  * Finds by name first child element of receiver and represents it as NSString.
+  * If child element contains subelements, they will be represented as strings too.
+  * For example, if receiver represents XML
+  * 	<root>
+  * 		<elem>
+  * 			<subelem>subelem-value</subelem>
+  * 		</elem>
+  * 	</root>
+  * then childStringValue:@"elem" would return @"<subelem>subelem-value</subelem>".
+  *
+  * @param childName Name of the requested child element.
+  * @return String representation of child content or nil if no child found.
+  */
 - (NSString *) childStringValue: (NSString *) childName;
+
+/** Returns first child element with specified name.
+  *
+  * @param childName Name of the requested child element.
+  * @return Receiver's first child element with specified name of nil if element is not found.
+  */
 - (GDataXMLElement *) firstChildWithName: (NSString *) childName;
+
+/** Returns object representation of XML element.
+  *
+  * @return NSString, NSArray or NSDictionary, depending on the receiver's content.
+  */
 - (id) objectValue;
 
 @end

@@ -56,22 +56,22 @@
 
 ///////////////////////// Config /////////////////////////
 
-// Turns on or off KBAPISupport debug messages
+/// Turns on or off KBAPISupport debug messages
 #define KBAPISUPPORT_DEBUG 0
 
-// Turns on or off JSON objects support (using NSJSONSerialization)
+/// Turns on or off JSON objects support (using NSJSONSerialization)
 #define KBAPISUPPORT_JSON 1
 
-// Use SBJson aka json-framework instead of NSJSONSerialization
+/// Use SBJson aka json-framework instead of NSJSONSerialization
 #define KBAPISUPPORT_USE_SBJSON 0
 
-// Turns on or off XML objects (using GDataXML)
+/// Turns on or off XML objects (using GDataXML)
 #define KBAPISUPPORT_XML 1
 
-// Turns on or off converting server response from any iOS-supported encoding
+/// Turns on or off converting server response from any iOS-supported encoding
 #define KBAPISUPPORT_DECODE 0
 
-// Sets the server response encoding
+/// Sets the server response encoding
 #define KBAPISUPPORT_DECODE_FROM (NSWindowsCP1251StringEncoding)
 
 ///////////////////////// At least one format must be selected /////////////////////////

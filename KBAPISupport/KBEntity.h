@@ -32,13 +32,38 @@
 @class GDataXMLElement;
 #endif
 
+/** This protocol defines the interface of autoconstructed response object.
+  * Depending on KBAPISupport config you must override entityFromJSON:,
+  * entityFromJSON: or both. For non-ARC environments you may consider
+  * using KBAutoEntity.
+  */
 @protocol KBEntity <NSObject>
 @required
 
+/** ------------------------------
+  * @name Autoconstructing objects
+  * ------------------------------
+  */
+
 #if KBAPISUPPORT_JSON
+/** Autoconstruct object from JSON response.
+  *
+  * This method is only available if KBAPISupport is compiled with JSON support.
+  *
+  * @param JSON Source JSON object.
+  * @return Newly constructed object or nil if error occured.
+  */
 + (instancetype) entityFromJSON: (id) JSON;
 #endif
+
 #if KBAPISUPPORT_XML
+/** Autoconstruct object from XML response.
+ *
+ * This method is only available if KBAPISupport is compiled with XML support.
+ *
+ * @param XML Source XML element.
+ * @return Newly constructed object or nil if error occured.
+ */
 + (instancetype) entityFromXML: (GDataXMLElement *) XML;
 #endif
 

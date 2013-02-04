@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		43AE234716BA7782009DFE3F /* KBError.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AE234616BA7782009DFE3F /* KBError.m */; };
 		43AE234A16BA790B009DFE3F /* NSObject+KBAutoEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AE234916BA790B009DFE3F /* NSObject+KBAutoEntity.m */; };
-		43AE234D16BA79A6009DFE3F /* KBAutoError.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AE234C16BA79A6009DFE3F /* KBAutoError.m */; };
 		43F2E0AF16B3424B004B0199 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F2E0AE16B3424B004B0199 /* Foundation.framework */; };
 		43F2E10416B35126004B0199 /* GDataXMLElement+stuff.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0F116B35126004B0199 /* GDataXMLElement+stuff.m */; };
 		43F2E10516B35126004B0199 /* KBAPIConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0F316B35126004B0199 /* KBAPIConnection.m */; };
@@ -38,8 +37,6 @@
 		43AE234616BA7782009DFE3F /* KBError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBError.m; sourceTree = "<group>"; };
 		43AE234816BA790B009DFE3F /* NSObject+KBAutoEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KBAutoEntity.h"; sourceTree = "<group>"; };
 		43AE234916BA790B009DFE3F /* NSObject+KBAutoEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KBAutoEntity.m"; sourceTree = "<group>"; };
-		43AE234B16BA79A6009DFE3F /* KBAutoError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAutoError.h; sourceTree = "<group>"; };
-		43AE234C16BA79A6009DFE3F /* KBAutoError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAutoError.m; sourceTree = "<group>"; };
 		43AE234E16BA8D72009DFE3F /* ARCSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARCSupport.h; sourceTree = "<group>"; };
 		43F2E0AB16B3424B004B0199 /* libKBAPISupport.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKBAPISupport.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		43F2E0AE16B3424B004B0199 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -127,8 +124,6 @@
 				43AE234616BA7782009DFE3F /* KBError.m */,
 				43F2E10216B35126004B0199 /* KBNetworkIndicator.h */,
 				43F2E10316B35126004B0199 /* KBNetworkIndicator.m */,
-				43AE234B16BA79A6009DFE3F /* KBAutoError.h */,
-				43AE234C16BA79A6009DFE3F /* KBAutoError.m */,
 				43F2E0FC16B35126004B0199 /* KBAutoField.h */,
 				43F2E0FD16B35126004B0199 /* KBAutoField.m */,
 				43F2E0FE16B35126004B0199 /* KBAutoFieldMacros.gen.h */,
@@ -224,7 +219,6 @@
 				43F2E10E16B36FDA004B0199 /* GDataXMLNode.m in Sources */,
 				43AE234716BA7782009DFE3F /* KBError.m in Sources */,
 				43AE234A16BA790B009DFE3F /* NSObject+KBAutoEntity.m in Sources */,
-				43AE234D16BA79A6009DFE3F /* KBAutoError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

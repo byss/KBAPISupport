@@ -34,43 +34,137 @@
 @class GDataXMLElement;
 #endif
 
+/** This protocol defines generic AutoObject's field parsing behaviour.
+  * Available only in non-ARC environment.
+  */
 @protocol KBAutoField <NSObject>
 @required
 
+/** ---------------------
+  * @name Parsing options
+  * ---------------------
+  */
+
+/** Object's field name */
 - (NSString *) fieldName;
+/** Sets object's field name
+  *
+  * @param fieldName New field name.
+  */
 - (void) setFieldName: (NSString *) fieldName;
 #if KBAPISUPPORT_XML
+/** Whether this KBAutoField should get field value from element's attributes.
+  *
+  * This method is obly defined when KBAPISupport is compiled with XML support.
+  */
 - (BOOL) isAttribute;
+/** Sets value for isAttribute.
+  * 
+  * This method is obly defined when KBAPISupport is compiled with XML support.
+  *
+  * @param isAttribute New value.
+  */
 - (void) setIsAttribute: (BOOL) isAttribute;
 #endif
 
+@optional
+/** Field name in the source JSON/XML object. */
+- (NSString *) sourceFieldName;
+/** Sets sourceFieldName
+  *
+  * @param sourceFieldName New source object field name.
+  */
+- (void) setSourceFieldName: (NSString *) sourceFieldName;
+
+@required
+/** --------------------
+  * @name Setting fields
+  * --------------------
+  */
+
 #if KBAPISUPPORT_JSON
+/** Sets represented field in the object from JSON representation.
+  *
+  * This method is obly defined when KBAPISupport is compiled with JSON support.
+  *
+  * @param object Response object.
+  * @param JSON Source JSON object.
+  * @return Whether operation succeeded.
+  */
 - (BOOL) setFieldInObject: (id) object fromJSON: (id) JSON;
 #endif
 #if KBAPISUPPORT_XML
+/** Sets represented field in the object from XML representation.
+  *
+  * This method is obly defined when KBAPISupport is compiled with XML support.
+  *
+  * @param object Response object.
+  * @param XML Source XML element object.
+  * @return Whether operation succeeded.
+  */
 - (BOOL) setFieldInObject: (id) object fromXML: (GDataXMLElement *) XML;
 #endif
 
-@optional
-- (NSString *) sourceFieldName;
-- (void) setSourceFieldName: (NSString *) sourceFieldName;
-
 @end
 
-///////////////////////// Some standart field types /////////////////////////
-
+/** Base class for predefined autofields, such as KBAutoIntegerField,
+  * KBAutoObjectField, KBAutoStringField and KBAutoTimestampField.
+  * Available only in non-ARC environment.
+  */
 @interface KBAutoFieldBase: NSObject <KBAutoField>
 
 #if KBAPISUPPORT_XML
+/** ---------------------
+  * @name Parsing options
+  * ---------------------
+  */
+
+/** Whether this autofield sould get field value from XML element attributes.
+  *
+  * This property is defined only if KBAPISupport is compiled with XML support.
+  */
 @property (nonatomic, assign) BOOL isAttribute;
 #endif
+/** Object's field name. */
 @property (nonatomic, retain) NSString *fieldName;
+/** Source JSON/XML object's field name. */
 @property (nonatomic, retain) NSString *sourceFieldName;
 
+/** ------------------------
+  * @name Creating instances
+  * ------------------------
+  */
+
+/** Calls autoFieldWithFieldName:sourceFieldName: with nil and nil.
+  *
+  * @see autoFieldWithFieldName:sourceFieldName:
+  */
 + (instancetype) autoField;
+
+/** Calls autoFieldWithFieldName:sourceFieldName: with fieldName and nil.
+  *
+  * @see autoFieldWithFieldName:sourceFieldName:
+  */
 + (instancetype) autoFieldWithFieldName: (NSString *) fieldName;
+
+/** Creates and initializes autofield.
+  *
+  * @param fieldName Object's field name.
+  * @param sourceFieldName Source JSON/XML object's field name.
+  * @return Newly created autofield instance.
+  *
+  * @sa autoFieldWithFieldName:
+  * @sa autoField
+  */
 + (instancetype) autoFieldWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
+
 #if KBAPISUPPORT_XML
+/** First calls autoFieldWithFieldName:sourceFieldName: with fieldName and sourceFieldName, then sets isAttribute value.
+  *
+  * This method is only defined if KBAPISupport was compiled with XML support.
+  *
+  * @see autoFieldWithFieldName:sourceFieldName:
+  */
 + (instancetype) autoFieldWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
 #endif
 
