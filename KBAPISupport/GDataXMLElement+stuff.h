@@ -43,7 +43,7 @@
   * 			<subelem>subelem-value</subelem>
   * 		</elem>
   * 	</root>
-  * then childStringValue:@"elem" would return @"<subelem>subelem-value</subelem>".
+  * then childStringValue:@"elem" would return @"&lt;subelem&gt;subelem-value&lt;/subelem&gt;".
   *
   * @param childName Name of the requested child element.
   * @return String representation of child content or nil if no child found.
