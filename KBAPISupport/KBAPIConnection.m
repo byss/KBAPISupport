@@ -130,7 +130,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 	if ([clazz conformsToProtocol:@protocol(KBEntity)]) {
 		_expected = KB_RETAIN (clazz);
 	}
-	if ([error isSubclassOfClass:[KBError class]]) {
+	if ([error conformsToProtocol:@protocol(KBEntity)]) {
 		_error = KB_RETAIN (error);
 	}
 	[self start];
@@ -149,7 +149,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 	}
 	if (!_error) {
 		Class error = [[theRequest class] error];
-		if ([error isSubclassOfClass:[KBError class]]) {
+		if ([error conformsToProtocol:@protocol(KBEntity)]) {
 			_error = KB_RETAIN (error);
 		}
 	}

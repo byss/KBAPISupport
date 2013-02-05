@@ -65,7 +65,7 @@ extern NSString *const kKBErrorDomain;
   *
   * This method is only defined if KBAPISupport is compiled with XML support.
   */
-+ (BOOL) errorCodeFieldIsAttirbute;
++ (BOOL) errorCodeFieldIsAttribute;
 
 /** Returns whether error description should be obtained from XML element attribute.
  *

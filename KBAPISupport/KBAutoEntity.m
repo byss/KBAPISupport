@@ -1,5 +1,5 @@
 //
-//  NSObject+KBAutoEntity.h
+//  KBAutoEntity.m
 //  KBAPISupport
 //
 //  Created by Kirill byss Bystrov on 06.12.12.
@@ -26,27 +26,41 @@
 
 #if !__has_feature(objc_arc)
 
-#import <Foundation/Foundation.h>
-
-#import "KBAPISupport-config.h"
+#import "KBAutoEntity.h"
 
 #if KBAPISUPPORT_XML
-@class GDataXMLElement;
+#	import "GDataXMLNode.h"
 #endif
 
-#import "KBEntity.h"
-#import "KBAutoField.h"
+@implementation KBAutoEntity
 
-/** This category is used for autoconstructing reponse objects by their fields
-  * descriptions.
-  */
-@interface NSObject (KBAutoEntity) <KBEntity>
++ (NSArray *) autoFields {
+	return nil;
+}
 
-/** Override this method to define the object's autoconstructed fields list.
-  * 
-  * @return Array of id &lt; KBAutoField &gt;.
-  */
-+ (NSArray *) autoFields;
+#if KBAPISUPPORT_JSON
++ (instancetype) entityFromJSON: (id) JSON {
+	id <KBEntity> result = [[[self alloc] init] autorelease];
+	for (id <KBAutoField> autoField in [self autoFields]) {
+		if (![autoField setFieldInObject:result fromJSON:JSON]) {
+			return nil;
+		}
+	}
+	return result;
+}
+#endif
+
+#if KBAPISUPPORT_XML
++ (instancetype) entityFromXML: (GDataXMLElement *) XML {
+	id <KBEntity> result = [[[self alloc] init] autorelease];
+	for (id <KBAutoField> autoField in [self autoFields]) {
+		if (![autoField setFieldInObject:result fromXML:XML]) {
+			return nil;
+		}
+	}
+	return result;
+}
+#endif
 
 @end
 

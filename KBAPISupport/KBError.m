@@ -30,6 +30,8 @@
 #	import "GDataXMLElement+stuff.h"
 #endif
 
+#import "KBAPISupport-debug.h"
+
 NSString *const kKBErrorDomain = @"ru.byss.KBAPISupport.KBError";
 
 @implementation KBError
@@ -51,7 +53,7 @@ NSString *const kKBErrorDomain = @"ru.byss.KBAPISupport.KBError";
 }
 
 #if KBAPISUPPORT_XML
-+ (BOOL) errorCodeFieldIsAttirbute {
++ (BOOL) errorCodeFieldIsAttribute {
 	return NO;
 }
 
@@ -120,7 +122,7 @@ NSString *const kKBErrorDomain = @"ru.byss.KBAPISupport.KBError";
 	if (!errorDomain) {
 		errorDomain = kKBErrorDomain;
 	}
-	NSInteger errorCode = ([self errorCodeFieldIsAttirbute] ? ([XML attributeForName:errorCodeField].stringValue.integerValue) : ([XML childStringValue:errorCodeField].integerValue));
+	NSInteger errorCode = ([self errorCodeFieldIsAttribute] ? ([XML attributeForName:errorCodeField].stringValue.integerValue) : ([XML childStringValue:errorCodeField].integerValue));
 	NSString *errorDescription = ([self errorDescriptionFieldIsAttribute] ? ([XML attributeForName:errorDescriptionField].stringValue) : [XML childStringValue:errorDescriptionField]);
 	NSDictionary *userInfo = nil;
 	if (errorDescription) {
