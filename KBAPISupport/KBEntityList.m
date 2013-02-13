@@ -144,4 +144,13 @@
 }
 #endif
 
+- (void) setObjectsFromArray: (NSArray *) array {
+	KB_RELEASE (__list);
+	__list = [array mutableCopy];
+}
+
+- (NSArray *) objects {
+	return [NSArray arrayWithArray:__list];
+}
+
 @end

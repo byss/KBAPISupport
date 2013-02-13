@@ -54,4 +54,7 @@
 - (id <KBEntity>) lastEntity;
 - (void) clear;
 
+- (void) setObjectsFromArray: (NSArray *) array;
+- (NSArray *) objects;
+
 @end
