@@ -3,6 +3,11 @@ KBAPISupport
 
 This mini-library is used to access various types of HTTP-based APIs.
 
+License
+=======
+
+The library itself is licensed under MIT License; GDataXML is licensed under Apache License. If you use this library in an application and notify me about it, i would be pleased :)
+
 Features
 ========
 
