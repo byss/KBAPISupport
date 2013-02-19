@@ -31,21 +31,15 @@
 #	import "GDataXMLNode.h"
 #endif
 
-@interface KBEntityList ()
-
-@property (nonatomic, readonly) NSMutableArray *_list;
-
-@end
-
 @implementation KBEntityList
 
 - (id) init {
-	return [self initCommon];
+	return [self initWithCapacity:0];
 }
 
-- (id) initCommon {
+- (id) initWithCapacity:(NSUInteger)capacity {
 	if (self = [super init]) {
-		__list = [[NSMutableArray alloc] init];
+		_list = [[NSMutableArray alloc] initWithCapacity:capacity];
 	}
 	
 	return self;
@@ -53,31 +47,11 @@
 
 #if !__has_feature(objc_arc)
 - (void) dealloc {
-	[__list release];
+	[_list release];
 	
 	[super dealloc];
 }
 #endif
-
-- (NSUInteger) count {
-	return [self._list count];
-}
-
-- (void) appendList: (KBEntityList *) other {
-	[self._list addObjectsFromArray:other._list];
-}
-
-- (id <KBEntity>) entityForIndex: (NSUInteger) idx {
-	return [self._list objectAtIndex:idx];
-}
-
-- (id <KBEntity>) lastEntity {
-	return [self._list lastObject];
-}
-
-- (void) clear {
-	[self._list removeAllObjects];
-}
 
 #if KBAPISUPPORT_XML
 + (NSString *) entityTag {
@@ -101,12 +75,12 @@
 }
 
 - (id) initWithJSON:(id)JSON {
-	if (self = [self initCommon]) {
+	if (self = [self initWithCapacity:[JSON count]]) {
 		Class entityClass = [[self class] entityClass];
 		for (id obj in JSON) {
 			id <KBEntity> entity = [entityClass entityFromJSON:obj];
 			if (entity) {
-				[__list addObject:entity];
+				[_list addObject:entity];
 			}
 		}
 	}
@@ -128,14 +102,15 @@
 }
 
 - (id) initWithXML:(GDataXMLElement *)XML {
-	if (self = [self initCommon]) {
-		NSString *entityTag = [[self class] entityTag];
-		Class entityClass = [[self class] entityClass];
-		NSArray *elements = [XML elementsForName:entityTag];
+	NSString *entityTag = [[self class] entityTag];
+	Class entityClass = [[self class] entityClass];
+	NSArray *elements = [XML elementsForName:entityTag];
+
+	if (self = [self initWithCapacity:[elements count]]) {
 		for (GDataXMLElement *element in elements) {
 			id <KBEntity> entity = [entityClass entityFromXML:element];
 			if (entity) {
-				[__list addObject:entity];
+				[_list addObject:entity];
 			}
 		}
 	}
@@ -143,14 +118,5 @@
 	return self;
 }
 #endif
-
-- (void) setObjectsFromArray: (NSArray *) array {
-	KB_RELEASE (__list);
-	__list = [array mutableCopy];
-}
-
-- (NSArray *) objects {
-	return [NSArray arrayWithArray:__list];
-}
 
 @end

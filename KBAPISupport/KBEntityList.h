@@ -36,10 +36,14 @@
 
 @interface KBEntityList: NSObject <KBEntity>
 
+@property (nonatomic, readonly) NSMutableArray *list;
+
 #if KBAPISUPPORT_XML
 + (NSString *) entityTag;
 #endif
 + (Class) entityClass;
+
+- (id) initWithCapacity: (NSUInteger) capacity;
 
 #if KBAPISUPPORT_JSON
 - (id) initWithJSON: (id) JSON;
@@ -47,14 +51,5 @@
 #if KBAPISUPPORT_XML
 - (id) initWithXML: (GDataXMLElement *) XML;
 #endif
-
-- (NSUInteger) count;
-- (void) appendList: (KBEntityList *) other;
-- (id <KBEntity>) entityForIndex: (NSUInteger) idx;
-- (id <KBEntity>) lastEntity;
-- (void) clear;
-
-- (void) setObjectsFromArray: (NSArray *) array;
-- (NSArray *) objects;
 
 @end
