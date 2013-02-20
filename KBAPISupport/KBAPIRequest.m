@@ -31,7 +31,7 @@
 @implementation KBAPIRequest
 
 + (instancetype) request {
-	KBAPIRequest *result = [[self alloc] init];
+	KBAPIRequest *result = [self new];
 	return KB_AUTORELEASE (result);
 }
 

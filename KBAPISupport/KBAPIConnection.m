@@ -91,7 +91,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #endif
 
 + (instancetype) connectionWithRequest:(KBAPIRequest *)request delegate:(id<KBAPIConnectionDelegate>)delegate {
-	KBAPIConnection *result = [[self alloc] init];
+	KBAPIConnection *result = [self new];
 	result._request = request;
 	result.delegate = delegate;
 	return KB_AUTORELEASE (result);
@@ -99,9 +99,9 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 
 - (id) init {
 	if (self = [super init]) {
-		_buffer = [[NSMutableData alloc] init];
+		_buffer = [NSMutableData new];
 #if KBAPISUPPORT_USE_SBJSON
-		_parser = [[SBJSONParser alloc] init];
+		_parser = [SBJSONParser new];
 #endif
 	}
 	return self;
