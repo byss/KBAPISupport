@@ -213,8 +213,8 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 	NSString *decodedString = [NSString stringWithUTF8String:bytes];
 #	else // KBAPISUPPORT_DECODE
 	KBAPISUPPORT_LOG (@"response: %s", bytes);
-	free (bytes);
 #	endif // KBAPISUPPORT_DECODE
+	free (bytes);
 #endif // (defined (DEBUG) && KBAPISUPPORT_DEBUG) || KBAPISUPPORT_DECODE
 	
 #if KBAPISUPPORT_JSON
