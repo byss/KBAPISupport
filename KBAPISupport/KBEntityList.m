@@ -64,7 +64,7 @@
 }
 
 #if KBAPISUPPORT_JSON
-+ (id <KBEntity>) entityFromJSON: (id) JSON {
++ (instancetype) entityFromJSON: (id) JSON {
 	Class entityClass = [self entityClass];
 	if (!([JSON isKindOfClass:[NSArray class]] && entityClass)) {
 		return nil;
@@ -90,7 +90,7 @@
 #endif
 
 #if KBAPISUPPORT_XML
-+ (id <KBEntity>) entityFromXML:(GDataXMLElement *)XML {
++ (instancetype) entityFromXML:(GDataXMLElement *)XML {
 	NSString *entityTag = [self entityTag];
 	Class entityClass = [self entityClass];
 	if (entityTag && entityClass) {
