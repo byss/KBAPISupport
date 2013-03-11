@@ -45,6 +45,8 @@ NSString *const KBJSONErrorKey = @"KBJSONErrorKey";
 NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #endif
 
+static NSTimeInterval defaultTimeout = 30.0;
+
 @interface KBAPIConnection () {
 @private
 	NSMutableData *_buffer;
@@ -62,6 +64,18 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 @end
 
 @implementation KBAPIConnection
+
++ (NSTimeInterval) defaultTimeout {
+	return defaultTimeout;
+}
+
++ (void) setDefaultTimeout:(NSTimeInterval)timeout {
+	if (timeout < 1.0) {
+		timeout = 1.0;
+	}
+	
+	defaultTimeout = timeout;
+}
 
 + (NSString *) methodName: (KBAPIRequestMethod) method {
 	switch (method) {
@@ -103,6 +117,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 #if KBAPISUPPORT_USE_SBJSON
 		_parser = [SBJSONParser new];
 #endif
+		_timeout = defaultTimeout;
 	}
 	return self;
 }
@@ -158,7 +173,7 @@ NSString *const KBXMLErrorKey = @"KBXMLErrorKey";
 	
 	[KBNetworkIndicator requestStarted];
 	
-	NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:theRequest.URL]];
+	NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:theRequest.URL] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:self.timeout];
 	req.HTTPMethod = [[self class] methodName:theRequest.requestMethod];
 	NSData *bodyData = theRequest.bodyData;
 	if (bodyData) {

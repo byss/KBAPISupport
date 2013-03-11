@@ -72,6 +72,23 @@ extern NSString *const KBXMLErrorKey;
 @property (nonatomic, assign) KBAPIConnectionResponseType responseType;
 #endif
 
+/** Connection timeout.
+  *
+  */
+@property (nonatomic, assign) NSTimeInterval timeout;
+
+/** Default connection timeout.
+  *
+  * @return Default connection timeout.
+  */
++ (NSTimeInterval) defaultTimeout;
+
+/** Sets new default connection timeout.
+ *
+ * @param timeout New default connection timeout.
+ */
++ (void) setDefaultTimeout: (NSTimeInterval) timeout;
+
 /** ----------------------------------------
   * @name Creating KBAPIConnection instances
   * ----------------------------------------
