@@ -58,7 +58,7 @@ extern NSString *const KBXMLErrorKey;
   * and set the delegate to receive API events such as errors, JSON, XML or
   * autoconstructed objects receiving.
   */
-@interface KBAPIConnection: NSObject
+@interface KBAPIConnection: NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 /** The connection's delegate which receives connection responses and errors. */
 @property (nonatomic, retain) id <KBAPIConnectionDelegate> delegate;
