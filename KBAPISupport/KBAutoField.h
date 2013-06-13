@@ -24,8 +24,6 @@
 //  THE SOFTWARE.
 //
 
-#if !__has_feature(objc_arc)
-
 #import <Foundation/Foundation.h>
 
 #import "KBAPISupport-config.h"
@@ -231,5 +229,3 @@
 #endif
 
 @end
-
-#endif // !__has_feature(objc_arc)

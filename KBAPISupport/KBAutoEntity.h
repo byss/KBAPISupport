@@ -24,8 +24,6 @@
 //  THE SOFTWARE.
 //
 
-#if !__has_feature(objc_arc)
-
 #import <Foundation/Foundation.h>
 
 #import "KBAPISupport-config.h"
@@ -49,5 +47,3 @@
 + (NSArray *) autoFields;
 
 @end
-
-#endif // !__has_feature(objc_arc)
