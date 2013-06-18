@@ -24,7 +24,9 @@
 // created a document to retain it for as long as any
 // references rely on nodes inside that document tree.
 
+#import "KBAPISupport-config.h"
 
+#if KBAPISUPPORT_XML
 #import <Foundation/Foundation.h>
 
 // libxml includes require that the target Header Search Paths contain
@@ -219,3 +221,5 @@ typedef NSUInteger GDataXMLNodeKind;
 
 - (NSString *)description;
 @end
+
+#endif

@@ -13,6 +13,9 @@
  * limitations under the License.
  */
 
+#import "KBAPISupport-config.h"
+
+#if KBAPISUPPORT_XML
 #define GDATAXMLNODE_DEFINE_GLOBALS 1
 #import "GDataXMLNode.h"
 
@@ -1828,3 +1831,5 @@ static CFHashCode StringCacheKeyHashCallBack(const void *str) {
   }
   return hash;
 }
+
+#endif
