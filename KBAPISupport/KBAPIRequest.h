@@ -67,6 +67,7 @@ enum _KBAPIRequestMethod {
   * By default is the value of bodyString encoded as UTF-8.
   */
 @property (nonatomic, readonly) NSData *bodyData;
+@property (nonatomic, readonly) NSDictionary *additionalHeaders;
 
 /** ------------------------
   * @name Creating instances

@@ -59,4 +59,8 @@
 	return [[self bodyString] dataUsingEncoding:NSUTF8StringEncoding];
 }
 
+- (NSDictionary *) additionalHeaders {
+	return nil;
+}
+
 @end

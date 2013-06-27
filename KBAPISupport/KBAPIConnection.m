@@ -179,6 +179,10 @@ static NSTimeInterval defaultTimeout = 30.0;
 	if (bodyData) {
 		req.HTTPBody = bodyData;
 	}
+	NSDictionary *addnHeaders = theRequest.additionalHeaders;
+	for (NSString *header in addnHeaders) {
+		[req setValue:[addnHeaders objectForKey:header] forHTTPHeaderField:header];
+	}
 	
 	[NSURLConnection connectionWithRequest:req delegate:self];
 	
