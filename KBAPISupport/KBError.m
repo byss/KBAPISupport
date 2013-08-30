@@ -129,7 +129,7 @@ NSString *const kKBErrorDomain = @"ru.byss.KBAPISupport.KBError";
 		userInfo = @{NSLocalizedDescriptionKey: errorDescription};
 	}
 	
-	return [KBError errorWithDomain:errorDomain code:errorCode userInfo:userInfo];
+	return [self errorWithDomain:errorDomain code:errorCode userInfo:userInfo];
 }
 #endif
 
