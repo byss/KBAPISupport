@@ -59,7 +59,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 
 @property (nonatomic, retain) KBAPIRequest *_request;
 
-+ (NSString *) methodName: (KBAPIRequestMethod) method;
++ (NSString *) methodName: (NSInteger) method;
 
 @end
 
@@ -77,7 +77,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 	defaultTimeout = timeout;
 }
 
-+ (NSString *) methodName: (KBAPIRequestMethod) method {
++ (NSString *) methodName: (NSInteger) method {
 	switch (method) {
 		case KBAPIRequestMethodGET:
 			return @"GET";

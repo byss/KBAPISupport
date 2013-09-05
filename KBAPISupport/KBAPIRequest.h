@@ -28,10 +28,7 @@
 
 #import "KBAPISupport-config.h"
 
-typedef enum _KBAPIRequestMethod KBAPIRequestMethod;
-
-/** Request HTTP method type. */
-enum _KBAPIRequestMethod {
+NS_ENUM (NSInteger, KBAPIRequestMethod) {
 	/** HTTP GET. */
 	KBAPIRequestMethodGET,
 	/** HTTP POST. */
@@ -59,7 +56,7 @@ enum _KBAPIRequestMethod {
   * 
   * KBAPIRequestMethodGET by default.
   */
-@property (nonatomic, readonly) KBAPIRequestMethod requestMethod;
+@property (nonatomic, readonly) NSInteger requestMethod;
 /** The request's HTTP body, represented as string. */
 @property (nonatomic, readonly) NSString *bodyString;
 /** The request's HTTP body data.

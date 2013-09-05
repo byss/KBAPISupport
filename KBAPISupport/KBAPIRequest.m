@@ -47,7 +47,7 @@
 	return nil;
 }
 
-- (KBAPIRequestMethod) requestMethod {
+- (NSInteger) requestMethod {
 	return KBAPIRequestMethodGET;
 }
 
