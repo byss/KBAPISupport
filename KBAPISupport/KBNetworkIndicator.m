@@ -26,18 +26,42 @@
 
 #import "KBNetworkIndicator.h"
 
-#import <UIKit/UIKit.h>
+#if TARGET_OS_IPHONE
+#	import <UIKit/UIKit.h>
+#endif
 
 #import "KBAPISupport-debug.h"
+#import "ARCSupport.h"
 
 static NSUInteger requestsCount = 0;
+#if !TARGET_OS_IPHONE
+static id <KBNetworkIndicatorDelegate> KBNetworkIndicatorDelegate = nil;
+#endif
 
 @implementation KBNetworkIndicator
 
+#if !TARGET_OS_IPHONE
+
++ (id <KBNetworkIndicatorDelegate>) activityDelegate {
+	return KBNetworkIndicatorDelegate;
+}
+
++ (void) setActivityDelegate: (id <KBNetworkIndicatorDelegate>) delegate {
+	KB_RELEASE (KBNetworkIndicatorDelegate);
+	KBNetworkIndicatorDelegate = KB_RETAIN (delegate);
+}
+
+#endif
+
 + (void) requestStarted {
 	@synchronized (self) {
-		requestsCount++;
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+		if (!(requestsCount++)) {
+#if TARGET_OS_IPHONE
+			[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+#else
+			[KBNetworkIndicatorDelegate setNetworkActivityStatus:YES];
+#endif
+		}
 	}
 }
 
@@ -45,7 +69,11 @@ static NSUInteger requestsCount = 0;
 	@synchronized (self) {
 		if (requestsCount) {
 			if (!(--requestsCount)) {
+#if TARGET_OS_IPHONE
 				[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+#else
+				[KBNetworkIndicatorDelegate setNetworkActivityStatus:NO];
+#endif
 			}
 		} else {
 			KBAPISUPPORT_BUG_HERE

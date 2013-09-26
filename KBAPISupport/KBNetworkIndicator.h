@@ -26,6 +26,8 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol KBNetworkIndicatorDelegate;
+
 /** This class is used to manage the network activity indicator. */
 @interface KBNetworkIndicator: NSObject
 
@@ -33,6 +35,15 @@
   * @name Counting API requests
   * ---------------------------
   */
+#if !TARGET_OS_IPHONE
+
+/** Get current network activity delegate (non-iOS). */
++ (id <KBNetworkIndicatorDelegate>) activityDelegate;
+
+/** Set network activity delegate (non-iOS). */
++ (void) setActivityDelegate: (id <KBNetworkIndicatorDelegate>) delegate;
+
+#endif
 
 /** Call this method when new network activity begins. */
 + (void) requestStarted;
@@ -41,3 +52,14 @@
 + (void) requestFinished;
 
 @end
+
+#if !TARGET_OS_IPHONE
+/** This protocol is used to handle non-iOS network activity indicator. */
+@protocol KBNetworkIndicatorDelegate <NSObject>
+
+@required
+/** This methid is called when network activity status is changed. */
+- (void) setNetworkActivityStatus: (BOOL) active;
+
+@end
+#endif
