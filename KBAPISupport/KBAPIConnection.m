@@ -392,7 +392,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 		} else if (XMLResponse && [self.delegate respondsToSelector:@selector(apiConnection:didReceiveXML:)]) {
 			[self.delegate apiConnection:self didReceiveXML:XMLResponse];
 #endif
-		} else {
+		} else if (self.delegate) {
 			KBAPISUPPORT_BUG_HERE
 		}
 
