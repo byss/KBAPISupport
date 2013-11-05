@@ -77,6 +77,11 @@ extern NSString *const KBXMLErrorKey;
   */
 @property (nonatomic, assign) NSTimeInterval timeout;
 
+/** Arbitrary dictionary associated with this request.
+  *
+  */
+@property (nonatomic, retain) NSDictionary *userInfo;
+
 /** Default connection timeout.
   *
   * @return Default connection timeout.
@@ -95,32 +100,38 @@ extern NSString *const KBXMLErrorKey;
   */
 
 #if KBAPISUPPORT_BOTH_FORMATS
-/** Creates and initializes API connection with specified response type for some API request.
-  *
-  * This method is available only if KBAPISupport was compiled with both JSON and XML support.
-  *
-  * @param request API request for this connection.
-  * @param delegate Connection delegate which receives connection status events.
-  * @param responseType Expected response type.
-  * @return Initialized KBAPIConnection instance.
-  *
-  * @sa KBAPIConnectionResponseType
-  * @sa connectionWithRequest:delegate:
-  * @sa delegate
-  */
 + (instancetype) connectionWithRequest: (KBAPIRequest *) request delegate: (id <KBAPIConnectionDelegate>) delegate responseType: (KBAPIConnectionResponseType) responseType;
+
+/** Creates and initializes API connection with specified response type for some API request.
+ *
+ * This method is available only if KBAPISupport was compiled with both JSON and XML support.
+ *
+ * @param request API request for this connection.
+ * @param delegate Connection delegate which receives connection status events.
+ * @param responseType Expected response type.
+ * @param userInfo Arbitrary dictionary associated with this connection.
+ * @return Initialized KBAPIConnection instance.
+ *
+ * @sa KBAPIConnectionResponseType
+ * @sa connectionWithRequest:delegate:
+ * @sa delegate
+ */
++ (instancetype) connectionWithRequest: (KBAPIRequest *) request delegate: (id <KBAPIConnectionDelegate>) delegate responseType: (KBAPIConnectionResponseType) responseType userInfo: (NSDictionary *) userInfo;
 #endif
 
-/** Creates and initializes API connection for some API request.
-  *
-  * @param request API request for this connection.
-  * @param delegate Connection delegate which receives connection status events.
-  * @return Initialized KBAPIConnection instance.
-  *
-  * @sa delegate
-  * @sa start
-  */
 + (instancetype) connectionWithRequest: (KBAPIRequest *) request delegate: (id <KBAPIConnectionDelegate>) delegate;
+
+/** Creates and initializes API connection for some API request.
+ *
+ * @param request API request for this connection.
+ * @param delegate Connection delegate which receives connection status events.
+ * @param userInfo Arbitrary dictionary associated with this connection.
+ * @return Initialized KBAPIConnection instance.
+ *
+ * @sa delegate
+ * @sa start
+ */
++ (instancetype) connectionWithRequest: (KBAPIRequest *) request delegate: (id <KBAPIConnectionDelegate>) delegate userInfo: (NSDictionary *) userInfo;
 
 /** -------------------------
   * @name Starting connection

@@ -98,16 +98,26 @@ static NSTimeInterval defaultTimeout = 30.0;
 
 #if KBAPISUPPORT_BOTH_FORMATS
 + (instancetype) connectionWithRequest: (KBAPIRequest *) request delegate: (id <KBAPIConnectionDelegate>) delegate responseType: (KBAPIConnectionResponseType) responseType {
+	return [self connectionWithRequest:request delegate:delegate responseType:responseType userInfo:nil];
+}
+
++ (instancetype) connectionWithRequest:(KBAPIRequest *)request delegate:(id<KBAPIConnectionDelegate>)delegate responseType:(KBAPIConnectionResponseType)responseType userInfo:(NSDictionary *)userInfo {
 	KBAPIConnection *result = [self connectionWithRequest:request delegate:delegate];
 	result.responseType = responseType;
+	result.userInfo = userInfo;
 	return result;
 }
 #endif
 
 + (instancetype) connectionWithRequest:(KBAPIRequest *)request delegate:(id<KBAPIConnectionDelegate>)delegate {
+	return [self connectionWithRequest:request delegate:delegate userInfo:nil];
+}
+
++ (instancetype) connectionWithRequest:(KBAPIRequest *)request delegate:(id<KBAPIConnectionDelegate>)delegate userInfo:(NSDictionary *)userInfo {
 	KBAPIConnection *result = [self new];
 	result._request = request;
 	result.delegate = delegate;
+	result.userInfo = userInfo;
 	return KB_AUTORELEASE (result);
 }
 
