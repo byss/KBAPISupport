@@ -406,7 +406,10 @@ DEALLOC_MACRO_1 (objectClass)
 				[value addObject:valueItem];
 			}
 		}
-		[self setStringArrayValue:[[NSArray alloc] initWithArray:value] forObject:object];
+		NSArray *immutableValue = [[NSArray alloc] initWithArray:value];
+		[self setStringArrayValue:immutableValue forObject:object];
+		[immutableValue release];
+		[value release];
 	} else {
 		[self setStringArrayValue:nil forObject:object];
 	}
