@@ -229,3 +229,7 @@
 #endif
 
 @end
+
+@interface KBAutoStringArrayField: KBAutoFieldBase
+
+@end

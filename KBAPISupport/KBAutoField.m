@@ -381,4 +381,53 @@ DEALLOC_MACRO_1 (objectClass)
 
 @end
 
+@implementation KBAutoStringArrayField
+
+- (void) setStringArrayValue: (NSArray *) value forObject: (id) object {
+	SEL setter = [self setter];
+	if ([object respondsToSelector:setter]) {
+		[object performSelector:setter withObject:value];
+	}
+}
+
+#if KBAPISUPPORT_JSON
+- (BOOL) setFieldInObject:(id)object fromJSON:(id)JSON {
+	if (![super setFieldInObject:object fromJSON:JSON]) {
+		return NO;
+	}
+	
+	NSString *sourceFieldName = [self realSourceFieldName];
+	
+	id fieldValue = [JSON objectForKey:sourceFieldName];
+	if ([fieldValue isKindOfClass:[NSArray class]]) {
+		NSMutableArray *value = [[NSMutableArray alloc] initWithCapacity:[fieldValue count]];
+		for (id valueItem in fieldValue) {
+			if ([valueItem isKindOfClass:[NSString class]]) {
+				[value addObject:valueItem];
+			}
+		}
+		NSArray *immutableValue = [[NSArray alloc] initWithArray:value];
+		[self setStringArrayValue:immutableValue forObject:object];
+		[immutableValue release];
+		[value release];
+	} else {
+		[self setStringArrayValue:nil forObject:object];
+	}
+	
+	return YES;
+}
+#endif
+
+#if KBAPISUPPORT_XML
+- (BOOL) setFieldInObject: (id) object fromXML: (GDataXMLElement *) XML {
+	static dispatch_once_t onceToken;
+	dispatch_once (&onceToken, ^{
+    NSLog (@"===== KBAPISupport: WARNING! string arrays are not supported for XML yet! =====");
+	});
+	return NO;
+}
+#endif
+
+@end
+
 #endif // !__has_feature(objc_arc)
