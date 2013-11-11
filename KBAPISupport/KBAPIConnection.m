@@ -191,12 +191,12 @@ static NSTimeInterval defaultTimeout = 30.0;
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 	_buffer.length = 0;
-	KBAPISUPPORT_LOG (@"HTTP code: %d", ((NSHTTPURLResponse *) response).statusCode);
+	KBAPISUPPORT_LOG (@"HTTP code: %zd", ((NSHTTPURLResponse *) response).statusCode);
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
 	[_buffer appendData:data];
-	KBAPISUPPORT_LOG (@"Received %d bytes", data.length);
+	KBAPISUPPORT_LOG (@"Received %zd bytes", data.length);
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
