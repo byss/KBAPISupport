@@ -49,6 +49,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 
 @interface KBAPIConnection () {
 @private
+	NSURLConnection *_connection;
 	NSMutableData *_buffer;
 	Class _expected;
 	Class _error;
@@ -194,9 +195,14 @@ static NSTimeInterval defaultTimeout = 30.0;
 		[req setValue:[addnHeaders objectForKey:header] forHTTPHeaderField:header];
 	}
 	
-	[NSURLConnection connectionWithRequest:req delegate:self];
+	_connection = [NSURLConnection connectionWithRequest:req delegate:self];
 	
 	KBAPISUPPORT_F_END
+}
+
+- (void) cancel {
+	[_connection cancel];
+	_connection = nil;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
@@ -210,6 +216,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+	_connection = nil;
 	[KBNetworkIndicator requestFinished];
 	KBAPISUPPORT_LOG (@"error: %@", error);
 	[self.delegate apiConnection:self didFailWithError:error];
@@ -217,6 +224,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	KBAPISUPPORT_F_START
+	_connection = nil;
 	
 	KBAPISUPPORT_LOG (@"Request OK");
 	[KBNetworkIndicator requestFinished];

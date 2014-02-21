@@ -168,4 +168,6 @@ extern NSString *const KBXMLErrorKey;
   */
 - (void) startForClass: (Class) clazz error: (Class) error;
 
+- (void) cancel;
+
 @end
