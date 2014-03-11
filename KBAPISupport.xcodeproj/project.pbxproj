@@ -17,7 +17,6 @@
 		43F2E10916B35126004B0199 /* KBEntityList.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10116B35126004B0199 /* KBEntityList.m */; };
 		43F2E10A16B35126004B0199 /* KBNetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10316B35126004B0199 /* KBNetworkIndicator.m */; };
 		43F2E10E16B36FDA004B0199 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10D16B36FDA004B0199 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		43F2E11016B37013004B0199 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F2E10F16B37013004B0199 /* libxml2.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,7 +59,6 @@
 		43F2E10316B35126004B0199 /* KBNetworkIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBNetworkIndicator.m; sourceTree = "<group>"; };
 		43F2E10C16B36FDA004B0199 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		43F2E10D16B36FDA004B0199 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
-		43F2E10F16B37013004B0199 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +66,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43F2E11016B37013004B0199 /* libxml2.dylib in Frameworks */,
 				43F2E0AF16B3424B004B0199 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,7 +94,6 @@
 		43F2E0AD16B3424B004B0199 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				43F2E10F16B37013004B0199 /* libxml2.dylib */,
 				43F2E0AE16B3424B004B0199 /* Foundation.framework */,
 			);
 			name = Frameworks;
