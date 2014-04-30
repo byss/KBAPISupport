@@ -140,6 +140,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 	[_expected release];
 	[_error release];
 	[_delegate release];
+	[_userInfo release];
 #	if KBAPISUPPORT_USE_SBJSON
 	[_parser release];
 #	endif
