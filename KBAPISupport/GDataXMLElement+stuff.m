@@ -32,25 +32,25 @@
 
 - (NSString *) childStringValue: (NSString *) childName {
 	GDataXMLElement *firstChild = [self firstChildWithName:childName];
-	if (firstChild) {
-		NSMutableString *result = [NSMutableString string];
-		for (GDataXMLNode *node in firstChild.children) {
-			[result appendString:node.XMLString];
-		}
-		return result;
-	} else {
+	if (!firstChild) {
 		return nil;
 	}
+	
+	__block NSMutableString *result = nil;
+	dispatch_once_t onceToken = 0L;
+	for (GDataXMLNode *node in firstChild.children) {
+		NSString *nodeXMLString = node.XMLString;
+		dispatch_once (&onceToken, ^{
+			result = [[NSMutableString alloc] initWithCapacity:(nodeXMLString.length * firstChild.children.count)]; // fair guess
+		});
+		[result appendString:node.XMLString];
+	}
+	
+	return (result ? [[NSString alloc] initWithString:result] : @"");
 }
 
 - (GDataXMLElement *) firstChildWithName: (NSString *) childName {
-	NSArray *children = [self elementsForName:childName];
-	if ([children count]) {
-		GDataXMLElement *child = [children objectAtIndex:0];
-		return child;
-	} else {
-		return nil;
-	}
+	return [self elementsForName:childName].firstObject;
 }
 
 - (id) objectValue {
@@ -59,13 +59,13 @@
 	if (!self.attributes.count) {
 		for (GDataXMLNode *node in self.children) {
 			if (node.kind != GDataXMLElementKind) {
-				NSString *result = nil;
 				if (node.kind == GDataXMLTextKind) {
-					result = node.stringValue;
+					return node.stringValue;
+				} else {
+					return nil;
 				}
-
-				return result;
 			}
+			
 			GDataXMLElement *element = (GDataXMLElement *) node;
 			if (childName) {
 				if ([childName isEqualToString:element.name]) {
@@ -81,9 +81,9 @@
 	}
 	
 	if (parseAsArray) {
-		NSMutableArray *result = [NSMutableArray array];
+		NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:self.children.count];
 		for (GDataXMLElement *element in self.children) {
-			id object = [element objectValue];
+			id object = element.objectValue;
 			if (object) {
 				[result addObject:object];
 			} else {
@@ -91,22 +91,23 @@
 			}
 		}
 		
-		return [NSArray arrayWithArray:result];
+		return [[NSArray alloc] initWithArray:result];
 	} else {
-		NSMutableDictionary *result = [NSMutableDictionary dictionary];
+		NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithCapacity:(self.attributes.count + self.children.count)];
 		for (GDataXMLNode *attr in self.attributes) {
-			[result setObject:attr.stringValue forKey:attr.name];
+			result [attr.name] = attr.stringValue;
 		}
+		
 		for (GDataXMLElement *element in self.children) {
-			id object = [element objectValue];
+			id object = element.objectValue;
 			if (object) {
-				[result setObject:object forKey:element.name];
+				result [element.name] = object;
 			} else {
 				return nil;
 			}
 		}
 		
-		return [NSDictionary dictionaryWithDictionary:result];
+		return [[NSDictionary alloc] initWithDictionary:result];
 	}
 }
 

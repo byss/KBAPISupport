@@ -24,11 +24,12 @@
 //  THE SOFTWARE.
 //
 
-#if !__has_feature(objc_arc)
-
 #import "KBAutoField.h"
 
+#import <objc/runtime.h>
+
 #import "KBEntity.h"
+#import "ARCSupport.h"
 #import "KBAutoFieldMacros.gen.h"
 
 #if KBAPISUPPORT_XML
@@ -36,25 +37,32 @@
 #	import "GDataXMLElement+stuff.h"
 #	define ADDN_ARGS isAttribute: (BOOL) isAttribute
 #	define ADDN_DEFAULTS isAttribute:NO
-#	define ADDN_INIT _isAttribute = isAttribute;
+#	define ADDN_INIT _attribute = isAttribute;
+#	define ADDN_ARGS2 entityTag: (NSString *) entityTag
+#	define ADDN_DEFAULTS2 entityTag:nil
+#	define ADDN_INIT2 _entityTag = KB_RETAIN (entityTag);
 #else
 #	define ADDN_ARGS
 #	define ADDN_DEFAULTS
 #	define ADDN_INIT
+#	define ADDN_ARGS2
+#	define ADDN_DEFAULTS2
+#	define ADDN_INIT2
 #endif
+
+static inline NSString *stringValue (id object);
+static inline NSNumber *numberValue (id object);
 
 #pragma mark - KBAutoFieldBase
 
-@interface KBAutoFieldBase ()
-
-- (NSString *) realSourceFieldName;
-- (SEL) setter;
+@interface KBAutoFieldBase () {
+	NSString *_sourceFieldName;
+}
 
 @end
 
 @implementation KBAutoFieldBase
 
-AUTOFIELD_CONVINIENCE_CREATOR_0 ()
 AUTOFIELD_CONVINIENCE_CREATOR_1 (fieldName, FieldName, NSString *)
 AUTOFIELD_CONVINIENCE_CREATOR_2 (fieldName, FieldName, NSString *, sourceFieldName, NSString *)
 
@@ -62,16 +70,20 @@ AUTOFIELD_CONVINIENCE_CREATOR_2 (fieldName, FieldName, NSString *, sourceFieldNa
 AUTOFIELD_CONVINIENCE_CREATOR_3 (fieldName, FieldName, NSString *, sourceFieldName, NSString *, isAttribute, BOOL)
 #endif
 
-DELEGATE_INITIALIZATION_0 (WithFieldName:nil sourceFieldName:nil ADDN_DEFAULTS)
 DELEGATE_INITIALIZATION (WithFieldName:(NSString *)fieldName, sourceFieldName:nil ADDN_DEFAULTS)
 #if KBAPISUPPORT_XML
 DELEGATE_INITIALIZATION (WithFieldName:(NSString *)fieldName sourceFieldName:(NSString *) sourceFieldName, ADDN_DEFAULTS)
 #endif
 
 - (id) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName ADDN_ARGS {
+	if (!fieldName) {
+		KB_RELEASE (self);
+		@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"fieldName cannot be nil!" userInfo:nil];
+	}
+	
 	if (self = [super init]) {
-		_fieldName = [fieldName retain];
-		_sourceFieldName = [sourceFieldName retain];
+		_fieldName = KB_RETAIN (fieldName);
+		_sourceFieldName = KB_RETAIN (sourceFieldName);
 		ADDN_INIT
 	}
 	
@@ -80,25 +92,13 @@ DELEGATE_INITIALIZATION (WithFieldName:(NSString *)fieldName sourceFieldName:(NS
 
 DEALLOC_MACRO_2(fieldName, sourceFieldName)
 
-- (SEL) setter {
-	NSString *first = [self.fieldName substringToIndex:1];
-	NSString *other = [self.fieldName substringFromIndex:1];
-	return NSSelectorFromString ([NSString stringWithFormat:@"set%@%@:", [first uppercaseString], other]);
-}
-
-- (NSString *) realSourceFieldName {
-	return (self.sourceFieldName ? self.sourceFieldName : self.fieldName);
+- (NSString *) sourceFieldName {
+	return (_sourceFieldName ?: self.fieldName);
 }
 
 #if KBAPISUPPORT_JSON
 - (BOOL) setFieldInObject: (id) object fromJSON: (id) JSON {
 	if (![JSON isKindOfClass:[NSDictionary class]]) {
-		return NO;
-	}
-	
-	NSString *sourceFieldName = [self realSourceFieldName];
-	NSString *fieldName = self.fieldName;
-	if (!(sourceFieldName && fieldName)) {
 		return NO;
 	}
 	
@@ -108,12 +108,6 @@ DEALLOC_MACRO_2(fieldName, sourceFieldName)
 
 #if KBAPISUPPORT_XML
 - (BOOL) setFieldInObject: (id) object fromXML:(GDataXMLElement *)XML {
-	NSString *sourceFieldName = [self realSourceFieldName];
-	NSString *fieldName = self.fieldName;
-	if (!(sourceFieldName && fieldName)) {
-		return NO;
-	}
-	
 	return YES;
 }
 #endif
@@ -124,35 +118,18 @@ DEALLOC_MACRO_2(fieldName, sourceFieldName)
 
 @implementation KBAutoTimestampField
 
-- (void) setDateFromTimestamp: (NSInteger) timestamp forObject: (id) object {
-	NSDate *value = [NSDate dateWithTimeIntervalSince1970:timestamp];
-	SEL setter = [self setter];
-	if ([object respondsToSelector:setter]) {
-		[object performSelector:setter withObject:value];
-	}
-}
-
-- (void) gotIntValue: (NSInteger) value forObject: (id) object {
-	[self setDateFromTimestamp:value forObject:object];
+- (void) gotNumericValue: (NSNumber *) value forObject: (id) object {
+	[object setValue:(value ? [[NSDate alloc] initWithTimeIntervalSince1970:value.integerValue] : nil) forKey:self.fieldName];
 }
 
 #if KBAPISUPPORT_JSON
-- (BOOL) setFieldInObject: (id) object fromJSON: (id) JSON {
+- (BOOL) setFieldInObject: (id) object fromJSON: (NSDictionary *) JSON {
 	if (![super setFieldInObject:object fromJSON:JSON]) {
 		return NO;
 	}
 	
-	NSString *sourceFieldName = [self realSourceFieldName];
-	
-	id fieldValue = [JSON objectForKey:sourceFieldName];
-	if ([fieldValue isKindOfClass:[NSNumber class]]) {
-		[self gotIntValue:[fieldValue integerValue] forObject:object];
-	} else if ([fieldValue isKindOfClass:[NSString class]]) {
-		NSInteger value = [fieldValue integerValue];
-		[self gotIntValue:value forObject:object];
-	} else {
-		[self gotIntValue:0 forObject:object];
-	}
+	NSNumber *numValue = numberValue (JSON [self.sourceFieldName]);
+	[self gotNumericValue:numValue forObject:object];
 	
 	return YES;
 }
@@ -164,21 +141,17 @@ DEALLOC_MACRO_2(fieldName, sourceFieldName)
 		return NO;
 	}
 	
-	NSInteger value = 0;
-	NSString *sourceFieldName = [self realSourceFieldName];
+	NSString *strValue = nil;
+	NSString *sourceFieldName = self.sourceFieldName;
 	if (self.isAttribute) {
-		GDataXMLNode *attr = [XML attributeForName:sourceFieldName];
-		if (attr) {
-			value = [[attr stringValue] integerValue];
+		for (GDataXMLNode *attr = [XML attributeForName:sourceFieldName]; attr; attr = nil) {
+			strValue = attr.stringValue;
 		}
 	} else {
-		NSString *stringValue = [XML childStringValue:sourceFieldName];
-		if (stringValue) {
-			value = [stringValue integerValue];
-		}
+		strValue = [XML childStringValue:sourceFieldName];
 	}
 	
-	[self gotIntValue:value forObject:object];
+	[self gotNumericValue:numberValue (strValue) forObject:object];
 	
 	return YES;
 }
@@ -190,7 +163,6 @@ DEALLOC_MACRO_2(fieldName, sourceFieldName)
 
 @implementation KBAutoIntegerField
 
-AUTOFIELD_CONVINIENCE_CREATOR_1 (isUnsigned, Unsigned, BOOL)
 AUTOFIELD_CONVINIENCE_CREATOR_2 (isUnsigned, Unsigned, BOOL, fieldName, NSString *)
 AUTOFIELD_CONVINIENCE_CREATOR_3 (isUnsigned, Unsigned, BOOL, fieldName, NSString *, sourceFieldName, NSString *)
 
@@ -198,7 +170,6 @@ AUTOFIELD_CONVINIENCE_CREATOR_3 (isUnsigned, Unsigned, BOOL, fieldName, NSString
 AUTOFIELD_CONVINIENCE_CREATOR_4 (isUnsigned, Unsigned, BOOL, fieldName, NSString *, sourceFieldName, NSString *, isAttribute, BOOL)
 #endif
 
-DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned, fieldName:nil sourceFieldName:nil ADDN_DEFAULTS)
 DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)fieldName, sourceFieldName:nil ADDN_DEFAULTS)
 #if KBAPISUPPORT_XML
 DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)fieldName sourceFieldName:(NSString *) sourceFieldName, ADDN_DEFAULTS)
@@ -216,21 +187,8 @@ DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)f
 	return self;
 }
 
-- (void) setIntValue: (NSInteger) value forObject: (id) object {
-	SEL setter = [self setter];
-	if (![object respondsToSelector:setter]) {
-		return;
-	}
-	
-	NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[object methodSignatureForSelector:setter]];
-	[invocation setSelector:setter];
-	[invocation setTarget:object];
-	[invocation setArgument:&value atIndex:2];
-	[invocation invoke];
-}
-
-- (void) gotIntValue:(NSInteger)value forObject:(id)object {
-	[self setIntValue:((self.isUnsigned && (value < 0)) ? 0 : value) forObject:object];
+- (void) gotNumericValue:(NSNumber *)value forObject:(id)object {
+	[object setValue:((self.isUnsigned && (value < 0)) ? nil : value) forKey:self.fieldName];
 }
 
 @end
@@ -239,30 +197,14 @@ DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)f
 
 @implementation KBAutoStringField
 
-- (void) setStringValue: (NSString *) value forObject: (id) object {
-	SEL setter = [self setter];
-	if ([object respondsToSelector:setter]) {
-		[object performSelector:setter withObject:value];
-	}
-}
-
 #if KBAPISUPPORT_JSON
-- (BOOL) setFieldInObject: (id) object fromJSON: (id) JSON {
+- (BOOL) setFieldInObject: (id) object fromJSON: (NSDictionary *) JSON {
 	if (![super setFieldInObject:object fromJSON:JSON]) {
 		return NO;
 	}
 	
-	NSString *sourceFieldName = [self realSourceFieldName];
-
-	id fieldValue = [JSON objectForKey:sourceFieldName];
-	if ([fieldValue isKindOfClass:[NSString class]]) {
-		[self setStringValue:fieldValue forObject:object];
-	} else if ([fieldValue isKindOfClass:[NSNumber class]]) {
-		NSString *value = [fieldValue stringValue];
-		[self setStringValue:value forObject:object];
-	} else {
-		[self setStringValue:nil forObject:object];
-	}
+	NSString *strValue = stringValue (JSON [self.sourceFieldName]);
+	[object setValue:strValue forKey:self.fieldName];
 	
 	return YES;
 }
@@ -274,18 +216,16 @@ DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)f
 		return NO;
 	}
 	
-	NSString *value = nil;
-	NSString *sourceFieldName = [self realSourceFieldName];
+	NSString *strValue = nil;
+	NSString *sourceFieldName = self.sourceFieldName;
 	if (self.isAttribute) {
-		GDataXMLNode *attr = [XML attributeForName:sourceFieldName];
-		if (attr) {
-			value = [attr stringValue];
+		for (GDataXMLNode *attr = [XML attributeForName:sourceFieldName]; attr; attr = nil) {
+			strValue = [attr stringValue];
 		}
 	} else {
-		value = [XML childStringValue:sourceFieldName];
+		strValue = [XML childStringValue:sourceFieldName];
 	}
-
-	[self setStringValue:value forObject:object];
+	[object setValue:strValue forKey:self.fieldName];
 	
 	return YES;
 }
@@ -297,57 +237,43 @@ DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)f
 
 @implementation KBAutoObjectField
 
-AUTOFIELD_CONVINIENCE_CREATOR_1 (objectClass, ObjectClass, Class)
 AUTOFIELD_CONVINIENCE_CREATOR_2 (objectClass, ObjectClass, Class, fieldName, NSString *)
 AUTOFIELD_CONVINIENCE_CREATOR_3 (objectClass, ObjectClass, Class, fieldName, NSString *, sourceFieldName, NSString *)
 
-#if KBAPISUPPORT_XML
-AUTOFIELD_CONVINIENCE_CREATOR_4 (objectClass, ObjectClass, Class, fieldName, NSString *, sourceFieldName, NSString *, isAttribute, BOOL)
-#endif
-
-DELEGATE_INITIALIZATION (WithObjectClass: (Class) objectClass, fieldName:nil sourceFieldName:nil ADDN_DEFAULTS)
-DELEGATE_INITIALIZATION (WithObjectClass: (Class) objectClass fieldName:(NSString *)fieldName, sourceFieldName:nil ADDN_DEFAULTS)
-#if KBAPISUPPORT_XML
-DELEGATE_INITIALIZATION (WithObjectClass: (Class) objectClass fieldName:(NSString *)fieldName sourceFieldName:(NSString *) sourceFieldName, ADDN_DEFAULTS)
-#endif
+DELEGATE_INITIALIZATION (WithObjectClass: (Class) objectClass fieldName:(NSString *)fieldName, sourceFieldName:nil)
 
 - (id) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName ADDN_ARGS {
-	return [self initWithObjectClass:nil fieldName:fieldName sourceFieldName:sourceFieldName ADDN_ARGS];
+#if KBAPISUPPORT_XML
+	if (isAttribute) {
+		KB_RELEASE (self);
+		@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Cannot build objects from attributes!" userInfo:nil];
+	}
+#endif
+	return [self initWithObjectClass:nil fieldName:fieldName sourceFieldName:sourceFieldName];
 }
 
-- (id) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName ADDN_ARGS {
-	if (self = [super initWithFieldName:fieldName sourceFieldName:sourceFieldName ADDN_ARGS]) {
-		_objectClass = [objectClass retain];
+- (id) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName {
+	if (!class_conformsToProtocol (objectClass, @protocol (KBEntity))) {
+		KB_RELEASE (self);
+		@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Object class must conform to KBEntity!" userInfo:nil];
+	}
+
+	if (self = [super initWithFieldName:fieldName sourceFieldName:sourceFieldName isAttribute:NO]) {
+		_objectClass = objectClass;
 	}
 	
 	return self;
 }
 
-DEALLOC_MACRO_1 (objectClass)
-
-- (void) setObjectValue: (id) value forObject: (id) object {
-	SEL setter = [self setter];
-	if ([object respondsToSelector:setter]) {
-		[object performSelector:setter withObject:value];
-	}
-}
-
 #if KBAPISUPPORT_JSON
-- (BOOL) setFieldInObject: (id) object fromJSON: (id) JSON {
+- (BOOL) setFieldInObject: (id) object fromJSON: (NSDictionary *) JSON {
 	if (![super setFieldInObject:object fromJSON:JSON]) {
 		return NO;
 	}
 
 	Class objectClass = self.objectClass;
-	if (![objectClass conformsToProtocol:@protocol (KBEntity)]) {
-		return NO;
-	}
-
-	NSString *sourceFieldName = [self realSourceFieldName];
-
-	id fieldValue = [JSON objectForKey:sourceFieldName];
-	id value = [objectClass entityFromJSON:fieldValue];
-	[self setObjectValue:value forObject:object];
+	id objValue = [objectClass entityFromJSON:JSON [self.sourceFieldName]];
+	[object setValue:objValue forKey:self.fieldName];
 	
 	return YES;
 }
@@ -360,20 +286,10 @@ DEALLOC_MACRO_1 (objectClass)
 	}
 
 	Class objectClass = self.objectClass;
-	if (![objectClass conformsToProtocol:@protocol (KBEntity)]) {
-		return NO;
-	}
-
-	GDataXMLElement *fieldValue = nil;
-	NSString *sourceFieldName = [self realSourceFieldName];
-	if (self.isAttribute) {
-		return NO;
-	} else {
-		fieldValue = [XML firstChildWithName:sourceFieldName];
-	}
-
-	id value = [objectClass entityFromXML:fieldValue];
-	[self setObjectValue:value forObject:object];
+	NSString *sourceFieldName = self.sourceFieldName;
+	GDataXMLElement *fieldValue = [XML firstChildWithName:sourceFieldName];
+	id objValue = [objectClass entityFromXML:fieldValue];
+	[object setValue:objValue forKey:self.fieldName];
 	
 	return YES;
 }
@@ -381,38 +297,33 @@ DEALLOC_MACRO_1 (objectClass)
 
 @end
 
+#pragma mark - KBAutoStringArrayField
+
 @implementation KBAutoStringArrayField
 
-- (void) setStringArrayValue: (NSArray *) value forObject: (id) object {
-	SEL setter = [self setter];
-	if ([object respondsToSelector:setter]) {
-		[object performSelector:setter withObject:value];
-	}
-}
-
 #if KBAPISUPPORT_JSON
-- (BOOL) setFieldInObject:(id)object fromJSON:(id)JSON {
+- (BOOL) setFieldInObject:(id)object fromJSON:(NSDictionary *)JSON {
 	if (![super setFieldInObject:object fromJSON:JSON]) {
 		return NO;
 	}
 	
-	NSString *sourceFieldName = [self realSourceFieldName];
-	
-	id fieldValue = [JSON objectForKey:sourceFieldName];
+	NSArray *fieldValue = JSON [self.sourceFieldName];
+	__strong id *strings = NULL;
+	NSUInteger stringsCount = 0;
 	if ([fieldValue isKindOfClass:[NSArray class]]) {
-		NSMutableArray *value = [[NSMutableArray alloc] initWithCapacity:[fieldValue count]];
+		strings = (__strong id *) malloc (sizeof (*strings) * fieldValue.count);
 		for (id valueItem in fieldValue) {
-			if ([valueItem isKindOfClass:[NSString class]]) {
-				[value addObject:valueItem];
+			for (NSString *strValue = stringValue (valueItem); strValue; strValue = nil) {
+				strings [stringsCount++] = strValue;
 			}
 		}
-		NSArray *immutableValue = [[NSArray alloc] initWithArray:value];
-		[self setStringArrayValue:immutableValue forObject:object];
-		[immutableValue release];
-		[value release];
-	} else {
-		[self setStringArrayValue:nil forObject:object];
 	}
+	
+	NSArray *strArrValue = (strings ? [[NSArray alloc] initWithObjects:strings count:stringsCount] : nil);
+	if (strings) {
+		free (strings);
+	}
+	[object setValue:strArrValue forKey:self.fieldName];
 	
 	return YES;
 }
@@ -430,4 +341,132 @@ DEALLOC_MACRO_1 (objectClass)
 
 @end
 
-#endif // !__has_feature(objc_arc)
+#pragma mark - KBAutoObjectArrayField
+
+@implementation KBAutoObjectArrayField
+
+AUTOFIELD_CONVINIENCE_CREATOR_2 (entityClass, EntityClass, Class, fieldName, NSString *)
+AUTOFIELD_CONVINIENCE_CREATOR_3 (entityClass, EntityClass, Class, fieldName, NSString *, sourceFieldName, NSString *)
+AUTOFIELD_CONVINIENCE_CREATOR_4 (entityClass, EntityClass, Class, fieldName, NSString *, sourceFieldName, NSString *, isMutable, BOOL)
+
+#if KBAPISUPPORT_XML
+AUTOFIELD_CONVINIENCE_CREATOR_3 (entityClass, EntityClass, Class, fieldName, NSString *, entityTag, NSString *)
+AUTOFIELD_CONVINIENCE_CREATOR_4 (entityClass, EntityClass, Class, fieldName, NSString *, sourceFieldName, NSString *, entityTag, NSString *)
+AUTOFIELD_CONVINIENCE_CREATOR_5 (entityClass, EntityClass, Class, fieldName, NSString *, sourceFieldName, NSString *, isMutable, BOOL, entityTag, NSString *)
+#endif
+
+DELEGATE_INITIALIZATION (WithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName, sourceFieldName:nil);
+DELEGATE_INITIALIZATION (WithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName sourceFieldName:(NSString *)sourceFieldName, isMutable:NO);
+#if KBAPISUPPORT_XML
+DELEGATE_INITIALIZATION (WithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName sourceFieldName:(NSString *)sourceFieldName isMutable: (BOOL) isMutable, entityTag:nil);
+- (instancetype) initWithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName entityTag: (NSString *) entityTag {
+	return [self initWithEntityClass:entityClass fieldName:fieldName sourceFieldName:nil isMutable:NO entityTag:entityTag];
+}
+- (instancetype) initWithEntityClass: (Class) entityClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName  entityTag: (NSString *) entityTag {
+	return [self initWithEntityClass:entityClass fieldName:fieldName sourceFieldName:sourceFieldName isMutable:NO entityTag:entityTag];
+}
+- (id) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName ADDN_ARGS {
+	return [self initWithEntityClass:nil fieldName:fieldName sourceFieldName:sourceFieldName ADDN_DEFAULTS2];
+}
+#endif
+
+- (id) initWithEntityClass: (Class) entityClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isMutable: (BOOL) isMutable ADDN_ARGS2 {
+	if (!class_conformsToProtocol (entityClass, @protocol (KBEntity))) {
+		KB_RELEASE (self);
+		@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Object class must conform to KBEntity!" userInfo:nil];
+	}
+#if KBAPISUPPORT_XML
+	if (!entityTag) {
+		KB_RELEASE (self);
+		@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Entity tag cannot be nil!" userInfo:nil];
+	}
+#endif
+	
+	if (self = [super initWithFieldName:fieldName sourceFieldName:sourceFieldName ADDN_DEFAULTS]) {
+		_entityClass = entityClass;
+		_isMutable = isMutable;
+		ADDN_INIT2
+	}
+	
+	return self;
+}
+
+DEALLOC_MACRO_1 (entityTag);
+
+#if KBAPISUPPORT_JSON
+- (BOOL) setFieldInObject:(id)object fromJSON:(NSDictionary *)JSON {
+	if (![super setFieldInObject:object fromJSON:JSON]) {
+		return NO;
+	}
+	
+	NSArray *fieldValue = JSON [self.sourceFieldName];
+	__strong id *objects = NULL;
+	NSUInteger objectsCount = 0;
+	if ([fieldValue isKindOfClass:[NSArray class]]) {
+		objects = (__strong id *) malloc (sizeof (*objects) * fieldValue.count);
+		Class entityClass = self.entityClass;
+		for (id valueItem in fieldValue) {
+			for (id objValue = [entityClass entityFromJSON:valueItem]; objValue; objValue = nil) {
+				objects [objectsCount++] = objValue;
+			}
+		}
+	}
+	
+	NSArray *objArrValue = (objects ? [[NSArray alloc] initWithObjects:objects count:objectsCount] : nil);
+	if (objects) {
+		free (objects);
+	}
+	[object setValue:objArrValue forKey:self.fieldName];
+	
+	return YES;
+}
+#endif
+
+#if KBAPISUPPORT_XML
+- (BOOL)setFieldInObject:(id)object fromXML:(GDataXMLElement *)XML {
+	if (![super setFieldInObject:object fromXML:XML]) {
+		return NO;
+	}
+	
+	NSString *entityTag = self.entityTag;
+	Class entityClass = self.entityClass;
+	NSArray *elements = [XML elementsForName:entityTag];
+	__strong id *objects = (__strong id *) malloc (sizeof (*objects) * elements.count);
+	NSUInteger objectsCount = 0;
+	for (GDataXMLElement *element in elements) {
+		for (id objValue = [entityClass entityFromXML:element]; objValue; objValue = nil) {
+			objects [objectsCount++] = objValue;
+		}
+	}
+
+	NSArray *objArrValue = (objects ? [[NSArray alloc] initWithObjects:objects count:objectsCount] : nil);
+	if (objects) {
+		free (objects);
+	}
+	[object setValue:objArrValue forKey:self.fieldName];
+	
+	return YES;
+}
+#endif
+
+@end
+
+static inline NSString *stringValue (id object) {
+	if ([object isKindOfClass:[NSString class]]) {
+		return object;
+	} else if ([object isKindOfClass:[NSNumber class]]) {
+		return [object description];
+	} else {
+		return nil;
+	}
+}
+
+static inline NSNumber *numberValue (id object) {
+	if ([object isKindOfClass:[NSNumber class]]) {
+		return object;
+	} else if ([object isKindOfClass:[NSString class]]) {
+		return [[NSDecimalNumber alloc] initWithString:object];
+	} else {
+		return nil;
+	}
+}

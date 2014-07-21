@@ -31,8 +31,7 @@
 @implementation KBAPIRequest
 
 + (instancetype) request {
-	KBAPIRequest *result = [self new];
-	return KB_AUTORELEASE (result);
+	return KB_AUTORELEASE ([self new]);
 }
 
 + (Class) expected {
@@ -51,12 +50,20 @@
 	return KBAPIRequestMethodGET;
 }
 
+- (BOOL) isBodyStreamed {
+	return NO;
+}
+
 - (NSString *) bodyString {
 	return nil;
 }
 
 - (NSData *) bodyData {
 	return [[self bodyString] dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+- (NSStream *) bodyStream {
+	return nil;
 }
 
 - (NSDictionary *) additionalHeaders {

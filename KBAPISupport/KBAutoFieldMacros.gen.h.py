@@ -49,7 +49,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.'''
-AUTOFIELD_CONVINIENCE_CREATOR_MAX = 4
+AUTOFIELD_CONVINIENCE_CREATOR_MAX = 5
 DEALLOC_MACRO_MAX = 2
 
 ######################### main () #########################
@@ -110,7 +110,7 @@ if AUTOFIELD_CONVINIENCE_CREATOR_MAX > -1:
 	fout.write ('''\
 #define AUTOFIELD_CONVINIENCE_CREATOR_0(nameSuffix, other...) \\
 + (instancetype) autoField##nameSuffix  { \\
-	return [[[self alloc] init##other] autorelease]; \\
+	return KB_AUTORELEASE ([[self alloc] init##other]); \\
 }
 
 ''')
@@ -135,11 +135,6 @@ for n in xrange (2, AUTOFIELD_CONVINIENCE_CREATOR_MAX + 1):
 ))
 
 fout.write ('''\
-#define DELEGATE_INITIALIZATION_0(defaultArgs) \\
-- (id) init { \\
-	return [self init##defaultArgs]; \\
-}
-	
 #define DELEGATE_INITIALIZATION(convinienceInit, defaultArgs) \\
 - (id) init##convinienceInit { \\
 	return [self init##convinienceInit defaultArgs]; \\
@@ -149,20 +144,28 @@ fout.write ('''\
 
 if DEALLOC_MACRO_MAX > 0:
 	fout.write ('''\
-#define DEALLOC_MACRO_1(field, other...) \\
+#if __has_feature(objc_arc)
+#	define DEALLOC_MACRO_1(...)
+#else
+#	define DEALLOC_MACRO_1(field, other...) \\
 - (void) dealloc { \\
 	[_##field release]; \\
 	other \\
 	\\
 	[super dealloc]; \\
 }
+#endif
 		
 ''')
 
 for n in xrange (2, DEALLOC_MACRO_MAX + 1):
 	fout.write ('''\
-#define DEALLOC_MACRO_{n}({SIGNATURE}, other...) \\
+#if __has_feature(objc_arc)
+#	define DEALLOC_MACRO_{n}(...)
+#else
+#	define DEALLOC_MACRO_{n}({SIGNATURE}, other...) \\
 		DEALLOC_MACRO_{prev}({PREV_SIGNATURE}, [_##field{n} release]; other)
+#endif
 
 '''.format (
 	n = n,

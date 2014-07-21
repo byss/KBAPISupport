@@ -36,6 +36,8 @@ NSString *const kKBErrorDomain = @"ru.byss.KBAPISupport.KBError";
 
 @implementation KBError
 
+#pragma mark - Methods to override
+
 + (NSString *) errorCodeField {
 	return nil;
 }
@@ -65,6 +67,8 @@ NSString *const kKBErrorDomain = @"ru.byss.KBAPISupport.KBError";
 	return NO;
 }
 #endif
+
+#pragma mark - KBEntity implementation
 
 #if KBAPISUPPORT_JSON
 + (instancetype) entityFromJSON:(id)JSON {

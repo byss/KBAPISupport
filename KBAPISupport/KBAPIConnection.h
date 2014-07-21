@@ -32,13 +32,12 @@
 @class KBAPIRequest;
 
 #if KBAPISUPPORT_BOTH_FORMATS
-typedef enum _KBAPIConnectionResponseType KBAPIConnectionResponseType;
 
 /** @enum Expected connection response type.
   *
   * Defined only if KBAPISupport was compiled with both JSON and XML support.
   */
-enum _KBAPIConnectionResponseType {
+typedef NS_ENUM (NSInteger, KBAPIConnectionResponseType) {
 	/** Let the connection to automatically decide of response type. */
 	KBAPIConnectionResponseTypeAuto = 0,
 	/** Response type is JSON. */
@@ -46,6 +45,26 @@ enum _KBAPIConnectionResponseType {
 	/** Response type is XML. */
 	KBAPIConnectionResponseTypeXML,
 };
+#endif
+
+#if KBAPISUPPORT_USE_BLOCKS
+typedef void (^KBAPICompletionBlock) (id <KBEntity> responseObject, NSError *error);
+#	if KBAPISUPPORT_BOTH_FORMATS
+typedef void (^KBAPIRawObjectCompletionBlock) (id JSONResponse, GDataXMLDocument *XMLResponse, NSError *error);
+#	elif KBAPISUPPORT_JSON
+typedef void (^KBAPIRawObjectCompletionBlock) (id JSONResponse, NSError *error);
+#	elif KBAPISUPPORT_XML
+typedef void (^KBAPIRawObjectCompletionBlock) (GDataXMLDocument *XMLResponse, NSError *error);
+#	else
+#		error FFFFFFFFFUUUUUUUUUUUUUUUUUUUUUU~
+#	endif
+typedef void (^KBAPIRawDataCompletionBlock) (NSData *responseData, NSError *error);
+#endif
+
+#if KBAPISUPPORT_USE_DELEGATES
+#	define _KBAPISUPPORT_DELEGATE_ARG delegate: (id <KBAPIConnectionDelegate>) delegate
+#else
+#	define _KBAPISUPPORT_DELEGATE_ARG
 #endif
 
 #if KBAPISUPPORT_BOTH_FORMATS
@@ -60,8 +79,11 @@ extern NSString *const KBXMLErrorKey;
   */
 @interface KBAPIConnection: NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
+#if KBAPISUPPORT_USE_DELEGATES
 /** The connection's delegate which receives connection responses and errors. */
-@property (nonatomic, retain) id <KBAPIConnectionDelegate> delegate;
+@property (nonatomic, strong) id <KBAPIConnectionDelegate> delegate;
+#endif
+
 #if KBAPISUPPORT_BOTH_FORMATS
 /** Expected response type.
   *
@@ -80,7 +102,7 @@ extern NSString *const KBXMLErrorKey;
 /** Arbitrary dictionary associated with this request.
   *
   */
-@property (nonatomic, retain) NSDictionary *userInfo;
+@property (nonatomic, strong) NSDictionary *userInfo;
 
 /** Default connection timeout.
   *
@@ -100,7 +122,7 @@ extern NSString *const KBXMLErrorKey;
   */
 
 #if KBAPISUPPORT_BOTH_FORMATS
-+ (instancetype) connectionWithRequest: (KBAPIRequest *) request delegate: (id <KBAPIConnectionDelegate>) delegate responseType: (KBAPIConnectionResponseType) responseType;
++ (instancetype) connectionWithRequest: (KBAPIRequest *) request _KBAPISUPPORT_DELEGATE_ARG responseType: (KBAPIConnectionResponseType) responseType;
 
 /** Creates and initializes API connection with specified response type for some API request.
  *
@@ -116,10 +138,10 @@ extern NSString *const KBXMLErrorKey;
  * @sa connectionWithRequest:delegate:
  * @sa delegate
  */
-+ (instancetype) connectionWithRequest: (KBAPIRequest *) request delegate: (id <KBAPIConnectionDelegate>) delegate responseType: (KBAPIConnectionResponseType) responseType userInfo: (NSDictionary *) userInfo;
++ (instancetype) connectionWithRequest: (KBAPIRequest *) request _KBAPISUPPORT_DELEGATE_ARG responseType: (KBAPIConnectionResponseType) responseType userInfo: (NSDictionary *) userInfo;
 #endif
 
-+ (instancetype) connectionWithRequest: (KBAPIRequest *) request delegate: (id <KBAPIConnectionDelegate>) delegate;
++ (instancetype) connectionWithRequest: (KBAPIRequest *) request _KBAPISUPPORT_DELEGATE_ARG;
 
 /** Creates and initializes API connection for some API request.
  *
@@ -131,7 +153,7 @@ extern NSString *const KBXMLErrorKey;
  * @sa delegate
  * @sa start
  */
-+ (instancetype) connectionWithRequest: (KBAPIRequest *) request delegate: (id <KBAPIConnectionDelegate>) delegate userInfo: (NSDictionary *) userInfo;
++ (instancetype) connectionWithRequest: (KBAPIRequest *) request _KBAPISUPPORT_DELEGATE_ARG userInfo: (NSDictionary *) userInfo;
 
 /** -------------------------
   * @name Starting connection
@@ -167,6 +189,20 @@ extern NSString *const KBXMLErrorKey;
   * @param error Expected response error class.
   */
 - (void) startForClass: (Class) clazz error: (Class) error;
+
+#if KBAPISUPPORT_USE_BLOCKS
+- (void) startWithCompletion: (KBAPICompletionBlock) completion;
+- (void) startForClass: (Class) clazz withCompletion: (KBAPICompletionBlock) completion;
+- (void) startForClass: (Class) clazz error: (Class) error withCompletion: (KBAPICompletionBlock) completion;
+
+- (void) startWithRawObjectCompletion: (KBAPIRawObjectCompletionBlock) completion;
+- (void) startForClass: (Class) clazz withRawObjectCompletion: (KBAPIRawObjectCompletionBlock) completion;
+- (void) startForClass: (Class) clazz error: (Class) error withRawObjectCompletion: (KBAPIRawObjectCompletionBlock) completion;
+
+- (void) startWithRawDataCompletion: (KBAPIRawDataCompletionBlock) completion;
+- (void) startForClass: (Class) clazz withRawDataCompletion: (KBAPIRawDataCompletionBlock) completion;
+- (void) startForClass: (Class) clazz error: (Class) error withRawDataCompletion: (KBAPIRawDataCompletionBlock) completion;
+#endif
 
 - (void) cancel;
 

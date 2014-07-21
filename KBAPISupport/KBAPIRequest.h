@@ -57,6 +57,13 @@ typedef NS_ENUM (NSInteger, KBAPIRequestMethod) {
   * KBAPIRequestMethodGET by default.
   */
 @property (nonatomic, readonly) KBAPIRequestMethod requestMethod;
+
+/** Switches between usage of bodyString/bodyData and bodyStream;
+  *
+  * Default value is NO, override it to use streamed body (e.g. for large files uploads).
+  */
+@property (nonatomic, readonly, getter = isBodyStreamed) BOOL bodyStreamed;
+
 /** The request's HTTP body, represented as string. */
 @property (nonatomic, readonly) NSString *bodyString;
 /** The request's HTTP body data.
@@ -64,6 +71,16 @@ typedef NS_ENUM (NSInteger, KBAPIRequestMethod) {
   * By default is the value of bodyString encoded as UTF-8.
   */
 @property (nonatomic, readonly) NSData *bodyData;
+
+/** The requests body stream.
+  *
+  * This property is used only if bodyStreamed is YES.
+  */
+@property (nonatomic, readonly) NSInputStream *bodyStream;
+
+/** Additional HTTP headers for sending.
+  *
+  */
 @property (nonatomic, readonly) NSDictionary *additionalHeaders;
 
 /** ------------------------

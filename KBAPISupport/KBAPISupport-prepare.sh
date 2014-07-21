@@ -88,6 +88,9 @@ ${defines_check_code}
 #if (KBAPISUPPORT_JSON && KBAPISUPPORT_XML) != (KBAPISUPPORT_BOTH_FORMATS)
 #	error Your config header sets KBAPISUPPORT_BOTH_FORMATS incorrectly
 #endif
+#if !(KBAPISUPPORT_USE_DELEGATES || KBAPISUPPORT_USE_BLOCKS)
+#	error Please enable one of the following options: KBAPISUPPORT_USE_DELEGATES, KBAPISUPPORT_USE_BLOCKS
+#endif
 EOF
 )
 	local config_file="$1"

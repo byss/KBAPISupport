@@ -24,23 +24,67 @@
 //  THE SOFTWARE.
 //
 
-#if !__has_feature(objc_arc)
-
 #import "KBAutoEntity.h"
+
+#import <objc/runtime.h>
 
 #if KBAPISUPPORT_XML
 #	import "GDataXMLNode.h"
 #endif
+#import "KBAPISupport-debug.h"
+
+static char const *const kAutoFieldsInitialized = "auto-fields-initialized";
+static char const *const kAutoFieldsArray = "auto-fields";
+static char const *const kKnownUndefinedKeys = "known-undefined-keys";
+
+static inline Method class_getMethod (Class class, SEL selector, BOOL isClassMethod);
+static inline void _setupAutoEntityMethod (SEL selector, BOOL isClassMethod, Class objectClass);
 
 @implementation KBAutoEntity
 
 + (NSArray *) autoFields {
+	NSArray *autoFields = nil;
+	if (__builtin_expect (!objc_getAssociatedObject (self, kAutoFieldsInitialized), 0)) {
+		@synchronized (self) {
+			if (!objc_getAssociatedObject (self, kAutoFieldsInitialized)) {
+				autoFields = [self initializeAutoFields];
+				objc_setAssociatedObject (self, kAutoFieldsInitialized, @YES, OBJC_ASSOCIATION_ASSIGN);
+				objc_setAssociatedObject (self, kAutoFieldsArray, autoFields, OBJC_ASSOCIATION_COPY);
+			}
+		}
+	} else {
+		autoFields = objc_getAssociatedObject (self, kAutoFieldsArray);
+	}
+	
+	return autoFields;
+}
+
++ (NSArray *)initializeAutoFields {
 	return nil;
 }
 
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+#if DEBUG
+	@synchronized (self.class) {
+		NSMutableSet *knownUndefinedKeys = objc_getAssociatedObject (self.class, kKnownUndefinedKeys);
+		if (![knownUndefinedKeys containsObject:key]) {
+			if (__builtin_expect (!knownUndefinedKeys, 0)) {
+				knownUndefinedKeys = [[NSMutableSet alloc] initWithObjects:key, nil];
+				objc_setAssociatedObject (self.class, kKnownUndefinedKeys, knownUndefinedKeys, OBJC_ASSOCIATION_RETAIN);
+			} else {
+				[knownUndefinedKeys addObject:key];
+			}
+			KBAPISUPPORT_LOG (@"Warning: undefined auto entity key: \"%@\"; value: %@; entity class: %@", key, value, self.class);
+		}
+	}
+#endif
+}
+
+#pragma mark - KBEntity implementation
+
 #if KBAPISUPPORT_JSON
 + (instancetype) entityFromJSON: (id) JSON {
-	id <KBEntity> result = [[self new] autorelease];
+	id <KBEntity> result = [self new];
 	for (id <KBAutoField> autoField in [self autoFields]) {
 		if (![autoField setFieldInObject:result fromJSON:JSON]) {
 			return nil;
@@ -52,7 +96,7 @@
 
 #if KBAPISUPPORT_XML
 + (instancetype) entityFromXML: (GDataXMLElement *) XML {
-	id <KBEntity> result = [[self new] autorelease];
+	id <KBEntity> result = [self new];
 	for (id <KBAutoField> autoField in [self autoFields]) {
 		if (![autoField setFieldInObject:result fromXML:XML]) {
 			return nil;
@@ -62,6 +106,53 @@
 }
 #endif
 
+#pragma mark - Setting another class as AutoEntity
+
++ (void) _setupAutoEntityMethods {
+	class_addProtocol (self, @protocol (KBEntity));
+	_setupAutoEntityMethod (@selector (autoFields), YES, self);
+	_setupAutoEntityMethod (@selector (initializeAutoFields), YES, self);
+	_setupAutoEntityMethod (@selector (setValue:forUndefinedKey:), NO, self);
+#if KBAPISUPPORT_JSON
+	_setupAutoEntityMethod (@selector (entityFromJSON:), YES, self);
+#endif
+#if KBAPISUPPORT_XML
+	_setupAutoEntityMethod (@selector (entityFromXML:), YES, self);
+#endif
+}
+
++ (void)setupAutoEntityMethodsForObjectClass:(Class)objectClass {
+	_setupAutoEntityMethod (@selector (_setupAutoEntityMethods), YES, objectClass);
+	[objectClass _setupAutoEntityMethods];
+}
+
 @end
 
-#endif // !__has_feature(objc_arc)
+#pragma mark - Helpers
+
+static inline Method class_getMethod (Class objClass, SEL selector, BOOL isClassMethod) {
+	return (isClassMethod ? class_getClassMethod : class_getInstanceMethod) (objClass, selector);
+}
+
+static inline void _setupAutoEntityMethod (SEL selector, BOOL isClassMethod, Class objectClass) {
+	static Class standardClass = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once (&onceToken, ^{
+		standardClass = [KBAutoEntity class];
+	});
+	
+	Method method = class_getMethod (standardClass, selector, isClassMethod);
+	IMP standardImpl = method_getImplementation (method);
+	IMP objectClassImpl = method_getImplementation (class_getMethod (objectClass, selector, isClassMethod));
+	
+	if (standardImpl != objectClassImpl) {
+		char const *const typeEncoding = method_getTypeEncoding (method);
+		Class destClass = (isClassMethod ? object_getClass (objectClass) : objectClass);
+
+		if (objectClassImpl) {
+			class_replaceMethod (destClass, selector, standardImpl, typeEncoding);
+		} else {
+			class_addMethod (destClass, selector, standardImpl, typeEncoding);
+		}
+	}
+}

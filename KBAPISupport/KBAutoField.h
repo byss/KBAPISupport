@@ -44,35 +44,19 @@
   */
 
 /** Object's field name */
-- (NSString *) fieldName;
-/** Sets object's field name
-  *
-  * @param fieldName New field name.
-  */
-- (void) setFieldName: (NSString *) fieldName;
+@property (nonatomic, readonly) NSString *fieldName;
+
 #if KBAPISUPPORT_XML
 /** Whether this KBAutoField should get field value from element's attributes.
   *
   * This method is obly defined when KBAPISupport is compiled with XML support.
   */
-- (BOOL) isAttribute;
-/** Sets value for isAttribute.
-  * 
-  * This method is obly defined when KBAPISupport is compiled with XML support.
-  *
-  * @param isAttribute New value.
-  */
-- (void) setIsAttribute: (BOOL) isAttribute;
+@property (nonatomic, readonly, getter = isAttribute) BOOL attribute;
 #endif
 
 @optional
 /** Field name in the source JSON/XML object. */
-- (NSString *) sourceFieldName;
-/** Sets sourceFieldName
-  *
-  * @param sourceFieldName New source object field name.
-  */
-- (void) setSourceFieldName: (NSString *) sourceFieldName;
+@property (nonatomic, readonly) NSString *sourceFieldName;
 
 @required
 /** --------------------
@@ -121,23 +105,18 @@
   *
   * This property is defined only if KBAPISupport is compiled with XML support.
   */
-@property (nonatomic, assign) BOOL isAttribute;
+@property (nonatomic, readonly, getter = isAttribute) BOOL attribute;
 #endif
+
 /** Object's field name. */
-@property (nonatomic, retain) NSString *fieldName;
+@property (nonatomic, readonly) NSString *fieldName;
 /** Source JSON/XML object's field name. */
-@property (nonatomic, retain) NSString *sourceFieldName;
+@property (nonatomic, readonly) NSString *sourceFieldName;
 
 /** ------------------------
   * @name Creating instances
   * ------------------------
   */
-
-/** Calls autoFieldWithFieldName:sourceFieldName: with nil and nil.
-  *
-  * @see autoFieldWithFieldName:sourceFieldName:
-  */
-+ (instancetype) autoField;
 
 /** Calls autoFieldWithFieldName:sourceFieldName: with fieldName and nil.
   *
@@ -166,40 +145,38 @@
 + (instancetype) autoFieldWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
 #endif
 
-- (id) initWithFieldName: (NSString *) fieldName;
+- (instancetype) initWithFieldName: (NSString *) fieldName;
 // designated initializer when XML is off
-- (id) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
+- (instancetype) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
 #if KBAPISUPPORT_XML
 // designated initializer when XML is on
-- (id) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
+- (instancetype) initWithFieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
 #endif
 
 @end
 
 @interface KBAutoTimestampField: KBAutoFieldBase
 
-- (void) gotIntValue: (NSInteger) value forObject: (id) object;
+- (void) gotNumericValue: (NSNumber *) value forObject: (id) object;
 
 @end
 
 @interface KBAutoIntegerField: KBAutoTimestampField
 
-@property (nonatomic, assign) BOOL isUnsigned;
+@property (nonatomic, readonly) BOOL isUnsigned;
 
-+ (instancetype) autoFieldWithUnsigned: (BOOL) isUnsigned;
 + (instancetype) autoFieldWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName;
 + (instancetype) autoFieldWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
 #if KBAPISUPPORT_XML
 + (instancetype) autoFieldWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
 #endif
 
-- (id) initWithUnsigned: (BOOL) isUnsigned;
-- (id) initWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName;
+- (instancetype) initWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName;
 // designated initializer when XML is off
-- (id) initWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
+- (instancetype) initWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
 #if KBAPISUPPORT_XML
 // designated initializer when XML is on
-- (id) initWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
+- (instancetype) initWithUnsigned: (BOOL) isUnsigned fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
 #endif
 
 @end
@@ -210,26 +187,42 @@
 
 @interface KBAutoObjectField: KBAutoFieldBase
 
-@property (nonatomic, retain) Class objectClass;
+@property (nonatomic, unsafe_unretained) Class objectClass;
 
-+ (instancetype) autoFieldWithObjectClass: (Class) objectClass;
 + (instancetype) autoFieldWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName;
 + (instancetype) autoFieldWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
-#if KBAPISUPPORT_XML
-+ (instancetype) autoFieldWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
-#endif
 
-- (id) initWithObjectClass: (Class) objectClass;
-- (id) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName;
-// designated initializer when XML is off
-- (id) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
-#if KBAPISUPPORT_XML
-// designated initializer when XML is on
-- (id) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
-#endif
+- (instancetype) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName;
+- (instancetype) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
 
 @end
 
 @interface KBAutoStringArrayField: KBAutoFieldBase
+
+@end
+
+@interface KBAutoObjectArrayField: KBAutoFieldBase
+
+@property (nonatomic, readonly) BOOL isMutable;
+@property (nonatomic, unsafe_unretained) Class entityClass;
+@property (nonatomic, readonly) NSString *entityTag;
+
++ (instancetype) autoFieldWithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName;
++ (instancetype) autoFieldWithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName sourceFieldName:(NSString *)sourceFieldName;
++ (instancetype) autoFieldWithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName sourceFieldName:(NSString *)sourceFieldName isMutable: (BOOL) isMutable;
+#if KBAPISUPPORT_XML
++ (instancetype) autoFieldWithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName entityTag: (NSString *) entityTag;
++ (instancetype) autoFieldWithEntityClass: (Class) entityClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName  entityTag: (NSString *) entityTag;
++ (instancetype) autoFieldWithEntityClass: (Class) entityClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName  isMutable: (BOOL) isMutable entityTag: (NSString *) entityTag;
+#endif
+
+- (instancetype) initWithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName;
+- (instancetype) initWithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName sourceFieldName:(NSString *)sourceFieldName;
+- (instancetype) initWithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName sourceFieldName:(NSString *)sourceFieldName isMutable: (BOOL) isMutable;
+#if KBAPISUPPORT_XML
+- (instancetype) initWithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName entityTag: (NSString *) entityTag;
+- (instancetype) initWithEntityClass: (Class) entityClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName  entityTag: (NSString *) entityTag;
+- (instancetype) initWithEntityClass: (Class) entityClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName  isMutable: (BOOL) isMutable entityTag: (NSString *) entityTag;
+#endif
 
 @end

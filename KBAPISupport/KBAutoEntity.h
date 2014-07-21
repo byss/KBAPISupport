@@ -40,10 +40,28 @@
   */
 @interface KBAutoEntity: NSObject <KBEntity>
 
-/** Override this method to define the object's autoconstructed fields list.
+/** This method returns a list of autoconstructed fields for this entity class.
+  * Normally you don't need to override this method, see +initializeAutoFields
+  * instead.
   * 
   * @return Array of id &lt; KBAutoField &gt;.
   */
 + (NSArray *) autoFields;
 
+/** This method is called exactly once to initialize the list of autoconstructed
+  * fields for this entity class. You should override this method in your entity
+  * subclass to enable automatic XML/JSON mapping.
+  *
+  * @return Array of id &lt; KBAutoField &gt;.
+  */
++ (NSArray *) initializeAutoFields;
+
++ (void) setupAutoEntityMethodsForObjectClass: (Class) objectClass;
+
+@end
+
+#define KBAUTOENTITY_EXTENSION(_Class) \
+@interface _Class () <KBEntity> \
++ (NSArray *) autoFields; \
++ (NSArray *) initializeAutoFields; \
 @end

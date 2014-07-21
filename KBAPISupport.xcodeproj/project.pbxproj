@@ -14,7 +14,6 @@
 		43F2E10516B35126004B0199 /* KBAPIConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0F316B35126004B0199 /* KBAPIConnection.m */; };
 		43F2E10616B35126004B0199 /* KBAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0F616B35126004B0199 /* KBAPIRequest.m */; };
 		43F2E10816B35126004B0199 /* KBAutoField.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0FD16B35126004B0199 /* KBAutoField.m */; };
-		43F2E10916B35126004B0199 /* KBEntityList.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10116B35126004B0199 /* KBEntityList.m */; };
 		43F2E10A16B35126004B0199 /* KBNetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10316B35126004B0199 /* KBNetworkIndicator.m */; };
 		43F2E10E16B36FDA004B0199 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10D16B36FDA004B0199 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
@@ -53,8 +52,6 @@
 		43F2E0FD16B35126004B0199 /* KBAutoField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAutoField.m; sourceTree = "<group>"; };
 		43F2E0FE16B35126004B0199 /* KBAutoFieldMacros.gen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAutoFieldMacros.gen.h; sourceTree = "<group>"; };
 		43F2E0FF16B35126004B0199 /* KBEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBEntity.h; sourceTree = "<group>"; };
-		43F2E10016B35126004B0199 /* KBEntityList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBEntityList.h; sourceTree = "<group>"; };
-		43F2E10116B35126004B0199 /* KBEntityList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBEntityList.m; sourceTree = "<group>"; };
 		43F2E10216B35126004B0199 /* KBNetworkIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBNetworkIndicator.h; sourceTree = "<group>"; };
 		43F2E10316B35126004B0199 /* KBNetworkIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBNetworkIndicator.m; sourceTree = "<group>"; };
 		43F2E10C16B36FDA004B0199 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
@@ -116,8 +113,6 @@
 				435460BA16C14327005388C2 /* KBAutoEntity.h */,
 				435460BB16C14327005388C2 /* KBAutoEntity.m */,
 				43F2E0FF16B35126004B0199 /* KBEntity.h */,
-				43F2E10016B35126004B0199 /* KBEntityList.h */,
-				43F2E10116B35126004B0199 /* KBEntityList.m */,
 				43AE234516BA7782009DFE3F /* KBError.h */,
 				43AE234616BA7782009DFE3F /* KBError.m */,
 				43F2E10216B35126004B0199 /* KBNetworkIndicator.h */,
@@ -210,7 +205,6 @@
 				43F2E10516B35126004B0199 /* KBAPIConnection.m in Sources */,
 				43F2E10616B35126004B0199 /* KBAPIRequest.m in Sources */,
 				43F2E10816B35126004B0199 /* KBAutoField.m in Sources */,
-				43F2E10916B35126004B0199 /* KBEntityList.m in Sources */,
 				43F2E10A16B35126004B0199 /* KBNetworkIndicator.m in Sources */,
 				43F2E10E16B36FDA004B0199 /* GDataXMLNode.m in Sources */,
 				43AE234716BA7782009DFE3F /* KBError.m in Sources */,
@@ -273,6 +267,7 @@
 		43F2E0BA16B3424B004B0199 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/KBAPISupport.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -288,6 +283,7 @@
 		43F2E0BB16B3424B004B0199 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/KBAPISupport.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";

@@ -33,6 +33,12 @@
   */
 @interface GDataXMLElement (stuff)
 
+/** Returns object representation of XML element.
+ *
+ * @return NSString, NSArray or NSDictionary, depending on the receiver's content.
+ */
+@property (nonatomic, readonly) id objectValue;
+
 /** Returns value of child XML element interpreted as string.
   *
   * Finds by name first child element of receiver and represents it as NSString.
@@ -56,12 +62,6 @@
   * @return Receiver's first child element with specified name of nil if element is not found.
   */
 - (GDataXMLElement *) firstChildWithName: (NSString *) childName;
-
-/** Returns object representation of XML element.
-  *
-  * @return NSString, NSArray or NSDictionary, depending on the receiver's content.
-  */
-- (id) objectValue;
 
 @end
 #endif

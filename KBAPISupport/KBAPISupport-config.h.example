@@ -74,10 +74,20 @@
 /// Sets the server response encoding
 #define KBAPISUPPORT_DECODE_FROM (NSWindowsCP1251StringEncoding)
 
+/// Use delegates for callbacks
+#define KBAPISUPPORT_USE_DELEGATES 1
+
+/// Use blocks for callbacks
+#define KBAPISUPPORT_USE_BLOCKS 1
+
 ///////////////////////// At least one format must be selected /////////////////////////
 
 #if !(KBAPISUPPORT_JSON || KBAPISUPPORT_XML)
 #	error Please select one of response formats in `Config' section
+#endif
+
+#if !(KBAPISUPPORT_USE_DELEGATES || KBAPISUPPORT_USE_BLOCKS)
+#	error Please select one of callbacks type in `Config' section
 #endif
 
 #if KBAPISUPPORT_JSON && KBAPISUPPORT_XML
