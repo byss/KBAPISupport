@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43288B201982477A00831DF1 /* KBArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 43288B1F1982477A00831DF1 /* KBArray.m */; };
 		435460BC16C14327005388C2 /* KBAutoEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 435460BB16C14327005388C2 /* KBAutoEntity.m */; };
 		43AE234716BA7782009DFE3F /* KBError.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AE234616BA7782009DFE3F /* KBError.m */; };
 		43F2E0AF16B3424B004B0199 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F2E0AE16B3424B004B0199 /* Foundation.framework */; };
@@ -31,6 +32,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		43288B1E1982477A00831DF1 /* KBArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBArray.h; sourceTree = "<group>"; };
+		43288B1F1982477A00831DF1 /* KBArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBArray.m; sourceTree = "<group>"; };
 		435460BA16C14327005388C2 /* KBAutoEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAutoEntity.h; sourceTree = "<group>"; };
 		435460BB16C14327005388C2 /* KBAutoEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAutoEntity.m; sourceTree = "<group>"; };
 		43AE234516BA7782009DFE3F /* KBError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBError.h; sourceTree = "<group>"; };
@@ -110,9 +113,11 @@
 				43F2E0F316B35126004B0199 /* KBAPIConnection.m */,
 				43F2E0F516B35126004B0199 /* KBAPIRequest.h */,
 				43F2E0F616B35126004B0199 /* KBAPIRequest.m */,
+				43F2E0FF16B35126004B0199 /* KBEntity.h */,
 				435460BA16C14327005388C2 /* KBAutoEntity.h */,
 				435460BB16C14327005388C2 /* KBAutoEntity.m */,
-				43F2E0FF16B35126004B0199 /* KBEntity.h */,
+				43288B1E1982477A00831DF1 /* KBArray.h */,
+				43288B1F1982477A00831DF1 /* KBArray.m */,
 				43AE234516BA7782009DFE3F /* KBError.h */,
 				43AE234616BA7782009DFE3F /* KBError.m */,
 				43F2E10216B35126004B0199 /* KBNetworkIndicator.h */,
@@ -201,6 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43288B201982477A00831DF1 /* KBArray.m in Sources */,
 				43F2E10416B35126004B0199 /* GDataXMLElement+stuff.m in Sources */,
 				43F2E10516B35126004B0199 /* KBAPIConnection.m in Sources */,
 				43F2E10616B35126004B0199 /* KBAPIRequest.m in Sources */,

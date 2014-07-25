@@ -80,6 +80,10 @@ static inline void _setupAutoEntityMethod (SEL selector, BOOL isClassMethod, Cla
 #endif
 }
 
+- (void)setNilValueForKey:(NSString *)key {
+	// do nothing: init-time default value is 0, NO or nil already
+}
+
 #pragma mark - KBEntity implementation
 
 #if KBAPISUPPORT_JSON
@@ -113,6 +117,7 @@ static inline void _setupAutoEntityMethod (SEL selector, BOOL isClassMethod, Cla
 	_setupAutoEntityMethod (@selector (autoFields), YES, self);
 	_setupAutoEntityMethod (@selector (initializeAutoFields), YES, self);
 	_setupAutoEntityMethod (@selector (setValue:forUndefinedKey:), NO, self);
+	_setupAutoEntityMethod (@selector (setNilValueForKey:), NO, self);
 #if KBAPISUPPORT_JSON
 	_setupAutoEntityMethod (@selector (entityFromJSON:), YES, self);
 #endif

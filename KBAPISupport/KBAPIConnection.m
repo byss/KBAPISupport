@@ -37,6 +37,11 @@
 #if KBAPISUPPORT_XML
 #	import "GDataXMLNode.h"
 #endif
+#if KBAPISUPPORT_USE_DELEGATES
+#	define _KBAPISUPPORT_DELEGATE_ARG_VALUE delegate:delegate
+#else
+#	define _KBAPISUPPORT_DELEGATE_ARG_VALUE
+#endif
 
 #import "KBAPISupport-debug.h"
 
@@ -105,25 +110,27 @@ static NSTimeInterval defaultTimeout = 30.0;
 }
 
 #if KBAPISUPPORT_BOTH_FORMATS
-+ (instancetype) connectionWithRequest: (KBAPIRequest *) request delegate: (id <KBAPIConnectionDelegate>) delegate responseType: (KBAPIConnectionResponseType) responseType {
-	return [self connectionWithRequest:request delegate:delegate responseType:responseType userInfo:nil];
++ (instancetype) connectionWithRequest: (KBAPIRequest *) request _KBAPISUPPORT_DELEGATE_ARG responseType: (KBAPIConnectionResponseType) responseType {
+	return [self connectionWithRequest:request _KBAPISUPPORT_DELEGATE_ARG_VALUE responseType:responseType userInfo:nil];
 }
 
-+ (instancetype) connectionWithRequest:(KBAPIRequest *)request delegate:(id<KBAPIConnectionDelegate>)delegate responseType:(KBAPIConnectionResponseType)responseType userInfo:(NSDictionary *)userInfo {
-	KBAPIConnection *result = [self connectionWithRequest:request delegate:delegate];
++ (instancetype) connectionWithRequest:(KBAPIRequest *)request _KBAPISUPPORT_DELEGATE_ARG responseType:(KBAPIConnectionResponseType)responseType userInfo:(NSDictionary *)userInfo {
+	KBAPIConnection *result = [self connectionWithRequest:request _KBAPISUPPORT_DELEGATE_ARG_VALUE];
 	result.responseType = responseType;
 	result.userInfo = userInfo;
 	return result;
 }
 #endif
 
-+ (instancetype) connectionWithRequest:(KBAPIRequest *)request delegate:(id<KBAPIConnectionDelegate>)delegate {
-	return [self connectionWithRequest:request delegate:delegate userInfo:nil];
++ (instancetype) connectionWithRequest:(KBAPIRequest *)request _KBAPISUPPORT_DELEGATE_ARG {
+	return [self connectionWithRequest:request _KBAPISUPPORT_DELEGATE_ARG_VALUE userInfo:nil];
 }
 
-+ (instancetype) connectionWithRequest:(KBAPIRequest *)request delegate:(id<KBAPIConnectionDelegate>)delegate userInfo:(NSDictionary *)userInfo {
++ (instancetype) connectionWithRequest:(KBAPIRequest *)request _KBAPISUPPORT_DELEGATE_ARG userInfo:(NSDictionary *)userInfo {
 	KBAPIConnection *result = [[self alloc] initWithRequest:request];
+#if KBAPISUPPORT_USE_DELEGATES
 	result.delegate = delegate;
+#endif
 	result.userInfo = userInfo;
 	return KB_AUTORELEASE (result);
 }
@@ -327,7 +334,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 #elif KBAPISUPPORT_JSON
 - (BOOL) notifyAboutRawObject: (id) JSONResponse {
 #elif KBAPISUPPORT_XML
-- (BOOL) notifyAboutRawObject: (GDataXMLDocument *) XMLNResponse {
+- (BOOL) notifyAboutRawObject: (GDataXMLDocument *) XMLResponse {
 #else
 #	error WUUUUUUUUT?
 #endif
@@ -352,7 +359,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 		if (self.rawObjectCompletionBlock) {
 #	if KBAPISUPPORT_BOTH_FORMATS
 			self.rawObjectCompletionBlock (JSONResponse, XMLResponse, nil);
-#	elif KBAISUPPORT_JSON
+#	elif KBAPISUPPORT_JSON
 			self.rawObjectCompletionBlock (JSONResponse, nil);
 #	elif KBAPISUPPORT_XML
 			self.rawObjectCompletionBlock (XMLResponse, nil);
@@ -554,6 +561,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 #if KBAPISUPPORT_BOTH_FORMATS
 					} // else if () {
 				}
+#endif
 				if (responseObject) {
 					notified = [self notifyAboutResponseObject:responseObject];
 				} else {
@@ -575,7 +583,6 @@ static NSTimeInterval defaultTimeout = 30.0;
 						}
 #endif
 					}
-#endif
 					if (error) {
 						[self notifyAboutError:error];
 					} else {
@@ -620,7 +627,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 				notified = [self notifyAboutRawObject:JSONResponse :XMLResponse];
 #elif KBAPISUPPORT_JSON
 				notified = [self notifyAboutRawObject:JSONResponse];
-#elif
+#elif KBAPISUPPORT_XML
 				notified = [self notifyAboutRawObject:XMLResponse];
 #else
 #	error Damn

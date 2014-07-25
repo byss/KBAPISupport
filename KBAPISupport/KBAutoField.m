@@ -253,12 +253,12 @@ DELEGATE_INITIALIZATION (WithObjectClass: (Class) objectClass fieldName:(NSStrin
 }
 
 - (id) initWithObjectClass: (Class) objectClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName {
-	if (!class_conformsToProtocol (objectClass, @protocol (KBEntity))) {
+	if (![objectClass conformsToProtocol:@protocol (KBEntity)]) {
 		KB_RELEASE (self);
 		@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Object class must conform to KBEntity!" userInfo:nil];
 	}
 
-	if (self = [super initWithFieldName:fieldName sourceFieldName:sourceFieldName isAttribute:NO]) {
+	if (self = [super initWithFieldName:fieldName sourceFieldName:sourceFieldName ADDN_DEFAULTS]) {
 		_objectClass = objectClass;
 	}
 	
@@ -311,7 +311,7 @@ DELEGATE_INITIALIZATION (WithObjectClass: (Class) objectClass fieldName:(NSStrin
 	__strong id *strings = NULL;
 	NSUInteger stringsCount = 0;
 	if ([fieldValue isKindOfClass:[NSArray class]]) {
-		strings = (__strong id *) malloc (sizeof (*strings) * fieldValue.count);
+		strings = (__strong id *) calloc (fieldValue.count, sizeof (*strings));
 		for (id valueItem in fieldValue) {
 			for (NSString *strValue = stringValue (valueItem); strValue; strValue = nil) {
 				strings [stringsCount++] = strValue;
@@ -371,7 +371,7 @@ DELEGATE_INITIALIZATION (WithEntityClass: (Class) entityClass fieldName:(NSStrin
 #endif
 
 - (id) initWithEntityClass: (Class) entityClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isMutable: (BOOL) isMutable ADDN_ARGS2 {
-	if (!class_conformsToProtocol (entityClass, @protocol (KBEntity))) {
+	if (![entityClass conformsToProtocol:@protocol (KBEntity)]) {
 		KB_RELEASE (self);
 		@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Object class must conform to KBEntity!" userInfo:nil];
 	}
@@ -403,7 +403,7 @@ DEALLOC_MACRO_1 (entityTag);
 	__strong id *objects = NULL;
 	NSUInteger objectsCount = 0;
 	if ([fieldValue isKindOfClass:[NSArray class]]) {
-		objects = (__strong id *) malloc (sizeof (*objects) * fieldValue.count);
+		objects = (__strong id *) calloc (fieldValue.count, sizeof (*objects));
 		Class entityClass = self.entityClass;
 		for (id valueItem in fieldValue) {
 			for (id objValue = [entityClass entityFromJSON:valueItem]; objValue; objValue = nil) {
@@ -431,7 +431,7 @@ DEALLOC_MACRO_1 (entityTag);
 	NSString *entityTag = self.entityTag;
 	Class entityClass = self.entityClass;
 	NSArray *elements = [XML elementsForName:entityTag];
-	__strong id *objects = (__strong id *) malloc (sizeof (*objects) * elements.count);
+	__strong id *objects = (__strong id *) calloc (elements.count, sizeof (*objects));
 	NSUInteger objectsCount = 0;
 	for (GDataXMLElement *element in elements) {
 		for (id objValue = [entityClass entityFromXML:element]; objValue; objValue = nil) {
