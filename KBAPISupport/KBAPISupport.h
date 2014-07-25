@@ -32,8 +32,6 @@
 #import "KBEntityList.h"
 #import "KBError.h"
 #import "KBNetworkIndicator.h"
-#if !__has_feature(objc_arc)
-#	import "KBAutoEntity.h"
-#	import "KBAutoError.h"
-#	import "KBAutoField.h"
-#endif
+#import "KBAutoEntity.h"
+#import "KBAutoError.h"
+#import "KBAutoField.h"
