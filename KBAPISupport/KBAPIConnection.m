@@ -607,6 +607,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 						KBAPISUPPORT_LOG (@"error: %@", genericError);
 						[self notifyAboutError:genericError];
 					}
+					notified = YES;
 				}
 			}
 		}
