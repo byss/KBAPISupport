@@ -35,7 +35,9 @@
 
 static char const *const kAutoFieldsInitialized = "auto-fields-initialized";
 static char const *const kAutoFieldsArray = "auto-fields";
+#if DEBUG
 static char const *const kKnownUndefinedKeys = "known-undefined-keys";
+#endif
 
 static inline Method class_getMethod (Class class, SEL selector, BOOL isClassMethod);
 static inline void _setupAutoEntityMethod (SEL selector, BOOL isClassMethod, Class objectClass);
