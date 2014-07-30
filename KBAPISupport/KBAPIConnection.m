@@ -398,7 +398,9 @@ static NSTimeInterval defaultTimeout = 30.0;
 	_connection = nil;
 	[KBNetworkIndicator requestFinished];
 	KBAPISUPPORT_LOG (@"error: %@", error);
-	[self notifyAboutError:error];
+	dispatch_async (dispatch_get_global_queue (DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		[self notifyAboutError:error];
+	});
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
