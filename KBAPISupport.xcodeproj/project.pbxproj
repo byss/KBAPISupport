@@ -196,8 +196,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
-			shellScript = "${SRCROOT}/${PRODUCT_NAME}/KBAPISupport-prepare.sh";
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/${TARGET_NAME}/KBAPISupport-prepare.sh\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 

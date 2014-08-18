@@ -503,6 +503,10 @@ static NSTimeInterval defaultTimeout = 30.0;
 		   )
 #	endif
 #endif
+#if !(KBAPISUPPORT_USE_DELEGATES || KBAPISUPPORT_USE_BLOCKS)
+#	error Error is coming!
+				NO
+#endif
 		) {
 							
 #if KBAPISUPPORT_JSON
@@ -544,6 +548,10 @@ static NSTimeInterval defaultTimeout = 30.0;
 #endif
 #if KBAPISUPPORT_USE_BLOCKS
 				self.completionBlock
+#endif
+#if !(KBAPISUPPORT_USE_DELEGATES || KBAPISUPPORT_USE_BLOCKS)
+#	error Y U NO WRITE GOOD CFG?
+					NO
 #endif
 				) {
 				id <KBEntity> responseObject = nil;

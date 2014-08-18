@@ -165,7 +165,10 @@ else # default action: build
 	fi
 
 	# Checking config file for full macros set & consistency
-	CONFIG_ERRORS=$(check_config "${CONFIG_FILE}" | egrep '^\s*<stdin>:' | grep '#error' | sed -E 's/^.*#error[[:space:]]+//')
+	errPrefixPCRE='^\s*<stdin>\s*:\s*\d+\s*:\s*\d+\s*:\s*error:\s*'
+	errPrefixRE="$(echo "${errPrefixPCRE}" | sed 's/\\s/[[:space:]]/g;s/\\d/[[:digit:]]/g')"
+
+	CONFIG_ERRORS=$(check_config "${CONFIG_FILE}" | egrep "${errPrefixPCRE}" | sed -E "s/${errPrefixRE}//")
 	if [ ! -z "${CONFIG_ERRORS}" ]; then
 		variable_error 'CONFIG_FILE' 'is not valid config file.' 'Please correct the following errors:\n' "${CONFIG_ERRORS}"
 	fi
