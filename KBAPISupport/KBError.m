@@ -26,7 +26,6 @@
 
 #import "KBError.h"
 #if KBAPISUPPORT_XML
-#	import "GDataXMLNode.h"
 #	import "GDataXMLElement+stuff.h"
 #endif
 

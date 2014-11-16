@@ -73,7 +73,7 @@ EOF
 # Checks KBAPISupport-config.h for full set of macros & consistency
 check_config() {
 	local defines_check_code=
-	for def in 'KBAPISUPPORT_DEBUG' 'KBAPISUPPORT_JSON' 'KBAPISUPPORT_USE_SBJSON' 'KBAPISUPPORT_XML' 'KBAPISUPPORT_DECODE'; do
+	for def in 'KBAPISUPPORT_DEBUG' 'KBAPISUPPORT_JSON' 'KBAPISUPPORT_XML' 'KBAPISUPPORT_DECODE' 'KBAPISUPPORT_USE_DELEGATES' 'KBAPISUPPORT_USE_BLOCKS'; do
 		local current_define=$(simple_bool_define_check "${def}")
 		defines_check_code=$(echo -e "${defines_check_code}\n${current_define}")
 	done

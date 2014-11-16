@@ -34,10 +34,6 @@
 #	undef KBAPISUPPORT_JSON
 #endif
 
-#ifdef KBAPISUPPORT_USE_SBJSON
-#	undef KBAPISUPPORT_USE_SBJSON
-#endif
-
 #ifdef KBAPISUPPORT_XML
 #	undef KBAPISUPPORT_XML
 #endif
@@ -54,6 +50,14 @@
 #	undef KBAPISUPPORT_BOTH_FORMATS
 #endif
 
+#ifdef KBAPISUPPORT_USE_DELEGATES
+#	undef KBAPISUPPORT_USE_DELEGATES
+#endif
+
+#ifdef KBAPISUPPORT_USE_BLOCKS
+#	undef KBAPISUPPORT_USE_BLOCKS
+#endif
+
 ///////////////////////// Config /////////////////////////
 
 /// Turns on or off KBAPISupport debug messages
@@ -61,9 +65,6 @@
 
 /// Turns on or off JSON objects support (using NSJSONSerialization)
 #define KBAPISUPPORT_JSON 1
-
-/// Use SBJson aka json-framework instead of NSJSONSerialization
-#define KBAPISUPPORT_USE_SBJSON 0
 
 /// Turns on or off XML objects (using GDataXML)
 #define KBAPISUPPORT_XML 1

@@ -1,0 +1,1 @@
+#define KBAPISUPPORT_DEBUG 1

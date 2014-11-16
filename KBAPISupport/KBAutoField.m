@@ -33,7 +33,6 @@
 #import "KBAutoFieldMacros.gen.h"
 
 #if KBAPISUPPORT_XML
-#	import "GDataXMLNode.h"
 #	import "GDataXMLElement+stuff.h"
 #	define ADDN_ARGS isAttribute: (BOOL) isAttribute
 #	define ADDN_DEFAULTS isAttribute:NO

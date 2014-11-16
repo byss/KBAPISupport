@@ -31,11 +31,12 @@
 #import "KBNetworkIndicator.h"
 #import "ARCSupport.h"
 
-#if KBAPISUPPORT_USE_SBJSON
-#	import "SBJsonParser.h"
-#endif
 #if KBAPISUPPORT_XML
-#	import "GDataXMLNode.h"
+#	if KBAPISUPPORT_PODS_BUILD
+#		import <GDataXML-HTML/GDataXMLNode.h>
+#	else
+#		import "GDataXMLNode.h"
+#	endif
 #endif
 #if KBAPISUPPORT_USE_DELEGATES
 #	define _KBAPISUPPORT_DELEGATE_ARG_VALUE delegate:delegate
@@ -59,9 +60,6 @@ static NSTimeInterval defaultTimeout = 30.0;
 	NSMutableData *_buffer;
 	__unsafe_unretained Class _expected;
 	__unsafe_unretained Class _error;
-#if KBAPISUPPORT_USE_SBJSON
-	SBJSonParser *_parser;
-#endif
 }
 
 #if KBAPISUPPORT_USE_BLOCKS
@@ -148,9 +146,6 @@ static NSTimeInterval defaultTimeout = 30.0;
 	if (self = [super init]) {
 		_request = KB_RETAIN (request);
 		_buffer = [NSMutableData new];
-#if KBAPISUPPORT_USE_SBJSON
-		_parser = [SBJSONParser new];
-#endif
 		_timeout = defaultTimeout;
 	}
 	
@@ -163,9 +158,6 @@ static NSTimeInterval defaultTimeout = 30.0;
 	[_request release];
 	[_delegate release];
 	[_userInfo release];
-#	if KBAPISUPPORT_USE_SBJSON
-	[_parser release];
-#	endif
 	
 	[super dealloc];
 }
@@ -412,7 +404,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 	
 	dispatch_async (dispatch_get_global_queue (DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 #define PREPARED_JSON (_buffer) //// >1 ////
-#if (defined (DEBUG) && KBAPISUPPORT_DEBUG) || KBAPISUPPORT_DECODE || KBAPISUPPORT_USE_SBJSON
+#if (defined (DEBUG) && KBAPISUPPORT_DEBUG) || KBAPISUPPORT_DECODE
 		char *bytes = malloc (_buffer.length + 1);
 		memcpy (bytes, _buffer.bytes, _buffer.length);
 		bytes [_buffer.length] = 0;
@@ -420,18 +412,16 @@ static NSTimeInterval defaultTimeout = 30.0;
 		NSString *decodedString = [NSString stringWithCString:bytes encoding:KBAPISUPPORT_DECODE_FROM];
 		KBAPISUPPORT_LOG (@"response: %@", decodedString);
 			// maybe there is some method like -(NSData *)dataWithData:(NSData *) fromEncoding:(NSStringEncoding)from toEncoding:(NSStringEncoding)to ?
-#		if KBAPISUPPORT_JSON && !KBAPISUPPORT_USE_SBJSON
+#		if KBAPISUPPORT_JSON
 		unichar *decodedBytes = malloc (decodedString.length * sizeof (unichar));
 		[decodedString getCharacters:decodedBytes range: NSMakeRange (0, decodedString.length)];
 		NSData *decodedData = [NSData dataWithBytesNoCopy:decodedBytes length:(decodedString.length * sizeof (unichar)) freeWhenDone:YES];
 		decodedBytes = NULL;
 #			undef PREPARED_JSON
 #			define PREPARED_JSON (decodedData) //// >1 ////
-#		endif // KBAPISUPPORT_JSON && !KBAPISUPPORT_USE_SBJSON
-#	elif KBAPISUPPORT_USE_SBJSON
-		NSString *decodedString = [NSString stringWithUTF8String:bytes];
+#		endif // KBAPISUPPORT_JSON
 #	else // KBAPISUPPORT_DECODE
-		KBAPISUPPORT_LOG (@"response: %s", bytes);
+		KBAPISUPPORT_LOG (@"response: %@", [[NSString alloc] initWithUTF8String:bytes]);
 #	endif // KBAPISUPPORT_DECODE
 		free (bytes);
 #endif // (defined (DEBUG) && KBAPISUPPORT_DEBUG) || KBAPISUPPORT_DECODE
@@ -449,11 +439,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 #	if KBAPISUPPORT_BOTH_FORMATS
 		if ((self.responseType == KBAPIConnectionResponseTypeJSON) || (self.responseType == KBAPIConnectionResponseTypeAuto)) {
 #	endif
-#	if KBAPISUPPORT_USE_SBJSON
-			JSONResponse = [_parser objectWithString:decodedString error:&JSONError];
-#	else
 			JSONResponse = [NSJSONSerialization JSONObjectWithData:PREPARED_JSON options:NSJSONReadingAllowFragments error:&JSONError];
-#	endif
 #	if KBAPISUPPORT_BOTH_FORMATS
 		}
 #	endif
@@ -466,15 +452,14 @@ static NSTimeInterval defaultTimeout = 30.0;
 		if ((self.responseType == KBAPIConnectionResponseTypeXML) || (self.responseType == KBAPIConnectionResponseTypeAuto)) {
 #	endif
 #	if KBAPISUPPORT_DECODE
-			XMLResponse = [[GDataXMLDocument alloc] initWithXMLString:decodedString options:0 error:&XMLError];
+			XMLResponse = [[GDataXMLDocument alloc] initWithXMLString:decodedString error:&XMLError];
 #	else
-			XMLResponse = [[GDataXMLDocument alloc] initWithData:_buffer options:0 error:&XMLError];
+			XMLResponse = [[GDataXMLDocument alloc] initWithData:_buffer error:&XMLError];
 #	endif
 #	if KBAPISUPPORT_BOTH_FORMATS
 		}
 #	endif
 #endif
-		
 		
 #if KBAPISUPPORT_BOTH_FORMATS
 		if ((((self.responseType == KBAPIConnectionResponseTypeJSON) && !JSONResponse) ||

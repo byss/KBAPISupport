@@ -1,0 +1,2 @@
+#define KBAPISUPPORT_JSON 1
+

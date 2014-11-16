@@ -27,7 +27,11 @@
 #import "KBAPISupport-config.h"
 
 #if KBAPISUPPORT_XML
-#	import "GDataXMLNode.h"
+#	if KBAPISUPPORT_PODS_BUILD
+#		import <GDataXML-HTML/GDataXMLNode.h>
+#	else
+#		import "GDataXMLNode.h"
+#	endif
 
 /** Convinience methods for GDataXMLElement.
   */
