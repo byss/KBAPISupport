@@ -56,6 +56,17 @@
   */
 + (NSArray *) initializeAutoFields;
 
+/** This method is used to create uninitialized, empty instance of the entity class.
+  * Default implementation uses simply result of [self new], but if you are using, e.g.
+  * Core Data, you may want to override this method to create managed objects in context.
+  * Note that this method is not automatically set via +setupAutoEntityMethodsForObjectClass:
+  * so you need to write your own even for default implementation if your entity is not
+  * a subclass of KBAutoEntity.
+  *
+  * @return Newly-created instance of entity class.
+  */
++ (instancetype) createEntity;
+
 + (void) setupAutoEntityMethodsForObjectClass: (Class) objectClass;
 
 @end

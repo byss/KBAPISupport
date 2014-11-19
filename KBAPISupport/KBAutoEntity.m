@@ -69,6 +69,10 @@ static inline void _setupAutoEntityMethod (SEL selector, BOOL isClassMethod, Cla
 	return nil;
 }
 
++ (instancetype) createEntity {
+	return [self new];
+}
+
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
 #if DEBUG
 	@synchronized (self.class) {
@@ -94,7 +98,7 @@ static inline void _setupAutoEntityMethod (SEL selector, BOOL isClassMethod, Cla
 
 #if KBAPISUPPORT_JSON
 + (instancetype) entityFromJSON: (id) JSON {
-	id <KBEntity> result = [self new];
+	id <KBEntity> result = [self createEntity];
 	for (id <KBAutoField> autoField in [self autoFields]) {
 		if (![autoField setFieldInObject:result fromJSON:JSON]) {
 			return nil;
@@ -106,7 +110,7 @@ static inline void _setupAutoEntityMethod (SEL selector, BOOL isClassMethod, Cla
 
 #if KBAPISUPPORT_XML
 + (instancetype) entityFromXML: (GDataXMLElement *) XML {
-	id <KBEntity> result = [self new];
+	id <KBEntity> result = [self createEntity];
 	for (id <KBAutoField> autoField in [self autoFields]) {
 		if (![autoField setFieldInObject:result fromXML:XML]) {
 			return nil;
