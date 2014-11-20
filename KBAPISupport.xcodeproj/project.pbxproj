@@ -16,7 +16,7 @@
 		43F2E10616B35126004B0199 /* KBAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0F616B35126004B0199 /* KBAPIRequest.m */; };
 		43F2E10816B35126004B0199 /* KBAutoField.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E0FD16B35126004B0199 /* KBAutoField.m */; };
 		43F2E10A16B35126004B0199 /* KBNetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10316B35126004B0199 /* KBNetworkIndicator.m */; };
-		43F2E10E16B36FDA004B0199 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10D16B36FDA004B0199 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		43F2E10E16B36FDA004B0199 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F2E10D16B36FDA004B0199 /* GDataXMLNode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
