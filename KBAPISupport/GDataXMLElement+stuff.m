@@ -50,7 +50,7 @@
 }
 
 - (GDataXMLElement *) firstChildWithName: (NSString *) childName {
-	return [self elementsForName:childName].firstObject;
+	return ([self.name isEqualToString:childName] ? self : [self elementsForName:childName].firstObject);
 }
 
 - (id) objectValue {
