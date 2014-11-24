@@ -56,6 +56,7 @@
   */
 + (NSArray *) initializeAutoFields;
 
+#if KBAPISUPPORT_JSON
 /** This method is used to create uninitialized, empty instance of the entity class.
   * Default implementation uses simply result of [self new], but if you are using, e.g.
   * Core Data, you may want to override this method to create managed objects in context.
@@ -65,7 +66,14 @@
   *
   * @return Newly-created instance of entity class.
   */
-+ (instancetype) createEntity;
++ (instancetype) createEntityForJSONObject: (id) JSON;
+#endif
+
+#if KBAPISUPPORT_XML
+/** @see +createEntityForJSONObject:
+  */
++ (instancetype) createEntityForXMLObject: (GDataXMLElement *) XML;
+#endif
 
 + (void) setupAutoEntityMethodsForObjectClass: (Class) objectClass;
 
