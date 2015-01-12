@@ -49,7 +49,9 @@
 #	define ADDN_INIT2
 #endif
 
+#if KBAPISUPPORT_JSON
 static inline NSString *stringValue (id object);
+#endif
 static inline NSNumber *numberValue (id object);
 
 #pragma mark - KBAutoFieldBase
@@ -450,6 +452,7 @@ DEALLOC_MACRO_1 (entityTag);
 
 @end
 
+#if KBAPISUPPORT_JSON
 static inline NSString *stringValue (id object) {
 	if ([object isKindOfClass:[NSString class]]) {
 		return object;
@@ -459,6 +462,7 @@ static inline NSString *stringValue (id object) {
 		return nil;
 	}
 }
+#endif
 
 static inline NSNumber *numberValue (id object) {
 	if ([object isKindOfClass:[NSNumber class]]) {

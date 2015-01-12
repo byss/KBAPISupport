@@ -93,6 +93,12 @@ ${defines_check_code}
 #endif
 EOF
 )
+	defines_check_code=$(cat <<EOF
+#if !KBAPISUPPORT_SKIP_CONFIG_CHECK
+${defines_check_code}
+#endif
+EOF
+)
 	local config_file="$1"
 	echo "${defines_check_code}" | "${COMPILER}" -include "${config_file}" -x objective-c-header -E - 2>&1 >/dev/null
 }

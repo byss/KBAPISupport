@@ -1,65 +1,86 @@
-class Pod::Spec
-	def setup_config_bit(config_bit)
-		self.source_files = 'KBAPISupport/ConfigBits/_KB_#{config_bit}.h'
-	end
-end
-
 Pod::Spec.new do |spec|
 	spec.name                 = 'KBAPISupport'
-	spec.version              = '2.0.1'
+	spec.version              = '2.1'
 	spec.license              = { :type => 'MIT' }
 	spec.homepage             = 'https://github.com/byss/' + spec.name
 	spec.authors              = { 'Kirill byss Bystrov' => 'kirrbyss@gmail.com' }
 	spec.summary              = 'Simple library for HTTP/HTTPS requests and parsing & mapping JSON/XML responses to native objects.'
 	spec.source               = { :git => spec.homepage + '.git', :tag => 'v' + spec.version.to_s }
 	spec.requires_arc         = true
-	spec.preserve_paths       = 'KBAPISupport/KBAPISupport-config.h'
+	spec.source_files         = 'KBAPISupport/*.{h,m}'
+	spec.private_header_files = 'KBAPISupport/ARCSupport.h'
+	spec.exclude_files        = 'KBAPISupport/KBAPISupport-pods-config.h'
+	spec.prepare_command = <<-EOF
+		pushd KBAPISupport &&
+		cp KBAPISupport-pods-config.h KBAPISupport-config.h &&
+		./KBAPISupport-prepare.sh &&
+		popd &&
+		touch KBAPISupport-fake-spec.m
+	EOF
 	
-	spec.subspec 'Debug' do |sspec_debug|
-		sspec_debug.setup_config_bit('DEBUG')
+	spec.subspec 'Debug' do |sspec|
+		sspec.xcconfig = {
+			'OTHER_CFLAGS' => '$(inherited) -DKBAPISUPPORT_DEBUG=1'
+		}
+		sspec.preserve_paths = 'KBAPISupport/KBAPISupport-config.h'
 	end
-	spec.subspec 'JSON' do |sspec_json|
-		sspec_json.setup_config_bit('JSON')
+	spec.subspec 'JSON' do |sspec|
+		sspec.xcconfig = {
+			'OTHER_CFLAGS' => '$(inherited) -DKBAPISUPPORT_JSON=1'
+		}
+		sspec.preserve_paths = 'KBAPISupport/KBAPISupport-config.h'
 	end
-	spec.subspec 'XML' do |sspec_xml|
-		sspec_xml.setup_config_bit('XML')
-		sspec_xml.dependency 'GDataXML-HTML', '~> 1.2.0'
-		sspec_xml.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
+	spec.subspec 'NOJSON' do |sspec|
+		sspec.xcconfig = {
+			'OTHER_CFLAGS' => '$(inherited) -UKBAPISUPPORT_JSON -DKBAPISUPPORT_JSON=0'
+		}
+		sspec.preserve_paths = 'KBAPISupport/KBAPISupport-config.h'
 	end
-	spec.subspec 'Decode_CP1251' do |sspec_decode_1251|
-		sspec_decode_1251.setup_config_bit('CP1251')
+	spec.subspec 'XML' do |sspec|
+		sspec.dependency 'GDataXML-HTML', '~> 1.2.0'
+		sspec.xcconfig = {
+			'OTHER_CFLAGS' => '$(inherited) -DKBAPISUPPORT_XML=1 -DKBAPISUPPORT_PODS_BUILD=1',
+			'HEADER_SEARCH_PATHS' => '$(inherited) $(SDKROOT)/usr/include/libxml2'
+		}
+		sspec.preserve_paths = 'KBAPISupport/KBAPISupport-config.h'
 	end
-	spec.subspec 'Delegates' do |sspec_delegates|
-		sspec_delegates.setup_config_bit('DELEGATES')
+	spec.subspec 'Decode_CP1251' do |sspec|
+		sspec.xcconfig = {
+			'OTHER_CFLAGS' => '$(inherited) -DKBAPISUPPORT_DECODE=1 -DKBAPISUPPORT_DECODE_FROM=(NSWindowsCP1251StringEncoding)'
+		}
+		sspec.preserve_paths = 'KBAPISupport/KBAPISupport-config.h'
 	end
-	spec.subspec 'Blocks' do |sspec_blocks|
-		sspec_blocks.setup_config_bit('BLOCKS')
+	spec.subspec 'Delegates' do |sspec|
+		sspec.xcconfig = {
+			'OTHER_CFLAGS' => '$(inherited) -DKBAPISUPPORT_USE_DELEGATES=1'
+		}
+		sspec.preserve_paths = 'KBAPISupport/KBAPISupport-config.h'
+	end
+	spec.subspec 'NODelegates' do |sspec|
+		sspec.xcconfig = {
+			'OTHER_CFLAGS' => '$(inherited) -UKBAPISUPPORT_USE_DELEGATES -DKBAPISUPPORT_USE_DELEGATES=0'
+		}
+		sspec.preserve_paths = 'KBAPISupport/KBAPISupport-config.h'
+	end
+	spec.subspec 'Blocks' do |sspec|
+		sspec.xcconfig = {
+			'OTHER_CFLAGS' => '$(inherited) -DKBAPISUPPORT_USE_BLOCKS=1'
+		}
+		sspec.preserve_paths = 'KBAPISupport/KBAPISupport-config.h'
 	end
 	
-	spec.subspec 'Library' do |sspec_lib|
-		sspec_lib.source_files         = 'KBAPISupport/*.{h,m}'
-		sspec_lib.private_header_files = 'KBAPISupport/ARCSupport.h'
-		sspec_lib.prepare_command = <<-EOF
-			shopt -s extglob;
-			pushd KBAPISupport &&
-			cat ConfigBits/!(_KB_FOOTER.h) ConfigBits/_KB_FOOTER.h > 'KBAPISupport-config.h'
-			cp 'KBAPISupport-config.h' ~/tmp/CONFEEG.h &&
-			./KBAPISupport-prepare.sh &&
-			popd
-		EOF
-	end
-	
-# 	spec.subspec 'JSON+Delegates' do |sspec_json_delegates|
-# 		sspec_json_delegates.dependency 'KBAPISupport/JSON'
-# 		sspec_json_delegates.dependency 'KBAPISupport/Delegates'
+# 	spec.subspec 'JSON+Delegates' do |sspec|
+# 		sspec.dependency 'KBAPISupport/JSON'
+# 		sspec.dependency 'KBAPISupport/Delegates'
 # 	end
-# 	spec.subspec 'JSON+Blocks' do |sspec_json_blocks|
-# 		sspec_json_blocks.dependency 'KBAPISupport/JSON'
-# 		sspec_json_blocks.dependency 'KBAPISupport/Blocks'
+# 	spec.subspec 'JSON+Blocks' do |sspec|
+# 		sspec.dependency 'KBAPISupport/JSON'
+# 		sspec.dependency 'KBAPISupport/Blocks'
 # 	end
-# 	spec.subspec 'XML+Delegates' do |sspec_xml_delegates|
-# 		sspec_xml_delegates.dependency 'KBAPISupport/XML'
-# 		sspec_xml_delegates.dependency 'KBAPISupport/Delegates'
+# 	spec.subspec 'XML+Delegates' do |sspec|
+# 		sspec.dependency 'KBAPISupport/XML'
+# 		sspec.dependency 'KBAPISupport/Delegates'
 # 	end
-	spec.default_subspecs = 'JSON', 'XML', 'Delegates', 'Blocks', 'Library'
+
+	spec.default_subspecs = 'JSON', 'Delegates'
 end

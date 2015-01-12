@@ -1,2 +1,0 @@
-#define KBAPISUPPORT_DECODE 1
-#define KBAPISUPPORT_DECODE_FROM (NSWindowsCP1251StringEncoding)
