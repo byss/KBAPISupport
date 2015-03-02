@@ -94,16 +94,20 @@ static NSString *const kArraySourceField = @"array";
 	return self;
 }
 
+- (Class) classForCoder {
+	return [self class];
+}
+
+- (Class) classForKeyedArchiver {
+	return [self class];
+}
+
 - (id)copyWithZone:(NSZone *)zone {
 	return [_backingArray copyWithZone:zone];
 }
 
 - (id)mutableCopyWithZone:(NSZone *)zone {
 	return [_backingArray mutableCopyWithZone:zone];
-}
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	[_backingArray encodeWithCoder:aCoder];
 }
 
 - (id) objectAtIndex:(NSUInteger)index {
