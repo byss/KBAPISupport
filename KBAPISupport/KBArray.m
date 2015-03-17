@@ -60,6 +60,10 @@ static NSString *const kArraySourceField = @"array";
 
 #if KBAPISUPPORT_JSON
 + (instancetype) entityFromJSON:(id)JSON {
+	if (!JSON) {
+		return nil;
+	}
+	
 	KBArrayHelper *helper = [KBArrayHelper new];
 	id <KBAutoField> autoField = self.autoField;
 	[autoField setFieldInObject:helper fromJSON:@{kArraySourceField: JSON}];
