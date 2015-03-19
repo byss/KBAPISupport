@@ -342,9 +342,17 @@ DELEGATE_INITIALIZATION (WithObjectClass: (Class) objectClass fieldName:(NSStrin
 
 @end
 
-#pragma mark - KBAutoObjectArrayField
+#pragma mark - KBAutoObjectCollectionField
 
-@implementation KBAutoObjectArrayField
+@implementation KBAutoObjectCollectionField
+
++ (Class) collectionClass {
+	@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Collection class is not defined!" userInfo:nil];
+}
+
++ (Class) mutableCollectionClass {
+	@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Mutable collection class is not defined!" userInfo:nil];
+}
 
 AUTOFIELD_CONVINIENCE_CREATOR_2 (entityClass, EntityClass, Class, fieldName, NSString *)
 AUTOFIELD_CONVINIENCE_CREATOR_3 (entityClass, EntityClass, Class, fieldName, NSString *, sourceFieldName, NSString *)
@@ -413,11 +421,7 @@ DEALLOC_MACRO_1 (entityTag);
 		}
 	}
 	
-	NSArray *objArrValue = (objects ? [[NSArray alloc] initWithObjects:objects count:objectsCount] : nil);
-	if (objects) {
-		free (objects);
-	}
-	[object setValue:objArrValue forKey:self.fieldName];
+	[self setFieldInObject:object withObjects:objects count:objectsCount];
 	
 	return YES;
 }
@@ -440,15 +444,24 @@ DEALLOC_MACRO_1 (entityTag);
 		}
 	}
 
-	NSArray *objArrValue = (objects ? [[NSArray alloc] initWithObjects:objects count:objectsCount] : nil);
-	if (objects) {
-		free (objects);
-	}
-	[object setValue:objArrValue forKey:self.fieldName];
+	[self setFieldInObject:object withObjects:objects count:objectsCount];
 	
 	return YES;
 }
 #endif
+
+- (void) setFieldInObject: (id) object withObjects: (__strong id *) objects count: (NSUInteger) objectCount {
+	id objCollectionValue = nil;
+	@try {
+		Class collectionClass = (self.isMutable ? [self.class mutableCollectionClass] : [self.class collectionClass]);
+		objCollectionValue = (objects ? [[collectionClass alloc] initWithObjects:objects count:objectCount] : nil);
+	}
+	@finally {
+		free (objects);
+	}
+	
+	[object setValue:objCollectionValue forKey:self.fieldName];
+}
 
 @end
 
@@ -473,3 +486,41 @@ static inline NSNumber *numberValue (id object) {
 		return nil;
 	}
 }
+
+#pragma mark - KBAutoObjectCollectionField subclasses
+
+@implementation KBAutoObjectArrayField
+
++ (Class) collectionClass {
+	return [NSArray class];
+}
+
++ (Class) mutableCollectionClass {
+	return [NSMutableArray class];
+}
+
+@end
+
+@implementation KBAutoObjectSetField
+
++ (Class) collectionClass {
+	return [NSSet class];
+}
+
++ (Class) mutableCollectionClass {
+	return [NSMutableSet class];
+}
+
+@end
+
+@implementation KBAutoObjectOrderedSetField
+
++ (Class) collectionClass {
+	return [NSOrderedSet class];
+}
+
++ (Class) mutableCollectionClass {
+	return [NSMutableOrderedSet class];
+}
+
+@end

@@ -201,11 +201,14 @@
 
 @end
 
-@interface KBAutoObjectArrayField: KBAutoFieldBase
+@interface KBAutoObjectCollectionField: KBAutoFieldBase
 
 @property (nonatomic, readonly) BOOL isMutable;
 @property (nonatomic, unsafe_unretained) Class entityClass;
 @property (nonatomic, readonly) NSString *entityTag;
+
++ (Class) collectionClass;
++ (Class) mutableCollectionClass;
 
 + (instancetype) autoFieldWithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName;
 + (instancetype) autoFieldWithEntityClass: (Class) entityClass fieldName:(NSString *)fieldName sourceFieldName:(NSString *)sourceFieldName;
@@ -224,5 +227,17 @@
 - (instancetype) initWithEntityClass: (Class) entityClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName  entityTag: (NSString *) entityTag;
 - (instancetype) initWithEntityClass: (Class) entityClass fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName  isMutable: (BOOL) isMutable entityTag: (NSString *) entityTag;
 #endif
+
+@end
+
+@interface KBAutoObjectArrayField: KBAutoObjectCollectionField
+
+@end
+
+@interface KBAutoObjectSetField: KBAutoObjectCollectionField
+
+@end
+
+@interface KBAutoObjectOrderedSetField: KBAutoObjectCollectionField
 
 @end
