@@ -57,7 +57,9 @@ static id <KBNetworkIndicatorDelegate> KBNetworkIndicatorDelegate = nil;
 	@synchronized (self) {
 		if (!(requestsCount++)) {
 #if TARGET_OS_IPHONE
+#	if !KBAPISUPPORT_EXTENSION_SAFE
 			[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+#	endif
 #else
 			[KBNetworkIndicatorDelegate setNetworkActivityStatus:YES];
 #endif
@@ -70,7 +72,9 @@ static id <KBNetworkIndicatorDelegate> KBNetworkIndicatorDelegate = nil;
 		if (requestsCount) {
 			if (!(--requestsCount)) {
 #if TARGET_OS_IPHONE
+#	if !KBAPISUPPORT_EXTENSION_SAFE
 				[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+#	endif
 #else
 				[KBNetworkIndicatorDelegate setNetworkActivityStatus:NO];
 #endif

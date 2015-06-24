@@ -58,7 +58,7 @@
 @protocol KBNetworkIndicatorDelegate <NSObject>
 
 @required
-/** This methid is called when network activity status is changed. */
+/** This method is called when network activity status is changed. */
 - (void) setNetworkActivityStatus: (BOOL) active;
 
 @end

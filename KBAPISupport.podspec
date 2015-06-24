@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'KBAPISupport'
-	spec.version              = '2.2'
+	spec.version              = '2.2.1'
 	spec.license              = { :type => 'MIT' }
 	spec.homepage             = 'https://github.com/byss/' + spec.name
 	spec.authors              = { 'Kirill byss Bystrov' => 'kirrbyss@gmail.com' }
@@ -65,6 +65,12 @@ Pod::Spec.new do |spec|
 	spec.subspec 'Blocks' do |sspec|
 		sspec.xcconfig = {
 			'OTHER_CFLAGS' => '$(inherited) -DKBAPISUPPORT_USE_BLOCKS=1'
+		}
+		sspec.preserve_paths = 'KBAPISupport/KBAPISupport-config.h'
+	end
+	spec.subspec 'ExtensionSafe' do |sspec|
+		sspec.xcconfig = {
+			'OTHER_CFLAGS' => '$(inherited) -DKBAPISUPPORT_EXTENSION_SAFE=1'
 		}
 		sspec.preserve_paths = 'KBAPISupport/KBAPISupport-config.h'
 	end
