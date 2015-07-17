@@ -262,6 +262,7 @@ static NSTimeInterval defaultTimeout = 30.0;
 - (void) cancel {
 	[_connection cancel];
 	_connection = nil;
+	[KBNetworkIndicator requestFinished];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {

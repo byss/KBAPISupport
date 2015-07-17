@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'KBAPISupport'
-	spec.version              = '2.2.1'
+	spec.version              = '2.2.2'
 	spec.license              = { :type => 'MIT' }
 	spec.homepage             = 'https://github.com/byss/' + spec.name
 	spec.authors              = { 'Kirill byss Bystrov' => 'kirrbyss@gmail.com' }
