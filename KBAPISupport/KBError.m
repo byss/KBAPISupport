@@ -98,7 +98,7 @@ NSString *const kKBErrorDomain = @"ru.byss.KBAPISupport.KBError";
 	}
 	NSString *errorDescription = [JSON objectForKey:errorDescriptionField];
 	NSDictionary *userInfo = nil;
-	if (errorDescription) {
+	if ([errorDescription isKindOfClass:[NSString class]]) {
 		userInfo = @{NSLocalizedDescriptionKey: errorDescription};
 	}
 	
