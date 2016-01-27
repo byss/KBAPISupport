@@ -234,6 +234,72 @@ DELEGATE_INITIALIZATION (WithUnsigned: (BOOL) isUnsigned fieldName:(NSString *)f
 
 @end
 
+#pragma mark - KBAutoURLField
+
+@implementation KBAutoURLField
+
+AUTOFIELD_CONVINIENCE_CREATOR_2 (baseURL, BaseURL, NSURL *, fieldName, NSString *)
+AUTOFIELD_CONVINIENCE_CREATOR_3 (baseURL, BaseURL, NSURL *, fieldName, NSString *, sourceFieldName, NSString *)
+
+#if KBAPISUPPORT_XML
+AUTOFIELD_CONVINIENCE_CREATOR_4 (baseURL, BaseURL, NSURL *, fieldName, NSString *, sourceFieldName, NSString *, isAttribute, BOOL)
+#endif
+
+DELEGATE_INITIALIZATION (WithBaseURL: (NSURL *) baseURL fieldName:(NSString *)fieldName, sourceFieldName:nil ADDN_DEFAULTS)
+#if KBAPISUPPORT_XML
+DELEGATE_INITIALIZATION (WithBaseURL: (NSURL *) baseURL fieldName:(NSString *)fieldName sourceFieldName:(NSString *) sourceFieldName, ADDN_DEFAULTS)
+#endif
+
+- (instancetype)initWithFieldName:(NSString *)fieldName sourceFieldName:(NSString *)sourceFieldName ADDN_ARGS {
+	return [self initWithBaseURL:nil fieldName:fieldName sourceFieldName:sourceFieldName ADDN_ARGS];
+}
+
+- (instancetype)initWithBaseURL:(NSURL *)baseURL fieldName:(NSString *)fieldName sourceFieldName:(NSString *)sourceFieldName ADDN_ARGS {
+	if (self = [super initWithFieldName:fieldName sourceFieldName:sourceFieldName ADDN_ARGS]) {
+		_baseURL = baseURL;
+	}
+	
+	return self;
+}
+
+#if KBAPISUPPORT_JSON
+- (BOOL) setFieldInObject: (id) object fromJSON: (NSDictionary *) JSON {
+	if (![super setFieldInObject:object fromJSON:JSON]) {
+		return NO;
+	}
+	
+	NSString *strValue = stringValue (JSON [self.sourceFieldName]);
+	NSURL *urlValue = (strValue ? [[NSURL alloc] initWithString:strValue relativeToURL:self.baseURL] : nil);
+	[object setValue:urlValue forKey:self.fieldName];
+	
+	return YES;
+}
+#endif
+
+#if KBAPISUPPORT_XML
+- (BOOL) setFieldInObject: (id) object fromXML: (GDataXMLElement *) XML {
+	if (![super setFieldInObject:object fromXML:XML]) {
+		return NO;
+	}
+	
+	NSString *strValue = nil;
+	NSString *sourceFieldName = self.sourceFieldName;
+	if (self.isAttribute) {
+		for (GDataXMLNode *attr = [XML attributeForName:sourceFieldName]; attr; attr = nil) {
+			strValue = [attr stringValue];
+		}
+	} else {
+		strValue = [XML childStringValue:sourceFieldName];
+	}
+	NSURL *urlValue = (strValue ? [[NSURL alloc] initWithString:strValue relativeToURL:self.baseURL] : nil);
+	[object setValue:urlValue forKey:self.fieldName];
+	
+	return YES;
+}
+#endif
+
+@end
+
 #pragma mark - KBAutoObjectField
 
 @implementation KBAutoObjectField

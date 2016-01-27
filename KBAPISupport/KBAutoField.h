@@ -185,6 +185,26 @@
 
 @end
 
+@interface KBAutoURLField: KBAutoStringField
+
+@property (nonatomic, readonly) NSURL *baseURL;
+
++ (instancetype) autoFieldWithBaseURL: (NSURL *) baseURL fieldName: (NSString *) fieldName;
++ (instancetype) autoFieldWithBaseURL: (NSURL *) baseURL fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
+#if KBAPISUPPORT_XML
++ (instancetype) autoFieldWithBaseURL: (NSURL *) baseURL fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
+#endif
+
+- (instancetype) initWithBaseURL: (NSURL *) baseURL fieldName: (NSString *) fieldName;
+// designated initializer when XML is off
+- (instancetype) initWithBaseURL: (NSURL *) baseURL fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName;
+#if KBAPISUPPORT_XML
+// designated initializer when XML is on
+- (instancetype) initWithBaseURL: (NSURL *) baseURL fieldName: (NSString *) fieldName sourceFieldName: (NSString *) sourceFieldName isAttribute: (BOOL) isAttribute;
+#endif
+
+@end
+
 @interface KBAutoObjectField: KBAutoFieldBase
 
 @property (nonatomic, unsafe_unretained) Class objectClass;
