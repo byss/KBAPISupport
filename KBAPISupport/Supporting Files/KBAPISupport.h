@@ -12,11 +12,7 @@ FOUNDATION_EXPORT double const KBAPISupportVersionNumber;
 FOUNDATION_EXPORT unsigned char const KBAPISupportVersionString [];
 
 /* Core */
-
-#import <KBAPISupport/KBAPIRequest.h>
-#import <KBAPISupport/KBOperation.h>
-#import <KBAPISupport/KBAPIRequestOperation.h>
-#import <KBAPISupport/KBAPIConnection.h>
+#import <KBAPISupport/KBAPISupport-Core.h>
 
 /* NSURLConnection */
 #if __has_include(<KBAPISupport/KBAPISupport+NSURLConnection.h>)
@@ -26,16 +22,6 @@ FOUNDATION_EXPORT unsigned char const KBAPISupportVersionString [];
 /* NSURLSession */
 #if __has_include(<KBAPISupport/KBAPISupport+NSURLSession.h>)
 #	import <KBAPISupport/KBAPISupport+NSURLSession.h>
-#endif
-
-/* Blocks */
-#if __has_include(<KBAPISupport/KBAPISupport+Blocks.h>)
-#	import <KBAPISupport/KBAPISupport+Blocks.h>
-#endif
-
-/* Delegates */
-#if __has_include(<KBAPISupport/KBAPISupport+Delegates.h>)
-#	import <KBAPISupport/KBAPISupport+Delegates.h>
 #endif
 
 /* JSON */
@@ -51,4 +37,14 @@ FOUNDATION_EXPORT unsigned char const KBAPISupportVersionString [];
 /* Mapping */
 #if __has_include(<KBAPISupport/KBAPISupport+Mapping.h>)
 #	import <KBAPISupport/KBAPISupport+Mapping.h>
+#endif
+
+/* Blocks */
+#if __has_include(<KBAPISupport/KBAPISupport+Blocks.h>)
+#	import <KBAPISupport/KBAPISupport+Blocks.h>
+#endif
+
+/* Delegates */
+#if __has_include(<KBAPISupport/KBAPISupport+Delegates.h>)
+#	import <KBAPISupport/KBAPISupport+Delegates.h>
 #endif

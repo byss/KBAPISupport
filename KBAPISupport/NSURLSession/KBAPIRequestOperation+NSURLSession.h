@@ -6,11 +6,11 @@
 //  Copyright © 2016 Kirill byss Bystrov. All rights reserved.
 //
 
-#import <KBAPISupport/KBAPISupport.h>
+#import <KBAPISupport/KBAPIRequestOperation.h>
 
 @interface KBAPIRequestOperation (NSURLSession)
 
-@property (nonatomic, weak, readonly) NSURLSession *session;
+@property (nonatomic, nullable, weak, readonly) NSURLSession *session;
 
 + (NSURLSession *_Nonnull) defaultSession;
 + (void) setDefaultSession: (NSURLSession *_Nullable) session;

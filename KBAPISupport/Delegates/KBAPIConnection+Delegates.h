@@ -12,6 +12,10 @@
 @class GDataXMLDocument;
 #endif
 
+#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+@protocol KBEntity;
+#endif
+
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol KBAPIConnectionDelegate <NSObject>

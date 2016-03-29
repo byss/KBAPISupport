@@ -6,8 +6,5 @@
 //  Copyright © 2016 Kirill byss Bystrov. All rights reserved.
 //
 
-#ifndef KBAPISupport_JSON_h
-#define KBAPISupport_JSON_h
-
-
-#endif /* KBAPISupport_JSON_h */
+#import <KBAPISupport/KBJSONParsingOperation.h>
+#import <KBAPISupport/KBAPIConnection+JSON.h>

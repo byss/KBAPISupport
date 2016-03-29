@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+@class KBAPIRequest;
+@class KBAPIConnection;
 @interface NSURLSession (KBAPISupport)
+
+- (KBAPIConnection *_Nullable) connectionWithRequest:  (KBAPIRequest *_Nonnull) request;
 
 @end
