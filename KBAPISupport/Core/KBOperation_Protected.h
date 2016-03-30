@@ -10,9 +10,6 @@
 
 @interface KBOperation ()
 
-@property (nonatomic, nullable, readonly) NSArray <NSOperation *> *suboperations;
-@property (nonatomic, nonnull, readonly) NSOperation *completionOperation;
-
 @property (nonatomic, nullable, readonly) id result;
 @property (nonatomic, nullable, copy) NSError *error;
 

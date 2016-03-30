@@ -6,4 +6,4 @@
 //  Copyright © 2016 Kirill byss Bystrov. All rights reserved.
 //
 
-#import <KBAPISupport/KBAPIRequestOperation+NSURLConnection.h>
+#import <KBAPISupport/KBAPINSURLConnection.h>

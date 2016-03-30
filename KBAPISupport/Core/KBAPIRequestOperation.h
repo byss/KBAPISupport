@@ -11,10 +11,11 @@
 @class KBAPIRequest;
 @interface KBAPIRequestOperation: KBOperation
 
+@property (nonatomic, assign) NSTimeInterval timeout;
+@property (nonatomic, nullable, copy) void (^operationCompletionBlock) (NSData *_Nullable result, NSError *_Nullable error);
+
 + (NSTimeInterval) defaultTimeout;
 + (void) setDefaultTimeout: (NSTimeInterval) defaultTimeout;
-
-@property (nonatomic, assign) NSTimeInterval timeout;
 
 - (instancetype _Nullable) initWithRequest: (KBAPIRequest *_Nonnull) request completion: (void (^_Nullable) (NSData *_Nullable responseData, NSError *_Nullable error)) completion NS_DESIGNATED_INITIALIZER;
 

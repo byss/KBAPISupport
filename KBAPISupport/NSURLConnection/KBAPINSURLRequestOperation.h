@@ -1,13 +1,13 @@
 //
-//  KBAPIRequestOperation+NSURLConnection.h
+//  KBAPINSURLRequestOperation.h
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 3/17/16.
+//  Created by Kirill Bystrov on 3/30/16.
 //  Copyright © 2016 Kirill byss Bystrov. All rights reserved.
 //
 
 #import <KBAPISupport/KBAPIRequestOperation.h>
 
-@interface KBAPIRequestOperation (NSURLConnection)
+@interface KBAPINSURLRequestOperation: KBAPIRequestOperation
 
 @end

@@ -14,6 +14,8 @@ static NSTimeInterval KBAPIRequestOperationDefaultTimeout = 30.0;
 
 @implementation KBAPIRequestOperation
 
+@dynamic operationCompletionBlock;
+
 + (NSTimeInterval)defaultTimeout {
 	return KBAPIRequestOperationDefaultTimeout;
 }
@@ -37,10 +39,6 @@ static NSTimeInterval KBAPIRequestOperationDefaultTimeout = 30.0;
 	}
 	
 	return self;
-}
-
-- (NSArray <NSOperation *> *) suboperations {
-	return nil;
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+@class KBOperation;
 @class KBAPIRequest;
 @interface KBAPIConnection: NSObject
 
@@ -24,7 +25,7 @@
 
 - (instancetype _Nullable) initWithRequest: (KBAPIRequest *_Nonnull) request NS_DESIGNATED_INITIALIZER;
 
-- (void) start;
+- (KBOperation *_Nullable) start;
 - (void) cancel;
 
 @end

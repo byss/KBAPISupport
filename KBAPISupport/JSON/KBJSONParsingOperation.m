@@ -8,6 +8,22 @@
 
 #import "KBJSONParsingOperation.h"
 
+#import "KBOperation_Protected.h"
+
 @implementation KBJSONParsingOperation
+
+@dynamic operationCompletionBlock;
+@synthesize result = _result;
+
+- (void) main {
+	NSData *JSONData = self.JSONData;
+	if (JSONData) {
+		NSError *JSONError = nil;
+		_result = [NSJSONSerialization JSONObjectWithData:JSONData options:NSJSONReadingAllowFragments error:&JSONError];
+		self.error = JSONError;
+	}
+	
+	[super main];
+}
 
 @end

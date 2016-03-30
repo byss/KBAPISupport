@@ -7,6 +7,7 @@
 //
 
 #import <KBAPISupport/KBAPIRequestOperation.h>
+#import <KBAPISupport/KBOperation_Protected.h>
 
 @interface KBAPIRequestOperation ()
 

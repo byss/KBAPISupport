@@ -10,4 +10,7 @@
 
 @interface KBJSONParsingOperation: KBOperation
 
+@property (nonatomic, copy, nullable) NSData *JSONData;
+@property (nonatomic, copy, nullable) void (^operationCompletionBlock) (id _Nullable parsedObject, NSError *_Nullable error);
+
 @end

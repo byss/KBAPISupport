@@ -1,5 +1,5 @@
 //
-//  NSURLRequest+KBAPIRequest.h
+//  NSMutableURLRequest+KBAPIRequest.h
 //  KBAPISupport
 //
 //  Created by Kirill Bystrov on 3/29/16.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class KBAPIRequest;
-@interface NSURLRequest (KBAPIRequest)
+@interface NSMutableURLRequest (KBAPIRequest)
 
 - (instancetype _Nullable) initWithAPIRequest: (KBAPIRequest *_Nonnull) request;
 

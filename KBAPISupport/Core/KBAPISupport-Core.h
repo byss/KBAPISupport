@@ -10,4 +10,4 @@
 #import <KBAPISupport/KBOperation.h>
 #import <KBAPISupport/KBAPIRequestOperation.h>
 #import <KBAPISupport/KBAPIConnection.h>
-#import <KBAPISupport/NSURLRequest+KBAPIRequest.h>
+#import <KBAPISupport/NSMutableURLRequest+KBAPIRequest.h>
