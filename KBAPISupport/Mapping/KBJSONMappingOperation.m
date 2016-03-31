@@ -42,10 +42,18 @@
 - (void) main {
 	id JSONObject = self.JSONObject;
 	if (JSONObject) {
-		_result = [self.expectedClass entityFromJSON:JSONObject];
+		Class expectedClass = self.expectedClass;
+		if ([expectedClass conformsToProtocol:@protocol (KBEntity)]) {
+			_result = [expectedClass entityFromJSON:JSONObject];
+		}
 
 		if (!_result) {
-			NSError *mappedError = (NSError *) [self.errorClass entityFromJSON:JSONObject];
+			Class errorClass = self.errorClass;
+			NSError *mappedError = nil;
+			if ([errorClass conformsToProtocol:@protocol (KBEntity)]) {
+				mappedError = [errorClass entityFromJSON:JSONObject];
+			}
+			
 			if ([mappedError isKindOfClass:[NSError class]]) {
 				self.error = mappedError;
 			} else {
