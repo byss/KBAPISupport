@@ -50,5 +50,5 @@ Pod::Spec.new do |spec|
 # 		sspec.dependency 'KBAPISupport/Core'
 # 	end
 	
-	spec.default_subspecs = 'Core'
+	spec.default_subspecs = 'Core', 'NSURLConnection', 'JSON', 'Mapping', 'Blocks'
 end
