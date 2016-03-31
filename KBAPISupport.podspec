@@ -7,6 +7,7 @@ Pod::Spec.new do |spec|
 	spec.summary              = 'Simple library for HTTP/HTTPS requests and parsing & mapping JSON/XML responses to native objects.'
 	spec.source               = { :git => spec.homepage + '.git', :tag => 'v' + spec.version.to_s }
 	spec.requires_arc         = true
+	spec.source_files = 'KBAPISupport/Supporting Files/KBAPISupport.h'
 	
 	spec.ios.deployment_target = '6.0'
 	spec.osx.deployment_target = '10.8'
