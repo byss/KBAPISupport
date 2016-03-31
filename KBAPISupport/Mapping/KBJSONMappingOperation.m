@@ -24,6 +24,8 @@
 //  THE SOFTWARE.
 //
 
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+
 #import "KBJSONMappingOperation.h"
 #import "KBOperation_Protected.h"
 
@@ -58,3 +60,5 @@
 }
 
 @end
+
+#endif
