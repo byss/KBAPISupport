@@ -36,7 +36,11 @@
 @implementation KBAPIConnection (NSURLConnectionOnly)
 
 + (instancetype)allocWithZone:(struct _NSZone *)zone {
-	return [KBAPINSURLConnection allocWithZone:zone];
+	if (self == [KBAPIConnection class]) {
+		return [KBAPINSURLConnection allocWithZone:zone];
+	} else {
+		return [super allocWithZone:zone];
+	}
 }
 
 @end

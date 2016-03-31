@@ -76,6 +76,7 @@
 					weakJSONMappingOperation.JSONObject = parsedObject;
 				};
 			}
+			[operation addSuboperation:jsonMappingOperation];
 			[jsonMappingOperation addDependency:jsonParsingOperation];
 		}
 #	endif

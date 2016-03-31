@@ -134,10 +134,10 @@ static NSOperationQueue *KBAPIConnectionDefaultCallbacksQueue = nil;
 
 - (KBOperation *) start {
 	KBAPIRequestOperation *operation = [self createRequestOperationWithRequest:self.request];
+	operation.timeout = self.timeout;
 	for (KBAPIConnectionOperationSetupHandler *handler in [self.class registeredHandlers]) {
 		handler.handlerBlock (self, operation);
 	}
-	operation.timeout = self.timeout;
 	self.operation = operation;
 	[[self.class operationQueue] addOperation:operation];
 	return operation;

@@ -58,6 +58,7 @@
 				};
 			}
 			[parsingOperation addDependency:suboperation];
+			[operation addSuboperation:parsingOperation];
 			break;
 		}
 	}

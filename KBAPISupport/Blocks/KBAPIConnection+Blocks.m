@@ -177,29 +177,29 @@
 	}
 }
 
-- (void)startWithRawDataCompletion:(void (^)(NSData * _Nullable, NSError * _Nullable))completion {
+- (KBOperation *) startWithRawDataCompletion:(void (^)(NSData * _Nullable, NSError * _Nullable))completion {
 	self.rawDataCompletion = completion;
-	[self start];
+	return [self start];
 }
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (void)startWithRawObjectCompletion:(void (^)(id _Nullable, NSError * _Nullable))completion {
+- (KBOperation *) startWithRawObjectCompletion:(void (^)(id _Nullable, NSError * _Nullable))completion {
 	self.rawObjectCompletion = completion;
-	[self start];
+	return [self start];
 }
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-- (void)startWithRawObjectCompletion:(void (^)(GDataXMLDocument *_Nullable, NSError * _Nullable))completion {
+- (KBOperation *) startWithRawObjectCompletion:(void (^)(GDataXMLDocument *_Nullable, NSError * _Nullable))completion {
 	self.rawObjectCompletion = completion;
-	[self start];
+	return [self start];
 }
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
-- (void)startWithCompletion:(void (^)(id<KBEntity> _Nullable, NSError * _Nullable))completion {
+- (KBOperation *) startWithCompletion:(void (^)(id<KBEntity> _Nullable, NSError * _Nullable))completion {
 	self.objectCompletion = completion;
-	[self start];
+	return [self start];
 }
 #endif
 
