@@ -60,8 +60,9 @@
 	KBXMLMappingOperation *xmlMappingOperation = [KBXMLMappingOperation new];
 #endif
 	
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>) || __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 	for (KBOperation *suboperation in operation.suboperations) {
-#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+#	if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 		if ([suboperation isKindOfClass:[KBJSONParsingOperation class]]) {
 			KBJSONParsingOperation *jsonParsingOperation = (KBJSONParsingOperation *) suboperation;
 			void (^suboperationCompletion) (id _Nullable, NSError *_Nullable) = jsonParsingOperation.operationCompletionBlock;
@@ -77,11 +78,12 @@
 			}
 			[jsonMappingOperation addDependency:jsonParsingOperation];
 		}
-#endif
-#if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
+#	endif
+#	if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 		// TODO
-#endif
+#	endif
 	}
+#endif
 }
 
 @end
