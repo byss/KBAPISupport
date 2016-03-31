@@ -45,8 +45,10 @@
 		_result = [self.expectedClass entityFromJSON:JSONObject];
 
 		if (!_result) {
-			self.error = [self.errorClass entityFromJSON:JSONObject];
-			if (!self.error) {
+			NSError *mappedError = (NSError *) [self.errorClass entityFromJSON:JSONObject];
+			if ([mappedError isKindOfClass:[NSError class]]) {
+				self.error = mappedError;
+			} else {
 				self.error = [NSError errorWithDomain:@"KBAPIConnection" code:-1 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Cannot build %@ from JSON object.", self.expectedClass]}];
 			}
 		}

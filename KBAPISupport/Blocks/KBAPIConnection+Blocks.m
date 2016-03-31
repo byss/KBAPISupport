@@ -75,14 +75,13 @@
 		for (KBMappingOperation *suboperation in operation.suboperations) {
 			if ([suboperation isKindOfClass:[KBMappingOperation class]]) {
 				void (^mappingCompletion) (id <KBEntity> _Nullable, NSError *_Nullable) = suboperation.operationCompletionBlock;
-				if (mappingCompletion) {
-					suboperation.operationCompletionBlock = ^(id <KBEntity> _Nullable responseObject, NSError *_Nullable error) {
+				suboperation.operationCompletionBlock = ^(id <KBEntity> _Nullable responseObject, NSError *_Nullable error) {
+					if (mappingCompletion) {
 						mappingCompletion (responseObject, error);
-						connectionCompletion (responseObject, error);
-					};
-				} else {
-					suboperation.operationCompletionBlock = connectionCompletion;
-				}
+					}
+					
+					connectionCompletion (responseObject, error);
+				};
 			}
 		}
 #endif
@@ -112,14 +111,13 @@
 		for (KBJSONParsingOperation *parsingOperation in operation.suboperations) {
 			if ([parsingOperation isKindOfClass:[KBJSONParsingOperation class]]) {
 				void (^parsingCompletion) (id _Nullable, NSError *_Nullable) = parsingOperation.operationCompletionBlock;
-				if (parsingCompletion) {
-					parsingOperation.operationCompletionBlock = ^(id _Nullable JSONObject, NSError *_Nullable error) {
+				parsingOperation.operationCompletionBlock = ^(id _Nullable JSONObject, NSError *_Nullable error) {
+					if (parsingCompletion) {
 						parsingCompletion (JSONObject, error);
-						connectionCompletion (JSONObject, error);
-					};
-				} else {
-					parsingOperation.operationCompletionBlock = connectionCompletion;
-				}
+					}
+					
+					connectionCompletion (JSONObject, error);
+				};
 			}
 		}
 		
@@ -164,41 +162,68 @@
 		for (KBAPIRequestOperation *requestOperation in operation.suboperations) {
 			if ([requestOperation isKindOfClass:[KBAPIRequestOperation class]]) {
 				void (^operationCompletion) (NSData *_Nullable, NSError *_Nullable) = requestOperation.operationCompletionBlock;
-				if (operationCompletion) {
-					requestOperation.operationCompletionBlock = ^(NSData *_Nullable responseData, NSError *_Nullable error) {
+				requestOperation.operationCompletionBlock = ^(NSData *_Nullable responseData, NSError *_Nullable error) {
+					if (operationCompletion) {
 						operationCompletion (responseData, error);
-						connectionCompletion (responseData, error);
-					};
-				} else {
-					requestOperation.operationCompletionBlock = connectionCompletion;
-				}
+					}
+					
+					connectionCompletion (responseData, error);
+				};
 			}
 		}
 	}
 }
 
 - (KBOperation *) startWithRawDataCompletion:(void (^)(NSData * _Nullable, NSError * _Nullable))completion {
-	self.rawDataCompletion = completion;
+	if (completion) {
+		__weak typeof (self) weakSelf = self;
+		self.rawDataCompletion = ^(NSData * _Nullable data, NSError * _Nullable error) {
+			[weakSelf.callbacksQueue addOperationWithBlock:^{
+				completion (data, error);
+			}];
+		};
+	}
 	return [self start];
 }
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 - (KBOperation *) startWithRawObjectCompletion:(void (^)(id _Nullable, NSError * _Nullable))completion {
-	self.rawObjectCompletion = completion;
+	if (completion) {
+		__weak typeof (self) weakSelf = self;
+		self.rawObjectCompletion = ^(id _Nullable JSONObject, NSError * _Nullable error) {
+			[weakSelf.callbacksQueue addOperationWithBlock:^{
+				completion (JSONObject, error);
+			}];
+		};
+	}
 	return [self start];
 }
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 - (KBOperation *) startWithRawObjectCompletion:(void (^)(GDataXMLDocument *_Nullable, NSError * _Nullable))completion {
-	self.rawObjectCompletion = completion;
+	if (completion) {
+		__weak typeof (self) weakSelf = self;
+		self.rawObjectCompletion = ^(GDataXMLDocument *_Nullable XMLObject, NSError * _Nullable error) {
+			[weakSelf.callbacksQueue addOperationWithBlock:^{
+				completion (XMLObject, error);
+			}];
+		};
+	}
 	return [self start];
 }
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
 - (KBOperation *) startWithCompletion:(void (^)(id<KBEntity> _Nullable, NSError * _Nullable))completion {
-	self.objectCompletion = completion;
+	if (completion) {
+		__weak typeof (self) weakSelf = self;
+		self.rawObjectCompletion = ^(id <KBEntity> _Nullable responseObject, NSError * _Nullable error) {
+			[weakSelf.callbacksQueue addOperationWithBlock:^{
+				completion (responseObject, error);
+			}];
+		};
+	}
 	return [self start];
 }
 #endif

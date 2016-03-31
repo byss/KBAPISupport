@@ -73,9 +73,17 @@
 
 - (void) main {
 	NSOperationQueue *queue = [NSOperationQueue currentQueue];
-	NSArray <NSOperation *> *suboperations = self.suboperations;
-	if (suboperations.count) {
-		[queue addOperations:suboperations waitUntilFinished:NO];
+	
+	if (self.error) {
+		NSArray <NSOperation *> *completionDependencies = self.completionOperation.dependencies;
+		for (NSOperation *operation in completionDependencies) {
+			[self.completionOperation removeDependency:operation];
+		}
+	} else {
+		NSArray <NSOperation *> *suboperations = self.suboperations;
+		if (suboperations.count) {
+			[queue addOperations:suboperations waitUntilFinished:NO];
+		}
 	}
 	[queue addOperations:@[self.completionOperation] waitUntilFinished:YES];
 }
@@ -104,6 +112,12 @@
 
 - (NSArray <NSOperation *> *) suboperations {
 	return _suboperations;
+}
+
+- (void) setError: (NSError *_Nonnull) error {
+	if (error) {
+		_error = error;
+	}
 }
 
 @end

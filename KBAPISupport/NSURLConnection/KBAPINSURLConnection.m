@@ -52,7 +52,7 @@
 	KBAPIRequestOperation *result = [super createRequestOperationWithRequest:request];
 	
 	KBAPIRequestOperation *urlRequestOperation = [[KBAPINSURLRequestOperation alloc] initWithRequest:request completion:NULL];
-	urlRequestOperation.timeout = self.timeout;
+	urlRequestOperation.timeout = result.timeout;
 	[result addSuboperation:urlRequestOperation];
 	
 	return result;

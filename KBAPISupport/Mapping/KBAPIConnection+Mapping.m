@@ -66,16 +66,17 @@
 		if ([suboperation isKindOfClass:[KBJSONParsingOperation class]]) {
 			KBJSONParsingOperation *jsonParsingOperation = (KBJSONParsingOperation *) suboperation;
 			void (^suboperationCompletion) (id _Nullable, NSError *_Nullable) = jsonParsingOperation.operationCompletionBlock;
-			if (suboperationCompletion) {
-				suboperation.operationCompletionBlock = ^(id _Nullable parsedObject, NSError *_Nullable error) {
-					weakJSONMappingOperation.JSONObject = parsedObject;
+			suboperation.operationCompletionBlock = ^(id _Nullable parsedObject, NSError *_Nullable error) {
+				if (suboperationCompletion) {
 					suboperationCompletion (parsedObject, error);
-				};
-			} else {
-				suboperation.operationCompletionBlock = ^(id _Nullable parsedObject, NSError *_Nullable error) {
-					weakJSONMappingOperation.JSONObject = parsedObject;
-				};
-			}
+				}
+				
+				typeof (jsonMappingOperation) strongJSONMappingOperation = weakJSONMappingOperation;
+				strongJSONMappingOperation.JSONObject = parsedObject;
+				if (error) {
+					[strongJSONMappingOperation setError:(NSError *) error];
+				}
+			};
 			[operation addSuboperation:jsonMappingOperation];
 			[jsonMappingOperation addDependency:jsonParsingOperation];
 		}

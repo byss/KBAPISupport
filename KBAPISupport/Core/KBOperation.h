@@ -37,4 +37,6 @@
 - (void) addSuboperation: (NSOperation *_Nonnull) operation;
 - (void) removeSuboperation: (NSOperation *_Nonnull) operation;
 
+- (void) setError: (NSError *_Nonnull) error;
+
 @end

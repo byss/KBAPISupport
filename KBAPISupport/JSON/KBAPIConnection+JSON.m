@@ -47,16 +47,17 @@
 	for (KBAPIRequestOperation *suboperation in operation.suboperations) {
 		if ([suboperation isKindOfClass:[KBAPIRequestOperation class]]) {
 			void (^suboperationCompletion) (NSData *_Nullable, NSError *_Nullable) = suboperation.operationCompletionBlock;
-			if (suboperationCompletion) {
-				suboperation.operationCompletionBlock = ^(NSData *_Nullable data, NSError *_Nullable error) {
-					weakParsingOperation.JSONData = data;
+			suboperation.operationCompletionBlock = ^(NSData *_Nullable data, NSError *_Nullable error) {
+				if (suboperationCompletion) {
 					suboperationCompletion (data, error);
-				};
-			} else {
-				suboperation.operationCompletionBlock = ^(NSData *_Nullable data, NSError *_Nullable error) {
-					weakParsingOperation.JSONData = data;
-				};
-			}
+				}
+				
+				typeof (parsingOperation) strongParsingOperation = weakParsingOperation;
+				strongParsingOperation.JSONData = data;
+				if (error) {
+					[strongParsingOperation setError:(NSError *) error];
+				}
+			};
 			[parsingOperation addDependency:suboperation];
 			[operation addSuboperation:parsingOperation];
 			break;
