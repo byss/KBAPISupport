@@ -26,11 +26,11 @@
 
 #import <KBAPISupport/KBOperation.h>
 
-@protocol KBEntity;
+@protocol KBObject;
 @interface KBMappingOperation: KBOperation
 
 @property (nonatomic, nullable, unsafe_unretained) Class expectedClass;
 @property (nonatomic, nullable, unsafe_unretained) Class errorClass;
-@property (nonatomic, nullable, copy) void (^operationCompletionBlock) (id <KBEntity> _Nullable responseObject, NSError *_Nullable error);
+@property (nonatomic, nullable, copy) void (^operationCompletionBlock) (id <KBObject> _Nullable responseObject, NSError *_Nullable error);
 
 @end

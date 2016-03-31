@@ -1,0 +1,551 @@
+//
+//  KBMappingProperty.m
+//  KBAPISupport
+//
+//  Created by Kirill Bystrov on 3/31/16.
+//  Copyright © 2016 Kirill byss Bystrov. All rights reserved.
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+#import "KBMappingProperty.h"
+
+#import "KBObject.h"
+
+static inline NSString *KBStringValue (id object);
+static inline NSNumber *KBNumberValue (id object);
+
+@implementation KBMappingProperty
+
+@synthesize objectKeyPath = _objectKeyPath;
+@synthesize sourceKeyPath = _sourceKeyPath;
+
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath {
+	return [[self alloc] initWithKeyPath:keyPath];
+}
+
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath {
+	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath];
+}
+
+- (instancetype) init {
+	NSString *keyPath = nil;
+	return [self initWithKeyPath:keyPath sourceKeyPath:nil];
+}
+
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath {
+	return [self initWithKeyPath:keyPath sourceKeyPath:nil];
+}
+
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath {
+	if (!keyPath) {
+		return nil;
+	}
+	
+	if (self = [super init]) {
+		_objectKeyPath = [keyPath copy];
+		_sourceKeyPath = (NSString *) [(sourceKeyPath ?: keyPath) copy];
+	}
+	
+	return self;
+}
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+	[object setValue:[JSONObject JSONValueForKeyPath:self.sourceKeyPath] forKeyPath:self.objectKeyPath];
+}
+#endif
+
+#if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
+- (void) setValueInObject: (NSObject *_Nonnull) object fromXMLObject: (GDataXMLElement * _Nullable) XMLObject {
+	// TODO
+	[self doesNotRecognizeSelector:_cmd];
+}
+#endif
+
+@end
+
+@implementation KBStringMappingProperty
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+	NSString *stringValue = KBStringValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
+	[object setValue:stringValue forKeyPath:self.objectKeyPath];
+}
+#endif
+
+@end
+
+@implementation KBStringArrayMappingProperty
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+	id value = [JSONObject JSONValueForKeyPath:self.sourceKeyPath];
+	__strong id *strings = NULL;
+	NSUInteger stringCount = 0;
+	if ([value isKindOfClass:[NSArray class]]) {
+		NSArray *arrayValue = value;
+		strings = (__strong id *) calloc (arrayValue.count, sizeof (*strings));
+		for (id arrayItem in arrayValue) {
+			NSString *stringItem = KBStringValue (arrayItem);
+			if (stringItem) {
+				strings [stringCount++] = stringItem;
+			}
+		}
+	}
+	
+	NSArray *stringsArrayValue = (strings ? [[NSArray alloc] initWithObjects:strings count:stringCount] : nil);
+	if (strings) {
+		free (strings);
+	}
+	
+	[object setValue:stringsArrayValue forKeyPath:self.objectKeyPath];
+}
+#endif
+
+@end
+
+@implementation KBURLMappingProperty
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+	NSString *stringValue = KBStringValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
+	NSURL *URLValue = (stringValue ? [[NSURL alloc] initWithString:stringValue] : nil);
+	[object setValue:URLValue forKeyPath:self.objectKeyPath];
+}
+#endif
+
+@end
+
+@interface KBEnumMappingProperty ()
+
+@property (nonatomic, readonly) NSDictionary <NSString *, NSNumber *> *enumValues;
+
+@end
+
+@implementation KBEnumMappingProperty
+
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath enumValues: (NSDictionary <NSString *, NSNumber *> *_Nonnull) enumValues {
+	return [[self alloc] initWithKeyPath:keyPath enumValues:enumValues];
+}
+
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath enumValues: (NSDictionary <NSString *, NSNumber *> *_Nonnull) enumValues {
+	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath enumValues:enumValues];
+}
+
+- (instancetype)initWithKeyPath:(NSString *)keyPath sourceKeyPath:(NSString *)sourceKeyPath {
+	NSDictionary *enumValues = nil;
+	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath enumValues:enumValues];
+}
+
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath enumValues: (NSDictionary <NSString *, NSNumber *> *_Nonnull) enumValues {
+	return [self initWithKeyPath:keyPath sourceKeyPath:nil enumValues:enumValues];
+}
+
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath enumValues: (NSDictionary <NSString *, NSNumber *> *_Nonnull) enumValues {
+	if (!enumValues.count) {
+		return nil;
+	}
+	
+	if (self = [super initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath]) {
+		_enumValues = [enumValues copy];
+	}
+	
+	return self;
+}
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+	NSString *stringValue = KBStringValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
+	NSNumber *enumValue = (stringValue ? self.enumValues [stringValue] : nil);
+	[object setValue:enumValue forKeyPath:self.objectKeyPath];
+}
+#endif
+
+@end
+
+@implementation KBNumberMappingProperty
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+	NSNumber *numberValue = KBNumberValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
+	[object setValue:numberValue forKeyPath:self.objectKeyPath];
+}
+#endif
+
+@end
+
+@implementation KBTimestampMappingProperty
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+	NSNumber *numberValue = KBNumberValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
+	NSDate *dateValue = (numberValue ? [[NSDate alloc] initWithTimeIntervalSince1970:numberValue.doubleValue] : nil);
+	[object setValue:dateValue forKeyPath:self.objectKeyPath];
+}
+#endif
+
+@end
+
+@interface KBMappingPropertyWithBlock ()
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+@property (nonatomic, readonly) void (^JSONMappingBlock) (NSObject *object, id JSONObject);
+#endif
+
+#if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
+@property (nonatomic, readonly) void (^XMLMappingBlock) (NSObject *object, GDataXMLElement *XMLObject);
+#endif
+
+@end
+
+@implementation KBMappingPropertyWithBlock
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock {
+	return [[self alloc] initWithKeyPath:keyPath JSONMappingBlock:JSONMappingBlock];
+}
+
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock {
+	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath JSONMappingBlock:JSONMappingBlock];
+}
+
+- (instancetype)initWithKeyPath:(NSString *)keyPath sourceKeyPath:(NSString *)sourceKeyPath {
+	void (^JSONMappingBlock) (NSObject *, id) = NULL;
+	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath JSONMappingBlock:JSONMappingBlock];
+}
+
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock {
+	return [self initWithKeyPath:keyPath sourceKeyPath:nil JSONMappingBlock:JSONMappingBlock];
+}
+
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock {
+	if (!JSONMappingBlock) {
+		return nil;
+	}
+	
+	if (self = [super initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath]) {
+		_JSONMappingBlock = [JSONMappingBlock copy];
+	}
+	
+	return self;
+}
+
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+	self.JSONMappingBlock (object, JSONObject);
+}
+#endif
+
+#if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock {
+	return [[self alloc] initWithKeyPath:keyPath XMLMappingBlock:XMLMappingBlock];
+}
+
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock {
+	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath XMLMappingBlock:XMLMappingBlock];
+}
+
+- (instancetype)initWithKeyPath:(NSString *)keyPath sourceKeyPath:(NSString *)sourceKeyPath {
+	void (^JSONMappingBlock) (NSObject *, GDataXMLElement *) = NULL;
+	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath XMLMappingBlock:XMLMappingBlock];
+}
+
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock {
+	return [self initWithKeyPath:keyPath sourceKeyPath:nil XMLMappingBlock:XMLMappingBlock];
+}
+
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock {
+	if (!XMLMappingBlock) {
+		return nil;
+	}
+	
+	if (self = [super initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath]) {
+		_XMLMappingBlock = [XMLMappingBlock copy];
+	}
+	
+	return self;
+}
+
+- (void) setValueInObject: (NSObject *) object fromXMLObject: (GDataXMLElement *) XMLObject {
+	self.XMLMappingBlock (object, XMLObject);
+}
+#endif
+
+@end
+
+@interface KBObjectMappingProperty ()
+
+@property (nonatomic, unsafe_unretained) Class valueClass;
+
+@end
+
+@implementation KBObjectMappingProperty
+
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath valueClass: (Class _Nonnull) valueClass {
+	return [[self alloc] initWithKeyPath:keyPath valueClass:valueClass];
+}
+
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath valueClass: (Class _Nonnull) valueClass {
+	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath valueClass:valueClass];
+}
+
++ (id) collectionValueWithObjects: (__strong id *) objects count: (NSUInteger) count {
+	return nil;
+}
+
+- (instancetype)initWithKeyPath:(NSString *)keyPath sourceKeyPath:(NSString *)sourceKeyPath {
+	Class valueClass = NULL;
+	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath valueClass:valueClass];
+}
+
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath valueClass: (Class _Nonnull) valueClass {
+	return [self initWithKeyPath:keyPath sourceKeyPath:nil valueClass:valueClass];
+}
+
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath valueClass: (Class _Nonnull) valueClass {
+	if (![valueClass conformsToProtocol:@protocol (KBObject)]) {
+		return nil;
+	}
+	
+	if (self = [super initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath]) {
+		_valueClass = valueClass;
+	}
+	
+	return self;
+}
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+	id JSONValue = [JSONObject JSONValueForKeyPath:self.sourceKeyPath];
+	id <KBObject> objectValue = [self.valueClass objectFromJSON:JSONValue];
+	[object setValue:objectValue forKeyPath:self.objectKeyPath];
+}
+#endif
+
+@end
+
+@interface KBCollectionMappingProperty ()
+
+@property (nonatomic, unsafe_unretained) Class itemClass;
+
++ (id) collectionValueWithObjects: (__strong id *) objects count: (NSUInteger) count;
+
+@end
+
+@implementation KBCollectionMappingProperty
+
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath itemClass: (Class _Nonnull) itemClass {
+	return [[self alloc] initWithKeyPath:keyPath itemClass:itemClass];
+}
+
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath itemClass: (Class _Nonnull) itemClass {
+	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath itemClass:itemClass];
+}
+
++ (id) collectionValueWithObjects: (__strong id *) objects count: (NSUInteger) count {
+	return nil;
+}
+
+- (instancetype)initWithKeyPath:(NSString *)keyPath sourceKeyPath:(NSString *)sourceKeyPath {
+	Class itemClass = NULL;
+	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath itemClass:itemClass];
+}
+
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath itemClass: (Class _Nonnull) itemClass {
+	return [self initWithKeyPath:keyPath sourceKeyPath:nil itemClass:itemClass];
+}
+
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath itemClass: (Class _Nonnull) itemClass {
+	if (![itemClass conformsToProtocol:@protocol (KBObject)]) {
+		return nil;
+	}
+	
+	if (self = [super initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath]) {
+		_itemClass = itemClass;
+	}
+	
+	return self;
+}
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+	id value = [JSONObject JSONValueForKeyPath:self.sourceKeyPath];
+	__strong id *objects = NULL;
+	NSUInteger objectCount = 0;
+	if ([value isKindOfClass:[NSArray class]]) {
+		NSArray *arrayValue = value;
+		objects = (__strong id *) calloc (arrayValue.count, sizeof (*objects));
+		Class const itemClass = self.itemClass;
+		for (id arrayItem in arrayValue) {
+			id objectValue = [itemClass objectFromJSON:arrayItem];
+			if (objectValue) {
+				objects [objectCount++] = objectValue;
+			}
+		}
+	}
+	
+	id collectionValue = (objects ? [self.class collectionValueWithObjects:objects count:objectCount] : nil);
+	if (objects) {
+		free (objects);
+	}
+	[object setValue:collectionValue forKeyPath:self.objectKeyPath];
+}
+#endif
+
+@end
+
+@implementation KBArrayMappingProperty
+
++ (id)collectionValueWithObjects:(__strong id *)objects count:(NSUInteger)count {
+	return [[NSArray alloc] initWithObjects:objects count:count];
+}
+
+@end
+
+@implementation KBSetMappingProperty
+
++ (id)collectionValueWithObjects:(__strong id *)objects count:(NSUInteger)count {
+	return [[NSSet alloc] initWithObjects:objects count:count];
+}
+
+@end
+
+@implementation KBOrderedSetMappingProperty
+
++ (id)collectionValueWithObjects:(__strong id *)objects count:(NSUInteger)count {
+	return [[NSOrderedSet alloc] initWithObjects:objects count:count];
+}
+
+@end
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+@implementation NSObject (KBJSONMapping)
+
+- (id) JSONValueForUnescapedKey: (NSString *) unescapedKey {
+	if ([unescapedKey hasPrefix:@"@"]) {
+		NSString *funcName = [unescapedKey substringFromIndex:1];
+		if ([funcName isEqualToString:@"first"] && [self isKindOfClass:[NSArray class]]) {
+			return [(NSArray *) self firstObject];
+		} else if ([funcName isEqualToString:@"last"] && [self isKindOfClass:[NSArray class]]) {
+			return [(NSArray *) self lastObject];
+		} else if ([funcName isEqualToString:@"any"]) {
+			if ([self isKindOfClass:[NSArray class]]) {
+				NSArray *array = (NSArray *) self;
+				if (array.count > 1) {
+					return array [arc4random_uniform ((u_int32_t) array.count)];
+				} else {
+					return array.firstObject;
+				}
+			}
+			if ([self isKindOfClass:[NSDictionary class]]) {
+				NSDictionary *dict = (NSDictionary *) self;
+				NSArray *keys = dict.allKeys;
+				if (keys.count > 1) {
+					return dict [keys [arc4random_uniform ((u_int32_t) keys.count)]];
+				} else if (keys.count == 1) {
+					id key = keys.firstObject;
+					return dict [key];
+				} else {
+					return nil;
+				}
+			}
+		}
+	}
+	
+	if ([unescapedKey hasPrefix:@"#"] && [self isKindOfClass:[NSArray class]]) {
+		NSArray *array = (NSArray *) self;
+		NSString *indexString = [unescapedKey substringFromIndex:1];
+		if (indexString.length && ([indexString rangeOfCharacterFromSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]].location == NSNotFound)) {
+			NSUInteger index = (NSUInteger) [indexString integerValue];
+			if (index < array.count) {
+				return array [index];
+			} else {
+				return nil;
+			}
+		}
+	}
+	
+	if ([self isKindOfClass:[NSDictionary class]]) {
+		return ((NSDictionary *) self) [unescapedKey];
+	}
+	
+	return nil;
+}
+
+- (id) JSONValueForKey: (NSString *) key {
+	return [self JSONValueForUnescapedKey:[key stringByReplacingOccurrencesOfString:@"\\." withString:@"."]];
+}
+
+- (id)JSONValueForKeyPath:(NSString *) keyPath {
+	if (!keyPath.length) {
+		return self;
+	}
+	
+	if ([keyPath rangeOfString:@"."].location == NSNotFound) {
+		return [self JSONValueForUnescapedKey:keyPath];
+	}
+	
+	static NSRegularExpression *keyRE = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once (&onceToken, ^{
+		keyRE = [[NSRegularExpression alloc] initWithPattern:@"^(.+?)(?<!\\\\)\\.|^(.+)$" options:(NSRegularExpressionOptions) 0 error:NULL];
+	});
+	
+	NSTextCheckingResult *keyResult = [keyRE firstMatchInString:keyPath options:(NSMatchingOptions) 0 range:NSMakeRange (0, keyPath.length)];
+	NSRange keyRange = NSMakeRange (NSNotFound, 0);
+	if (keyResult) {
+		if ([keyResult rangeAtIndex:1].location != NSNotFound) {
+			keyRange = [keyResult rangeAtIndex:1];
+		} else if ([keyResult rangeAtIndex:2].location != NSNotFound) {
+			keyRange = [keyResult rangeAtIndex:2];
+		}
+	}
+	
+	if (keyRange.location != NSNotFound) {
+		NSString *key = [keyPath substringWithRange:keyRange];
+		id valueForKey = [self JSONValueForKey:key];
+		NSString *remainingPath = [keyPath substringFromIndex:NSMaxRange (keyResult.range)];
+		return [valueForKey JSONValueForKeyPath:remainingPath];
+	} else {
+		return nil;
+	}
+}
+
+@end
+#endif
+
+static inline NSString *KBStringValue (id object) {
+	if ([object isKindOfClass:[NSString class]]) {
+		return object;
+	} else if ([object isKindOfClass:[NSNumber class]]) {
+		return [(NSNumber *) object stringValue];
+	} else {
+		return nil;
+	}
+}
+
+static inline NSNumber *KBNumberValue (id object) {
+	if ([object isKindOfClass:[NSNumber class]]) {
+		return object;
+	} else if ([object isKindOfClass:[NSString class]]) {
+		return [[NSDecimalNumber alloc] initWithString:object];
+	} else {
+		return nil;
+	}
+}

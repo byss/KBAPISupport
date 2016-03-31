@@ -29,10 +29,10 @@
 #import "KBJSONMappingOperation.h"
 #import "KBOperation_Protected.h"
 
-#import "KBEntity.h"
+#import "KBObject.h"
 
 @interface KBJSONMappingOperation () {
-	id <KBEntity> _result;
+	id <KBObject> _result;
 }
 
 @end
@@ -43,15 +43,15 @@
 	id JSONObject = self.JSONObject;
 	if (JSONObject) {
 		Class expectedClass = self.expectedClass;
-		if ([expectedClass conformsToProtocol:@protocol (KBEntity)]) {
-			_result = [expectedClass entityFromJSON:JSONObject];
+		if ([expectedClass conformsToProtocol:@protocol (KBObject)]) {
+			_result = [expectedClass objectFromJSON:JSONObject];
 		}
 
 		if (!_result) {
 			Class errorClass = self.errorClass;
 			NSError *mappedError = nil;
-			if ([errorClass conformsToProtocol:@protocol (KBEntity)]) {
-				mappedError = [errorClass entityFromJSON:JSONObject];
+			if ([errorClass conformsToProtocol:@protocol (KBObject)]) {
+				mappedError = [errorClass objectFromJSON:JSONObject];
 			}
 			
 			if ([mappedError isKindOfClass:[NSError class]]) {

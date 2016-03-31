@@ -31,7 +31,7 @@
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
-@protocol KBEntity;
+@protocol KBObject;
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
-- (void) apiConnection:(KBAPIConnection *)connection didReceiveResponse: (id <KBEntity>) response;
+- (void) apiConnection:(KBAPIConnection *)connection didReceiveResponse: (id <KBObject>) response;
 #endif
 
 @end

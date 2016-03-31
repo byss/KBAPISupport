@@ -53,7 +53,7 @@
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
-@property (nonatomic, copy, nullable) void (^objectCompletion) (id <KBEntity> _Nullable responseObject, NSError *_Nullable error);
+@property (nonatomic, copy, nullable) void (^objectCompletion) (id <KBObject> _Nullable responseObject, NSError *_Nullable error);
 #endif
 
 @end
@@ -69,13 +69,13 @@
 + (void) setupCompletionBlocksForOperation: (KBAPIRequestOperation *) operation usingConnection: (KBAPIConnection *) connection {
 #if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
 	if (connection.objectCompletion) {
-		void (^connectionCompletion) (id <KBEntity> _Nullable, NSError *_Nullable) = connection.objectCompletion;
+		void (^connectionCompletion) (id <KBObject> _Nullable, NSError *_Nullable) = connection.objectCompletion;
 		connection.objectCompletion = NULL;
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>) || __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 		for (KBMappingOperation *suboperation in operation.suboperations) {
 			if ([suboperation isKindOfClass:[KBMappingOperation class]]) {
-				void (^mappingCompletion) (id <KBEntity> _Nullable, NSError *_Nullable) = suboperation.operationCompletionBlock;
-				suboperation.operationCompletionBlock = ^(id <KBEntity> _Nullable responseObject, NSError *_Nullable error) {
+				void (^mappingCompletion) (id <KBObject> _Nullable, NSError *_Nullable) = suboperation.operationCompletionBlock;
+				suboperation.operationCompletionBlock = ^(id <KBObject> _Nullable responseObject, NSError *_Nullable error) {
 					if (mappingCompletion) {
 						mappingCompletion (responseObject, error);
 					}
@@ -218,10 +218,10 @@
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
-- (KBOperation *) startWithCompletion:(void (^)(id<KBEntity> _Nullable, NSError * _Nullable))completion {
+- (KBOperation *) startWithCompletion:(void (^)(id<KBObject> _Nullable, NSError * _Nullable))completion {
 	if (completion) {
 		typeof (self) strongSelf = self;
-		self.objectCompletion = ^(id <KBEntity> _Nullable responseObject, NSError * _Nullable error) {
+		self.objectCompletion = ^(id <KBObject> _Nullable responseObject, NSError * _Nullable error) {
 			[strongSelf.callbacksQueue addOperationWithBlock:^{
 				completion (responseObject, error);
 			}];
@@ -265,11 +265,11 @@
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
-- (void (^)(id<KBEntity> _Nullable, NSError * _Nullable))objectCompletion {
+- (void (^)(id<KBObject> _Nullable, NSError * _Nullable))objectCompletion {
 	return objc_getAssociatedObject (self, @selector (objectCompletion));
 }
 
-- (void)setObjectCompletion:(void (^)(id<KBEntity> _Nullable, NSError * _Nullable))objectCompletion {
+- (void)setObjectCompletion:(void (^)(id<KBObject> _Nullable, NSError * _Nullable))objectCompletion {
 	objc_setAssociatedObject (self, @selector (objectCompletion), objectCompletion, OBJC_ASSOCIATION_COPY);
 }
 #endif

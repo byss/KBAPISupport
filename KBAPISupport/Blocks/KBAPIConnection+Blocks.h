@@ -31,23 +31,23 @@
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
-@protocol KBEntity;
+@protocol KBObject;
 #endif
 
 @interface KBAPIConnection (Blocks)
 
-- (KBOperation *) startWithRawDataCompletion: (void (^_Nullable) (NSData *_Nullable responseData, NSError *_Nullable error)) completion;
+- (KBOperation *_Nullable) startWithRawDataCompletion: (void (^_Nullable) (NSData *_Nullable responseData, NSError *_Nullable error)) completion;
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (KBOperation *) startWithRawObjectCompletion: (void (^_Nullable) (id _Nullable JSONResponse, NSError *_Nullable error)) completion;
+- (KBOperation *_Nullable) startWithRawObjectCompletion: (void (^_Nullable) (id _Nullable JSONResponse, NSError *_Nullable error)) completion;
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-- (KBOperation *) startWithRawObjectCompletion: (void (^_Nullable) (GDataXMLDocument *_Nullable XMLResponse, NSError *_Nullable error)) completion;
+- (KBOperation *_Nullable) startWithRawObjectCompletion: (void (^_Nullable) (GDataXMLDocument *_Nullable XMLResponse, NSError *_Nullable error)) completion;
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
-- (KBOperation *) startWithCompletion: (void (^_Nonnull) (id <KBEntity> _Nullable responseObject, NSError *_Nullable error)) completion;
+- (KBOperation *_Nullable) startWithCompletion: (void (^_Nonnull) (id <KBObject> _Nullable responseObject, NSError *_Nullable error)) completion;
 #endif
 
 @end

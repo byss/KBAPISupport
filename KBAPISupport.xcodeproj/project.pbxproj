@@ -48,7 +48,7 @@
 		43E622041CAC44F400AFAF20 /* KBJSONMappingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622021CAC44F400AFAF20 /* KBJSONMappingOperation.m */; };
 		43E622071CAC450B00AFAF20 /* KBXMLMappingOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E622051CAC450B00AFAF20 /* KBXMLMappingOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E622081CAC450B00AFAF20 /* KBXMLMappingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622061CAC450B00AFAF20 /* KBXMLMappingOperation.m */; };
-		43E6220A1CAC464A00AFAF20 /* KBEntity.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E622091CAC464A00AFAF20 /* KBEntity.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43E6220A1CAC464A00AFAF20 /* KBObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E622091CAC464A00AFAF20 /* KBObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E6220D1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6220B1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h */; };
 		43E6220E1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E6220C1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m */; };
 		43E622111CAD3B9100AFAF20 /* KBMappingOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6220F1CAD3B9100AFAF20 /* KBMappingOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -57,6 +57,10 @@
 		43E622391CAD76EA00AFAF20 /* KBAPISessionConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622371CAD76EA00AFAF20 /* KBAPISessionConnection.m */; };
 		43E6223C1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6223A1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h */; };
 		43E6223D1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E6223B1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m */; };
+		43E622451CAD87DB00AFAF20 /* NSObject+KBMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E622431CAD87DB00AFAF20 /* NSObject+KBMapping.h */; };
+		43E622461CAD87DB00AFAF20 /* NSObject+KBMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622441CAD87DB00AFAF20 /* NSObject+KBMapping.m */; };
+		43E622491CAD897400AFAF20 /* KBMappingProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E622471CAD897400AFAF20 /* KBMappingProperty.h */; };
+		43E6224A1CAD897400AFAF20 /* KBMappingProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622481CAD897400AFAF20 /* KBMappingProperty.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -103,7 +107,7 @@
 		43E622021CAC44F400AFAF20 /* KBJSONMappingOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBJSONMappingOperation.m; sourceTree = "<group>"; };
 		43E622051CAC450B00AFAF20 /* KBXMLMappingOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBXMLMappingOperation.h; sourceTree = "<group>"; };
 		43E622061CAC450B00AFAF20 /* KBXMLMappingOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBXMLMappingOperation.m; sourceTree = "<group>"; };
-		43E622091CAC464A00AFAF20 /* KBEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBEntity.h; sourceTree = "<group>"; };
+		43E622091CAC464A00AFAF20 /* KBObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBObject.h; sourceTree = "<group>"; };
 		43E6220B1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KBAPIRequest+Mapping.h"; sourceTree = "<group>"; };
 		43E6220C1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "KBAPIRequest+Mapping.m"; sourceTree = "<group>"; };
 		43E6220F1CAD3B9100AFAF20 /* KBMappingOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBMappingOperation.h; sourceTree = "<group>"; };
@@ -112,6 +116,10 @@
 		43E622371CAD76EA00AFAF20 /* KBAPISessionConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAPISessionConnection.m; sourceTree = "<group>"; };
 		43E6223A1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPISessionRequestOperation.h; sourceTree = "<group>"; };
 		43E6223B1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAPISessionRequestOperation.m; sourceTree = "<group>"; };
+		43E622431CAD87DB00AFAF20 /* NSObject+KBMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KBMapping.h"; sourceTree = "<group>"; };
+		43E622441CAD87DB00AFAF20 /* NSObject+KBMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KBMapping.m"; sourceTree = "<group>"; };
+		43E622471CAD897400AFAF20 /* KBMappingProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBMappingProperty.h; sourceTree = "<group>"; };
+		43E622481CAD897400AFAF20 /* KBMappingProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBMappingProperty.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,7 +209,7 @@
 			isa = PBXGroup;
 			children = (
 				43D1BDE31C9A36B900A807F8 /* KBAPISupport+Mapping.h */,
-				43E622091CAC464A00AFAF20 /* KBEntity.h */,
+				43E622091CAC464A00AFAF20 /* KBObject.h */,
 				43E6220F1CAD3B9100AFAF20 /* KBMappingOperation.h */,
 				43E622101CAD3B9100AFAF20 /* KBMappingOperation.m */,
 				43E622011CAC44F400AFAF20 /* KBJSONMappingOperation.h */,
@@ -211,6 +219,10 @@
 				43E6220B1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h */,
 				43E6220C1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m */,
 				43E621F31CAB003100AFAF20 /* KBAPIConnection+Mapping.m */,
+				43E622431CAD87DB00AFAF20 /* NSObject+KBMapping.h */,
+				43E622441CAD87DB00AFAF20 /* NSObject+KBMapping.m */,
+				43E622471CAD897400AFAF20 /* KBMappingProperty.h */,
+				43E622481CAD897400AFAF20 /* KBMappingProperty.m */,
 			);
 			path = Mapping;
 			sourceTree = "<group>";
@@ -277,13 +289,15 @@
 				43D1BDBC1C9A2E9400A807F8 /* KBAPIRequestOperation_Protected.h in Headers */,
 				43E621F11CAAFFD100AFAF20 /* KBAPISupport-Core.h in Headers */,
 				43D1BD981C9A16AD00A807F8 /* KBOperation.h in Headers */,
+				43E622491CAD897400AFAF20 /* KBMappingProperty.h in Headers */,
 				43D1BDE41C9A36B900A807F8 /* KBAPISupport+Mapping.h in Headers */,
 				43E622111CAD3B9100AFAF20 /* KBMappingOperation.h in Headers */,
 				43D1BDCB1C9A335200A807F8 /* KBAPIConnection+NSURLSession.h in Headers */,
 				43D1BDB51C9A2A3F00A807F8 /* KBAPIConnection+Delegates.h in Headers */,
 				43D1BDCF1C9A337300A807F8 /* NSURLSession+KBAPISupport.h in Headers */,
 				43D1BD8F1C9A11DA00A807F8 /* KBAPISupport.h in Headers */,
-				43E6220A1CAC464A00AFAF20 /* KBEntity.h in Headers */,
+				43E6220A1CAC464A00AFAF20 /* KBObject.h in Headers */,
+				43E622451CAD87DB00AFAF20 /* NSObject+KBMapping.h in Headers */,
 				43D1BDD31C9A34BF00A807F8 /* KBAPISupport+Blocks.h in Headers */,
 				43D1BDD91C9A34F300A807F8 /* KBJSONParsingOperation.h in Headers */,
 				43D1BD9E1C9A1AFD00A807F8 /* KBAPIRequestOperation.h in Headers */,
@@ -384,7 +398,9 @@
 				43D1BDE01C9A362600A807F8 /* KBAPIConnection+Delegates.m in Sources */,
 				43D1BDCC1C9A335200A807F8 /* KBAPIConnection+NSURLSession.m in Sources */,
 				43D1BDAC1C9A209D00A807F8 /* KBAPIConnection.m in Sources */,
+				43E6224A1CAD897400AFAF20 /* KBMappingProperty.m in Sources */,
 				43E622391CAD76EA00AFAF20 /* KBAPISessionConnection.m in Sources */,
+				43E622461CAD87DB00AFAF20 /* NSObject+KBMapping.m in Sources */,
 				43E622081CAC450B00AFAF20 /* KBXMLMappingOperation.m in Sources */,
 				43E621F51CAB003100AFAF20 /* KBAPIConnection+Mapping.m in Sources */,
 				43E622121CAD3B9100AFAF20 /* KBMappingOperation.m in Sources */,

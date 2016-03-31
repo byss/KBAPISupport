@@ -1,8 +1,8 @@
 //
-//  KBAPISupport+Mapping.h
+//  NSObject+KBMapping.h
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 3/17/16.
+//  Created by Kirill Bystrov on 3/31/16.
 //  Copyright © 2016 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,8 +25,22 @@
 //
 
 #import <KBAPISupport/KBObject.h>
-#import <KBAPISupport/KBMappingOperation.h>
-#import <KBAPISupport/KBJSONMappingOperation.h>
-#import <KBAPISupport/KBXMLMappingOperation.h>
-#import <KBAPISupport/KBAPIRequest+Mapping.h>
-#import <KBAPISupport/NSObject+KBMapping.h>
+
+@protocol KBMappingProperty;
+#if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
+@class GDataXMLElement;
+#endif
+@interface NSObject (KBMapping) <KBObject>
+
++ (NSArray <id <KBMappingProperty>> *) mappingProperties;
++ (NSArray <id <KBMappingProperty>> *) initializeMappingProperties;
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
++ (instancetype) newInstanceForJSONObject: (id) JSONObject;
+#endif
+
+#if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
++ (instancetype) newInstanceForXMLObject: (GDataXMLElement *) XMLObject;
+#endif
+
+@end

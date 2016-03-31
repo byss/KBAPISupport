@@ -1,5 +1,5 @@
 //
-//  KBEntity.h
+//  KBObject.h
 //  KBAPISupport
 //
 //  Created by Kirill Bystrov on 3/30/16.
@@ -30,16 +30,16 @@
 @class GDataXMLElement;
 #endif
 
-@protocol KBEntity <NSObject>
+@protocol KBObject <NSObject>
 
 @required
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-+ (instancetype _Nullable) entityFromJSON: (id _Nonnull) JSON;
++ (instancetype _Nullable) objectFromJSON: (id _Nonnull) JSON;
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-+ (instancetype _Nullable) entityFromXML: (GDataXMLElement *_Nonnull) XML;
++ (instancetype _Nullable) objectFromXML: (GDataXMLElement *_Nonnull) XML;
 #endif
 
 @end
