@@ -26,6 +26,12 @@
 
 #import "NSURLSession+KBAPISupport.h"
 
+#import "KBAPISessionConnection.h"
+
 @implementation NSURLSession (KBAPISupport)
+
+- (KBAPIConnection *)connectionWithRequest:(KBAPIRequest *)request {
+	return [[KBAPISessionConnection alloc] initWithRequest:request session:self];
+}
 
 @end

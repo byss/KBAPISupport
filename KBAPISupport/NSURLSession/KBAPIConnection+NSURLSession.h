@@ -28,10 +28,11 @@
 
 @interface KBAPIConnection (NSURLSession)
 
-@property (nonatomic, weak, nullable, readonly) NSURLSession *session;
++ (NSURLSession *_Nonnull) defaultSession;
++ (void) setDefaultSession: (NSURLSession *_Nullable) session;
 
-+ (instancetype _Nullable) connectionWithRequest: (KBAPIRequest *_Nonnull) request session: (NSURLSession *_Nonnull) session;
++ (instancetype _Nullable) connectionWithRequest: (KBAPIRequest *_Nonnull) request session: (NSURLSession *_Nullable) session;
 
-- (instancetype _Nullable) initWithRequest: (KBAPIRequest *_Nonnull) request session: (NSURLSession *_Nonnull) session;
+- (instancetype _Nullable) initWithRequest: (KBAPIRequest *_Nonnull) request session: (NSURLSession *_Nullable) session;
 
 @end

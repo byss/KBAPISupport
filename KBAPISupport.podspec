@@ -20,13 +20,12 @@ Pod::Spec.new do |spec|
 		sspec.source_files = 'KBAPISupport/NSURLConnection/*.{h,m}'
 		sspec.dependency 'KBAPISupport/Core'
 	end
-# 	TODO
-# 	spec.subspec 'NSURLSession' do |sspec|
-# 		sspec.source_files = 'KBAPISupport/NSURLSession/*.{h,m}'
-# 		sspec.dependency 'KBAPISupport/Core'
-# 		spec.ios.deployment_target = '7.0'
-# 		spec.osx.deployment_target = '10.9'
-# 	end
+	spec.subspec 'NSURLSession' do |sspec|
+		sspec.source_files = 'KBAPISupport/NSURLSession/*.{h,m}'
+		sspec.dependency 'KBAPISupport/Core'
+		spec.ios.deployment_target = '7.0'
+		spec.osx.deployment_target = '10.9'
+	end
 	spec.subspec 'JSON' do |sspec|
 		sspec.source_files = 'KBAPISupport/JSON/*.{h,m}'
 		sspec.dependency 'KBAPISupport/Core'
@@ -51,5 +50,5 @@ Pod::Spec.new do |spec|
 # 		sspec.dependency 'KBAPISupport/Core'
 # 	end
 	
-	spec.default_subspecs = 'Core', 'NSURLConnection', 'JSON', 'Mapping', 'Blocks'
+	spec.default_subspecs = 'Core', 'NSURLSession', 'JSON', 'Mapping', 'Blocks'
 end

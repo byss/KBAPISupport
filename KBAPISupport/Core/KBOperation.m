@@ -89,6 +89,10 @@
 }
 
 - (void) cancel {
+	if (self.operationCompletionBlock) {
+		self.operationCompletionBlock (nil, [[NSError alloc] initWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil]);
+	}
+	
 	[self.completionOperation cancel];
 	for (NSOperation *operation in self.suboperations) {
 		[operation cancel];

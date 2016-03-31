@@ -24,6 +24,7 @@
 //  THE SOFTWARE.
 //
 
-#import <KBAPIRequestOperation+NSURLSession.h>
-#import <KBAPIConnection+NSURLSession.h>
-#import <NSURLSession+KBAPISupport.h>
+#import <KBAPISupport/KBAPISessionRequestOperation.h>
+#import <KBAPISupport/KBAPISessionConnection.h>
+#import <KBAPISupport/KBAPIConnection+NSURLSession.h>
+#import <KBAPISupport/NSURLSession+KBAPISupport.h>

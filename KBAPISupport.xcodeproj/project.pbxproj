@@ -22,8 +22,6 @@
 		43D1BDBC1C9A2E9400A807F8 /* KBAPIRequestOperation_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D1BDBB1C9A2E9400A807F8 /* KBAPIRequestOperation_Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		43D1BDC31C9A310B00A807F8 /* KBAPISupport+NSURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D1BDC21C9A310700A807F8 /* KBAPISupport+NSURLSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D1BDC41C9A311000A807F8 /* KBAPISupport+NSURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D1BDC11C9A30A500A807F8 /* KBAPISupport+NSURLConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		43D1BDC71C9A31FA00A807F8 /* KBAPIRequestOperation+NSURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D1BDC51C9A31FA00A807F8 /* KBAPIRequestOperation+NSURLSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		43D1BDC81C9A31FA00A807F8 /* KBAPIRequestOperation+NSURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D1BDC61C9A31FA00A807F8 /* KBAPIRequestOperation+NSURLSession.m */; };
 		43D1BDCB1C9A335200A807F8 /* KBAPIConnection+NSURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D1BDC91C9A335200A807F8 /* KBAPIConnection+NSURLSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D1BDCC1C9A335200A807F8 /* KBAPIConnection+NSURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D1BDCA1C9A335200A807F8 /* KBAPIConnection+NSURLSession.m */; };
 		43D1BDCF1C9A337300A807F8 /* NSURLSession+KBAPISupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D1BDCD1C9A337300A807F8 /* NSURLSession+KBAPISupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -55,6 +53,10 @@
 		43E6220E1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E6220C1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m */; };
 		43E622111CAD3B9100AFAF20 /* KBMappingOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6220F1CAD3B9100AFAF20 /* KBMappingOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E622121CAD3B9100AFAF20 /* KBMappingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622101CAD3B9100AFAF20 /* KBMappingOperation.m */; };
+		43E622381CAD76EA00AFAF20 /* KBAPISessionConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E622361CAD76EA00AFAF20 /* KBAPISessionConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43E622391CAD76EA00AFAF20 /* KBAPISessionConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622371CAD76EA00AFAF20 /* KBAPISessionConnection.m */; };
+		43E6223C1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6223A1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h */; };
+		43E6223D1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E6223B1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,8 +77,6 @@
 		43D1BDBB1C9A2E9400A807F8 /* KBAPIRequestOperation_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPIRequestOperation_Protected.h; sourceTree = "<group>"; };
 		43D1BDC11C9A30A500A807F8 /* KBAPISupport+NSURLConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KBAPISupport+NSURLConnection.h"; sourceTree = "<group>"; };
 		43D1BDC21C9A310700A807F8 /* KBAPISupport+NSURLSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KBAPISupport+NSURLSession.h"; sourceTree = "<group>"; };
-		43D1BDC51C9A31FA00A807F8 /* KBAPIRequestOperation+NSURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KBAPIRequestOperation+NSURLSession.h"; sourceTree = "<group>"; };
-		43D1BDC61C9A31FA00A807F8 /* KBAPIRequestOperation+NSURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "KBAPIRequestOperation+NSURLSession.m"; sourceTree = "<group>"; };
 		43D1BDC91C9A335200A807F8 /* KBAPIConnection+NSURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KBAPIConnection+NSURLSession.h"; sourceTree = "<group>"; };
 		43D1BDCA1C9A335200A807F8 /* KBAPIConnection+NSURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "KBAPIConnection+NSURLSession.m"; sourceTree = "<group>"; };
 		43D1BDCD1C9A337300A807F8 /* NSURLSession+KBAPISupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSession+KBAPISupport.h"; sourceTree = "<group>"; };
@@ -108,6 +108,10 @@
 		43E6220C1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "KBAPIRequest+Mapping.m"; sourceTree = "<group>"; };
 		43E6220F1CAD3B9100AFAF20 /* KBMappingOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBMappingOperation.h; sourceTree = "<group>"; };
 		43E622101CAD3B9100AFAF20 /* KBMappingOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBMappingOperation.m; sourceTree = "<group>"; };
+		43E622361CAD76EA00AFAF20 /* KBAPISessionConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPISessionConnection.h; sourceTree = "<group>"; };
+		43E622371CAD76EA00AFAF20 /* KBAPISessionConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAPISessionConnection.m; sourceTree = "<group>"; };
+		43E6223A1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPISessionRequestOperation.h; sourceTree = "<group>"; };
+		43E6223B1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBAPISessionRequestOperation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,10 +231,12 @@
 			isa = PBXGroup;
 			children = (
 				43D1BDC21C9A310700A807F8 /* KBAPISupport+NSURLSession.h */,
-				43D1BDC51C9A31FA00A807F8 /* KBAPIRequestOperation+NSURLSession.h */,
-				43D1BDC61C9A31FA00A807F8 /* KBAPIRequestOperation+NSURLSession.m */,
+				43E6223A1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h */,
+				43E6223B1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m */,
 				43D1BDC91C9A335200A807F8 /* KBAPIConnection+NSURLSession.h */,
 				43D1BDCA1C9A335200A807F8 /* KBAPIConnection+NSURLSession.m */,
+				43E622361CAD76EA00AFAF20 /* KBAPISessionConnection.h */,
+				43E622371CAD76EA00AFAF20 /* KBAPISessionConnection.m */,
 				43D1BDCD1C9A337300A807F8 /* NSURLSession+KBAPISupport.h */,
 				43D1BDCE1C9A337300A807F8 /* NSURLSession+KBAPISupport.m */,
 			);
@@ -265,13 +271,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D1BDC31C9A310B00A807F8 /* KBAPISupport+NSURLSession.h in Headers */,
+				43E6223C1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h in Headers */,
 				43E622031CAC44F400AFAF20 /* KBJSONMappingOperation.h in Headers */,
 				43E622071CAC450B00AFAF20 /* KBXMLMappingOperation.h in Headers */,
 				43D1BDBC1C9A2E9400A807F8 /* KBAPIRequestOperation_Protected.h in Headers */,
 				43E621F11CAAFFD100AFAF20 /* KBAPISupport-Core.h in Headers */,
 				43D1BD981C9A16AD00A807F8 /* KBOperation.h in Headers */,
 				43D1BDE41C9A36B900A807F8 /* KBAPISupport+Mapping.h in Headers */,
-				43D1BDC71C9A31FA00A807F8 /* KBAPIRequestOperation+NSURLSession.h in Headers */,
 				43E622111CAD3B9100AFAF20 /* KBMappingOperation.h in Headers */,
 				43D1BDCB1C9A335200A807F8 /* KBAPIConnection+NSURLSession.h in Headers */,
 				43D1BDB51C9A2A3F00A807F8 /* KBAPIConnection+Delegates.h in Headers */,
@@ -283,6 +289,7 @@
 				43D1BD9E1C9A1AFD00A807F8 /* KBAPIRequestOperation.h in Headers */,
 				43D1BDB11C9A25AD00A807F8 /* KBAPIConnection+Blocks.h in Headers */,
 				43D1BDC41C9A311000A807F8 /* KBAPISupport+NSURLConnection.h in Headers */,
+				43E622381CAD76EA00AFAF20 /* KBAPISessionConnection.h in Headers */,
 				43D1BDD61C9A34D900A807F8 /* KBAPISupport+JSON.h in Headers */,
 				43E621F81CAC0EE300AFAF20 /* KBAPINSURLConnection.h in Headers */,
 				43D1BDA71C9A1CA700A807F8 /* KBAPIRequest.h in Headers */,
@@ -368,8 +375,8 @@
 				43D1BD9F1C9A1AFD00A807F8 /* KBAPIRequestOperation.m in Sources */,
 				43E621F91CAC0EE300AFAF20 /* KBAPINSURLConnection.m in Sources */,
 				43D1BDA81C9A1CA700A807F8 /* KBAPIRequest.m in Sources */,
-				43D1BDC81C9A31FA00A807F8 /* KBAPIRequestOperation+NSURLSession.m in Sources */,
 				43D1BDDE1C9A351900A807F8 /* KBAPIConnection+JSON.m in Sources */,
+				43E6223D1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m in Sources */,
 				43E622041CAC44F400AFAF20 /* KBJSONMappingOperation.m in Sources */,
 				43E621EF1CAAFF1900AFAF20 /* NSMutableURLRequest+KBAPIRequest.m in Sources */,
 				43D1BDDA1C9A34F300A807F8 /* KBJSONParsingOperation.m in Sources */,
@@ -377,6 +384,7 @@
 				43D1BDE01C9A362600A807F8 /* KBAPIConnection+Delegates.m in Sources */,
 				43D1BDCC1C9A335200A807F8 /* KBAPIConnection+NSURLSession.m in Sources */,
 				43D1BDAC1C9A209D00A807F8 /* KBAPIConnection.m in Sources */,
+				43E622391CAD76EA00AFAF20 /* KBAPISessionConnection.m in Sources */,
 				43E622081CAC450B00AFAF20 /* KBXMLMappingOperation.m in Sources */,
 				43E621F51CAB003100AFAF20 /* KBAPIConnection+Mapping.m in Sources */,
 				43E622121CAD3B9100AFAF20 /* KBMappingOperation.m in Sources */,

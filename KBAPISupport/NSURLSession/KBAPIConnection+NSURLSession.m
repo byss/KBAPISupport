@@ -26,6 +26,28 @@
 
 #import "KBAPIConnection+NSURLSession.h"
 
+#import "KBAPISessionConnection.h"
+
 @implementation KBAPIConnection (NSURLSession)
+
++ (NSURLSession *)defaultSession {
+	return [KBAPISessionConnection defaultSession];
+}
+
++ (void)setDefaultSession:(NSURLSession *)session {
+	[KBAPISessionConnection setDefaultSession:session];
+}
+
++ (instancetype _Nullable) connectionWithRequest: (KBAPIRequest *_Nonnull) request session: (NSURLSession *_Nullable) session {
+	return [[self alloc] initWithRequest:request session:session];
+}
+
+- (instancetype _Nullable) initWithRequest: (KBAPIRequest *_Nonnull) request session: (NSURLSession *_Nullable) session {
+	if (self.class == [KBAPIConnection class]) {
+		return [[KBAPISessionConnection alloc] initWithRequest:request session:session];
+	} else {
+		return [self initWithRequest:request];
+	}
+}
 
 @end
