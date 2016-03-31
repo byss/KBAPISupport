@@ -221,7 +221,7 @@
 - (KBOperation *) startWithCompletion:(void (^)(id<KBEntity> _Nullable, NSError * _Nullable))completion {
 	if (completion) {
 		typeof (self) strongSelf = self;
-		self.rawObjectCompletion = ^(id <KBEntity> _Nullable responseObject, NSError * _Nullable error) {
+		self.objectCompletion = ^(id <KBEntity> _Nullable responseObject, NSError * _Nullable error) {
 			[strongSelf.callbacksQueue addOperationWithBlock:^{
 				completion (responseObject, error);
 			}];
