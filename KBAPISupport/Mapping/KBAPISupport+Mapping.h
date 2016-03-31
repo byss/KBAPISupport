@@ -25,6 +25,7 @@
 //
 
 #import <KBAPISupport/KBEntity.h>
+#import <KBAPISupport/KBMappingOperation.h>
 #import <KBAPISupport/KBJSONMappingOperation.h>
 #import <KBAPISupport/KBXMLMappingOperation.h>
 #import <KBAPISupport/KBAPIRequest+Mapping.h>

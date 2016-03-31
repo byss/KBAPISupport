@@ -97,6 +97,11 @@
 	[self.completionOperation addDependency:operation];
 }
 
+- (void)removeSuboperation:(NSOperation *)operation {
+	[self.completionOperation removeDependency:operation];
+	[_suboperations removeObject:operation];
+}
+
 - (NSArray <NSOperation *> *) suboperations {
 	return _suboperations;
 }

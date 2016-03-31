@@ -29,10 +29,13 @@
 #import "KBAPIRequest+Mapping.h"
 #import "KBAPIRequestOperation.h"
 #import "KBXMLMappingOperation.h"
-// TODO
-//#import "KBXMLParsingOperation.h"
 #import "KBJSONMappingOperation.h"
-#import "KBJSONParsingOperation.h"
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
+#	import "KBJSONParsingOperation.h"
+#endif
+#if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
+#	import "KBXMLParsingOperation.h"
+#endif
 
 @interface KBAPIConnection (Mapping)
 

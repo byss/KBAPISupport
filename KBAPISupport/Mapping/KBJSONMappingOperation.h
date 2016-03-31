@@ -26,15 +26,11 @@
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 
-#import <KBAPISupport/KBOperation.h>
+#import <KBAPISupport/KBMappingOperation.h>
 
-@protocol KBEntity;
-@interface KBJSONMappingOperation: KBOperation
+@interface KBJSONMappingOperation: KBMappingOperation
 
 @property (nonatomic, nullable, strong) id JSONObject;
-@property (nonatomic, nullable, unsafe_unretained) Class expectedClass;
-@property (nonatomic, nullable, unsafe_unretained) Class errorClass;
-@property (nonatomic, nullable, copy) void (^operationCompletionBlock) (id <KBEntity> _Nullable responseObject, NSError *_Nullable error);
 
 @end
 

@@ -37,8 +37,6 @@
 
 @implementation KBJSONMappingOperation
 
-@dynamic operationCompletionBlock;
-
 - (void) main {
 	id JSONObject = self.JSONObject;
 	if (JSONObject) {

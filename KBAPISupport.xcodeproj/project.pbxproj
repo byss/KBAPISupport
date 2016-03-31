@@ -53,6 +53,8 @@
 		43E6220A1CAC464A00AFAF20 /* KBEntity.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E622091CAC464A00AFAF20 /* KBEntity.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E6220D1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6220B1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h */; };
 		43E6220E1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E6220C1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m */; };
+		43E622111CAD3B9100AFAF20 /* KBMappingOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6220F1CAD3B9100AFAF20 /* KBMappingOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43E622121CAD3B9100AFAF20 /* KBMappingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622101CAD3B9100AFAF20 /* KBMappingOperation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +106,8 @@
 		43E622091CAC464A00AFAF20 /* KBEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBEntity.h; sourceTree = "<group>"; };
 		43E6220B1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KBAPIRequest+Mapping.h"; sourceTree = "<group>"; };
 		43E6220C1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "KBAPIRequest+Mapping.m"; sourceTree = "<group>"; };
+		43E6220F1CAD3B9100AFAF20 /* KBMappingOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBMappingOperation.h; sourceTree = "<group>"; };
+		43E622101CAD3B9100AFAF20 /* KBMappingOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBMappingOperation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +198,8 @@
 			children = (
 				43D1BDE31C9A36B900A807F8 /* KBAPISupport+Mapping.h */,
 				43E622091CAC464A00AFAF20 /* KBEntity.h */,
+				43E6220F1CAD3B9100AFAF20 /* KBMappingOperation.h */,
+				43E622101CAD3B9100AFAF20 /* KBMappingOperation.m */,
 				43E622011CAC44F400AFAF20 /* KBJSONMappingOperation.h */,
 				43E622021CAC44F400AFAF20 /* KBJSONMappingOperation.m */,
 				43E622051CAC450B00AFAF20 /* KBXMLMappingOperation.h */,
@@ -266,6 +272,7 @@
 				43D1BD981C9A16AD00A807F8 /* KBOperation.h in Headers */,
 				43D1BDE41C9A36B900A807F8 /* KBAPISupport+Mapping.h in Headers */,
 				43D1BDC71C9A31FA00A807F8 /* KBAPIRequestOperation+NSURLSession.h in Headers */,
+				43E622111CAD3B9100AFAF20 /* KBMappingOperation.h in Headers */,
 				43D1BDCB1C9A335200A807F8 /* KBAPIConnection+NSURLSession.h in Headers */,
 				43D1BDB51C9A2A3F00A807F8 /* KBAPIConnection+Delegates.h in Headers */,
 				43D1BDCF1C9A337300A807F8 /* NSURLSession+KBAPISupport.h in Headers */,
@@ -372,6 +379,7 @@
 				43D1BDAC1C9A209D00A807F8 /* KBAPIConnection.m in Sources */,
 				43E622081CAC450B00AFAF20 /* KBXMLMappingOperation.m in Sources */,
 				43E621F51CAB003100AFAF20 /* KBAPIConnection+Mapping.m in Sources */,
+				43E622121CAD3B9100AFAF20 /* KBMappingOperation.m in Sources */,
 				43D1BDE21C9A369E00A807F8 /* KBAPIConnection+Blocks.m in Sources */,
 				43E622001CAC13EE00AFAF20 /* KBAPINSURLRequestOperation.m in Sources */,
 			);
