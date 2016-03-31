@@ -176,11 +176,12 @@
 
 - (KBOperation *) startWithRawDataCompletion:(void (^)(NSData * _Nullable, NSError * _Nullable))completion {
 	if (completion) {
-		__weak typeof (self) weakSelf = self;
+		typeof (self) strongSelf = self;
 		self.rawDataCompletion = ^(NSData * _Nullable data, NSError * _Nullable error) {
-			[weakSelf.callbacksQueue addOperationWithBlock:^{
+			[strongSelf.callbacksQueue addOperationWithBlock:^{
 				completion (data, error);
 			}];
+			strongSelf.rawDataCompletion = NULL;
 		};
 	}
 	return [self start];
@@ -189,11 +190,12 @@
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 - (KBOperation *) startWithRawObjectCompletion:(void (^)(id _Nullable, NSError * _Nullable))completion {
 	if (completion) {
-		__weak typeof (self) weakSelf = self;
+		typeof (self) strongSelf = self;
 		self.rawObjectCompletion = ^(id _Nullable JSONObject, NSError * _Nullable error) {
-			[weakSelf.callbacksQueue addOperationWithBlock:^{
+			[strongSelf.callbacksQueue addOperationWithBlock:^{
 				completion (JSONObject, error);
 			}];
+			strongSelf.rawObjectCompletion = NULL;
 		};
 	}
 	return [self start];
@@ -203,11 +205,12 @@
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 - (KBOperation *) startWithRawObjectCompletion:(void (^)(GDataXMLDocument *_Nullable, NSError * _Nullable))completion {
 	if (completion) {
-		__weak typeof (self) weakSelf = self;
+		typeof (self) strongSelf = self;
 		self.rawObjectCompletion = ^(GDataXMLDocument *_Nullable XMLObject, NSError * _Nullable error) {
-			[weakSelf.callbacksQueue addOperationWithBlock:^{
+			[strongSelf.callbacksQueue addOperationWithBlock:^{
 				completion (XMLObject, error);
 			}];
+			strongSelf.rawObjectCompletion = NULL;
 		};
 	}
 	return [self start];
@@ -217,11 +220,12 @@
 #if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
 - (KBOperation *) startWithCompletion:(void (^)(id<KBEntity> _Nullable, NSError * _Nullable))completion {
 	if (completion) {
-		__weak typeof (self) weakSelf = self;
+		typeof (self) strongSelf = self;
 		self.rawObjectCompletion = ^(id <KBEntity> _Nullable responseObject, NSError * _Nullable error) {
-			[weakSelf.callbacksQueue addOperationWithBlock:^{
+			[strongSelf.callbacksQueue addOperationWithBlock:^{
 				completion (responseObject, error);
 			}];
+			strongSelf.objectCompletion = NULL;
 		};
 	}
 	return [self start];
