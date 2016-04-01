@@ -101,6 +101,9 @@ static NSOperationQueue *KBAPIConnectionDefaultCallbacksQueue = nil;
 	dispatch_once (&onceToken, ^{
 		operationQueue = [NSOperationQueue new];
 		operationQueue.name = @"KBAPIConnection";
+		if ([operationQueue respondsToSelector:@selector (setQualityOfService:)]) {
+			operationQueue.qualityOfService = NSQualityOfServiceUtility;
+		}
 	});
 	
 	return operationQueue;
