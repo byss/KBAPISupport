@@ -73,6 +73,7 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 	NSURLSessionTask *task = [session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 		[weakSelf handleTaskCompletionWithData:data error:error];
 	}];
+	_task = task;
 
 	_semaphore = dispatch_semaphore_create (0);
 	[task resume];
