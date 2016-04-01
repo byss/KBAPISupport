@@ -57,7 +57,11 @@ static void const *const KBMappingPropertiesInitializedKey = "mapping-properties
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 + (instancetype) newInstanceForJSONObject: (id) JSONObject {
-	return [self new];
+	if ([JSONObject isKindOfClass:[NSDictionary class]]) {
+		return [self new];
+	} else {
+		return nil;
+	}
 }
 
 + (instancetype)objectFromJSON:(id)JSON {
@@ -77,7 +81,11 @@ static void const *const KBMappingPropertiesInitializedKey = "mapping-properties
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 + (instancetype) newInstanceForXMLObject: (GDataXMLElement *) XMLObject {
-	return [self new];
+	if ([JSONObject isKindOfClass:[NSDictionary class]]) {
+		return [self new];
+	} else {
+		return nil;
+	}
 }
 
 + (instancetype)objectFromXML:(GDataXMLElement *) XML {
