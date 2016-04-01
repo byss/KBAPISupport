@@ -38,7 +38,7 @@ static dispatch_queue_t KBNetworkIndicatorQueue = NULL;
 + (void) initialize {
 	if (self == [KBNetworkIndicator class]) {
 		KBNetworkIndicatorQueue = dispatch_queue_create ("KBNetworkIndicatorQueue", dispatch_queue_attr_make_with_qos_class (DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INITIATED, 0));
-		KBLOGI (@"%@ initialized", self);
+		KBASLOGI (@"%@ initialized", self);
 	}
 }
 
@@ -56,7 +56,7 @@ static dispatch_queue_t KBNetworkIndicatorQueue = NULL;
 		if (KBNetworkRequestCount > 0) {
 			KBNetworkRequestCount--;
 		} else {
-			KBLOGW (@"Network indicator counter gone below zero, resetting");
+			KBASLOGW (@"Network indicator counter gone below zero, resetting");
 		}
 		dispatch_after (dispatch_time (DISPATCH_TIME_NOW, (int64_t) (0.15 * NSEC_PER_SEC)), KBNetworkIndicatorQueue, ^{
 			if (KBNetworkRequestCount == 0) {

@@ -24,16 +24,15 @@
 //  THE SOFTWARE.
 //
 
-#if __has_include (<KBAPISupport/KBAPISupport+Logging.h>)
-#	import <KBAPISupport/KBAPISupport+Logging.h>
-#	define KBLOG_MACRO(lvl, fmt, args...) ([[KBLogger sharedLogger] logWithLevel:lvl file:__FILE__ line:__LINE__ function:__PRETTY_FUNCTION__ message:fmt, ##args])
-#	define KBLOGE(fmt, args...) KBLOG_MACRO (KBLogLevelError, fmt, ##args)
-#	define KBLOGW(fmt, args...) KBLOG_MACRO (KBLogLevelWarning, fmt, ##args)
-#	define KBLOGI(fmt, args...) KBLOG_MACRO (KBLogLevelInfo, fmt, ##args)
-#	define KBLOGD(fmt, args...) KBLOG_MACRO (KBLogLevelDebug, fmt, ##args)
+#if __has_include (<KBLogger/KBLogger.h>)
+#	import <KBLogger/KBLogger.h>
+#	define KBASLOGE(fmt, args...) KBLOGE(@"KBAPISupport: " fmt, ##args)
+#	define KBASLOGW(fmt, args...) KBLOGW(@"KBAPISupport: " fmt, ##args)
+#	define KBASLOGI(fmt, args...) KBLOGI(@"KBAPISupport: " fmt, ##args)
+#	define KBASLOGD(fmt, args...) KBLOGD(@"KBAPISupport: " fmt, ##args)
 #else
-#	define KBLOGE(...)
-#	define KBLOGW(...)
-#	define KBLOGI(...)
-#	define KBLOGD(...)
+#	define KBASLOGE(...)
+#	define KBASLOGW(...)
+#	define KBASLOGI(...)
+#	define KBASLOGD(...)
 #endif

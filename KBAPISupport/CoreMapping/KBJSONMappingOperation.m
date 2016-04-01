@@ -47,27 +47,27 @@
 		if ([expectedClass conformsToProtocol:@protocol (KBObject)]) {
 			_result = [expectedClass objectFromJSON:JSONObject];
 		} else {
-			KBLOGW (@"Object class %@ does not conform to %@", expectedClass, @protocol (KBObject));
+			KBASLOGW (@"Object class %@ does not conform to %@", expectedClass, @protocol (KBObject));
 		}
 
 		if (_result) {
-			KBLOGI (@"Mapping successful");
-			KBLOGD (@"Mapped object: %@", _result);
+			KBASLOGI (@"Mapping successful");
+			KBASLOGD (@"Mapped object: %@", _result);
 		} else {
 			Class errorClass = self.errorClass;
 			NSError *mappedError = nil;
 			if ([errorClass conformsToProtocol:@protocol (KBObject)]) {
 				mappedError = [errorClass objectFromJSON:JSONObject];
 			} else {
-				KBLOGI (@"Error class %@ does not conform to %@", errorClass, @protocol (KBObject));
+				KBASLOGI (@"Error class %@ does not conform to %@", errorClass, @protocol (KBObject));
 			}
 			
 			if ([mappedError isKindOfClass:[NSError class]]) {
-				KBLOGI (@"Error successfully mapped");
-				KBLOGD (@"Mapped error: %@", mappedError);
+				KBASLOGI (@"Error successfully mapped");
+				KBASLOGD (@"Mapped error: %@", mappedError);
 				self.error = mappedError;
 			} else {
-				KBLOGI (@"Error cannot be mapped, using generic one");
+				KBASLOGI (@"Error cannot be mapped, using generic one");
 				self.error = [NSError errorWithDomain:@"KBAPIConnection" code:-1 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Cannot build %@ from JSON object.", self.expectedClass]}];
 			}
 		}

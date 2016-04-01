@@ -37,14 +37,14 @@
 - (void) main {
 	NSData *JSONData = self.JSONData;
 	if (JSONData) {
-		KBLOGI (@"Deserializing data (%ld bytes)", (long) JSONData.length);
+		KBASLOGI (@"Deserializing data (%ld bytes)", (long) JSONData.length);
 		NSError *JSONError = nil;
 		_result = [NSJSONSerialization JSONObjectWithData:JSONData options:NSJSONReadingAllowFragments error:&JSONError];
 		if (JSONError) {
-			KBLOGE (@"Deserialization error: %@", JSONError);
+			KBASLOGE (@"Deserialization error: %@", JSONError);
 		} else {
-			KBLOGI (@"Deserialization success");
-			KBLOGD (@"Deserialized object: %@", _result);
+			KBASLOGI (@"Deserialization success");
+			KBASLOGD (@"Deserialized object: %@", _result);
 		}
 		self.error = JSONError;
 	}

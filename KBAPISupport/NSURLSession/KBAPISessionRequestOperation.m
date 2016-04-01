@@ -48,7 +48,7 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 + (void)initialize {
 	if (self == [KBAPISessionRequestOperation class]) {
 		KBAPISessionRequestOperationDefaultSession = [NSURLSession sharedSession];
-		KBLOGI (@"%@ initialized", self);
+		KBASLOGI (@"%@ initialized", self);
 	}
 }
 
@@ -69,10 +69,10 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 }
 
 - (void)main {
-	KBLOGI (@"Starting request: %@ %@", self.request.HTTPMethod, self.request.URL);
-	KBLOGD (@"Headers: %@", self.request.additionalHeaders);
-	KBLOGD (@"Body length: %ld", (long) self.request.bodyData.length);
-	KBLOGD (@"Body string: %@", self.request.bodyString);
+	KBASLOGI (@"Starting request: %@ %@", self.request.HTTPMethod, self.request.URL);
+	KBASLOGD (@"Headers: %@", self.request.additionalHeaders);
+	KBASLOGD (@"Body length: %ld", (long) self.request.bodyData.length);
+	KBASLOGD (@"Body string: %@", self.request.bodyString);
 	
 #if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
 	[KBNetworkIndicator requestStarted];
@@ -100,13 +100,13 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 }
 
 - (void) handleTaskCompletionWithData: (NSData *) responseData response: (NSURLResponse *) response error: (NSError *) error {
-	KBLOGI (@"Task did finish");
-	KBLOGI (@"Response: %@", response);
+	KBASLOGI (@"Task did finish");
+	KBASLOGI (@"Response: %@", response);
 	if (error) {
-		KBLOGE (@"Error: %@", error);
+		KBASLOGE (@"Error: %@", error);
 	} else {
-		KBLOGD (@"Response data length: %ld bytes", (long) responseData.length);
-		KBLOGD (@"Response string: %@", [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
+		KBASLOGD (@"Response data length: %ld bytes", (long) responseData.length);
+		KBASLOGD (@"Response string: %@", [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
 	}
 	
 	_result = responseData;

@@ -71,8 +71,3 @@
 #if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
 #	import <KBAPISupport/KBAPISupport+NetworkIndicator.h>
 #endif
-
-/* Logging */
-#if __has_include (<KBAPISupport/KBAPISupport+Logging.h>)
-#	import <KBAPISupport/KBAPISupport+Logging.h>
-#endif

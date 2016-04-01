@@ -51,7 +51,7 @@ static NSOperationQueue *KBAPIConnectionDefaultCallbacksQueue = nil;
 + (void)initialize {
 	if (self == [KBAPIConnection class]) {
 		KBAPIConnectionDefaultCallbacksQueue = [NSOperationQueue mainQueue];
-		KBLOGI (@"%@ initialized", self);
+		KBASLOGI (@"%@ initialized", self);
 	}
 }
 
@@ -68,7 +68,7 @@ static NSOperationQueue *KBAPIConnectionDefaultCallbacksQueue = nil;
 + (void)registerOperationSetupHandlerWithPriority:(NSUInteger)priority handlerBlock:(void (^)(KBAPIConnection * _Nonnull, KBAPIRequestOperation * _Nonnull))handlerBlock {
 	KBAPIConnectionOperationSetupHandler *handler = [[KBAPIConnectionOperationSetupHandler alloc] initWithPriority:priority handlerBlock:handlerBlock];
 	if (handler) {
-		KBLOGI (@"Registering connection setup handler with priority %ld", (long) priority);
+		KBASLOGI (@"Registering connection setup handler with priority %ld", (long) priority);
 		[[self registeredHandlers] addObject:handler];
 		[[self registeredHandlers] sortUsingComparator:^NSComparisonResult (KBAPIConnectionOperationSetupHandler *handler1, KBAPIConnectionOperationSetupHandler *handler2) {
 			if (handler1.priority > handler2.priority) {
@@ -80,7 +80,7 @@ static NSOperationQueue *KBAPIConnectionDefaultCallbacksQueue = nil;
 			}
 		}];
 	} else {
-		KBLOGW (@"Cannot register handler block %@ with priority %ld", handlerBlock, (long) priority);
+		KBASLOGW (@"Cannot register handler block %@ with priority %ld", handlerBlock, (long) priority);
 	}
 }
 

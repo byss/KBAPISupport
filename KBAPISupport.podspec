@@ -7,7 +7,7 @@ Pod::Spec.new do |spec|
 	spec.summary              = 'Simple library for HTTP/HTTPS requests and parsing & mapping JSON/XML responses to native objects.'
 	spec.source               = { :git => spec.homepage + '.git', :tag => 'v' + spec.version.to_s }
 	spec.requires_arc         = true
-	spec.source_files = 'KBAPISupport/Supporting Files/KBAPISupport.h'
+	spec.source_files         = 'KBAPISupport/Supporting Files/KBAPISupport.h'
 	
 	spec.ios.deployment_target = '6.0'
 	spec.osx.deployment_target = '10.8'
@@ -60,9 +60,6 @@ Pod::Spec.new do |spec|
 	spec.subspec 'NetworkIndicator' do |sspec|
 		sspec.source_files = 'KBAPISupport/NetworkIndicator/*.{h,m}'
 		sspec.ios.frameworks = 'UIKit'
-	end
-	spec.subspec 'Logging' do |sspec|
-		sspec.source_files = 'KBAPISupport/Logging/*.{h,m}'
 	end
 	
 	spec.default_subspecs = 'Core', 'NSURLSession', 'JSON', 'ObjectMapping', 'Blocks'
