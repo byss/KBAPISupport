@@ -20,10 +20,12 @@ Pod::Spec.new do |spec|
 	end
 	spec.subspec 'NSURLConnection' do |sspec|
 		sspec.source_files = 'KBAPISupport/NSURLConnection/*.{h,m}'
+		sspec.private_header_files = 'KBAPISupport/NSURLConnection/*_Protected.h'
 		sspec.dependency 'KBAPISupport/Core'
 	end
 	spec.subspec 'NSURLSession' do |sspec|
 		sspec.source_files = 'KBAPISupport/NSURLSession/*.{h,m}'
+		sspec.private_header_files = 'KBAPISupport/NSURLSession/*_Protected.h'
 		sspec.dependency 'KBAPISupport/Core'
 		spec.ios.deployment_target = '7.0'
 		spec.osx.deployment_target = '10.9'

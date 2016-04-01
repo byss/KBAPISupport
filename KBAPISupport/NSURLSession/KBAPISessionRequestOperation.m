@@ -24,8 +24,7 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPISessionRequestOperation.h"
-#import "KBAPIRequestOperation_Protected.h"
+#import "KBAPISessionRequestOperation_Protected.h"
 
 #import "NSMutableURLRequest+KBAPIRequest.h"
 
@@ -36,8 +35,6 @@
 static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 
 @interface KBAPISessionRequestOperation () {
-	__weak NSURLSessionTask *_task;
-	
 	dispatch_semaphore_t _semaphore;
 	NSData *_result;
 }
@@ -79,7 +76,7 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 
 	__weak typeof (self) weakSelf = self;
 	NSURLSessionTask *task = [session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-		[weakSelf handleTaskCompletionWithData:data error:error];
+		[weakSelf handleTaskCompletionWithData:data response:response error:error];
 	}];
 	_task = task;
 
@@ -94,16 +91,20 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 #endif
 }
 
-- (void) handleTaskCompletionWithData: (NSData *) responseData error: (NSError *) error {
+- (void) handleTaskCompletionWithData: (NSData *) responseData response: (NSURLResponse *) response error: (NSError *) error {
 	_result = responseData;
 	self.error = error;
 	
-	dispatch_semaphore_signal (_semaphore);
+	[self releaseOperationSemaphore];
 }
 
 - (void)cancel {
-	[_task cancel];
+	[self.task cancel];
 	[super cancel];
+}
+
+- (void) releaseOperationSemaphore {
+	dispatch_semaphore_signal (_semaphore);
 }
 
 - (id) result {

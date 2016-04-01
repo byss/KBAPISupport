@@ -24,8 +24,7 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPINSURLRequestOperation.h"
-#import "KBAPIRequestOperation_Protected.h"
+#import "KBAPINSURLRequestOperation_Protected.h"
 
 #import "NSMutableURLRequest+KBAPIRequest.h"
 
@@ -33,9 +32,7 @@
 #	import "KBNetworkIndicator.h"
 #endif
 
-@interface KBAPINSURLRequestOperation () <NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
-	__weak NSURLConnection *_connection;
-	
+@interface KBAPINSURLRequestOperation () {
 	dispatch_semaphore_t _semaphore;
 	NSMutableData *_buffer;
 }
@@ -69,13 +66,17 @@
 }
 
 - (void)cancel {
-	[_connection cancel];
+	[self.connection cancel];
 	[super cancel];
+}
+
+- (void) releaseOperationSemaphore {
+	dispatch_semaphore_signal (_semaphore);
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	self.error = error;
-	dispatch_semaphore_signal (_semaphore);
+	[self releaseOperationSemaphore];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
@@ -96,7 +97,7 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	dispatch_semaphore_signal (_semaphore);
+	[self releaseOperationSemaphore];
 }
 
 - (id) result {
