@@ -1,5 +1,5 @@
 //
-//  KBNetworkIndicator.m
+//  KBLogger.m
 //  KBAPISupport
 //
 //  Created by Kirill Bystrov on 4/1/16.
@@ -24,52 +24,68 @@
 //  THE SOFTWARE.
 //
 
-#import "KBNetworkIndicator.h"
-
-#import <UIKit/UIKit.h>
+#import "KBLogger.h"
 
 #import "KBAPISupportLogging_Protected.h"
 
-static int32_t KBNetworkRequestCount = 0;
-static dispatch_queue_t KBNetworkIndicatorQueue = NULL;
+static id <KBLogger> KBLoggerInstance = nil;
 
-@implementation KBNetworkIndicator
+static char const *const logLevelString (KBLogLevel const logLevel);
+
+@implementation KBLogger
+
+@synthesize logLevel = _logLevel;
 
 + (void) initialize {
-	if (self == [KBNetworkIndicator class]) {
-		KBNetworkIndicatorQueue = dispatch_queue_create ("KBNetworkIndicatorQueue", dispatch_queue_attr_make_with_qos_class (DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INITIATED, 0));
+	if (self == [KBLogger class]) {
+		KBLoggerInstance = [KBLogger new];
 		KBLOGI (@"%@ initialized", self);
 	}
 }
 
-+ (void) requestStarted {
-	dispatch_async (KBNetworkIndicatorQueue, ^{
-		int32_t oldValue = KBNetworkRequestCount++;
-		if (oldValue == 0) {
-			[self setNetworkIndicatorActive:YES];
-		}
-	});
++ (id<KBLogger>)sharedLogger {
+	return KBLoggerInstance;
 }
 
-+ (void) requestFinished {
-	dispatch_async (KBNetworkIndicatorQueue, ^{
-		if (KBNetworkRequestCount > 0) {
-			KBNetworkRequestCount--;
-		} else {
-			KBLOGW (@"Network indicator counter gone below zero, resetting");
-		}
-		dispatch_after (dispatch_time (DISPATCH_TIME_NOW, (int64_t) (0.15 * NSEC_PER_SEC)), KBNetworkIndicatorQueue, ^{
-			if (KBNetworkRequestCount == 0) {
-				[self setNetworkIndicatorActive:NO];
-			}
-		});
-	});
++ (void)setSharedLogger:(id<KBLogger>)sharedLogger {
+	KBLoggerInstance = (sharedLogger ?: [KBLogger new]);
 }
 
-+ (void) setNetworkIndicatorActive: (BOOL) active {
-	dispatch_sync (dispatch_get_main_queue (), ^{
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = active;
-	});
+- (instancetype)init {
+	if (self = [super init]) {
+		_logLevel = KBLogLevelDebug;
+	}
+	
+	return self;
+}
+
+- (void)logWithLevel:(KBLogLevel)level file:(const char *)file line:(int)line function:(const char *)function message:(NSString *)fmt, ... {
+	if (level > self.logLevel) {
+		return;
+	}
+	
+	va_list args;
+	va_start (args, fmt);
+	NSString *message = [[NSString alloc] initWithFormat:fmt arguments:args];
+	va_end (args);
+	
+	NSLog (@"KBAPISupport: %s%s (%d): %@", logLevelString (level), function, line, message);
 }
 
 @end
+
+static char const *const logLevelString (KBLogLevel const logLevel) {
+	static char const *const noLogLevel = "";
+	static char const *const logLevelStrings [] = {
+		"E: ",
+		"W: ",
+		"I: ",
+		"D: ",
+	};
+	
+	if ((logLevel < 1) || (logLevel > sizeof (logLevelStrings) / sizeof (*logLevelStrings))) {
+		return noLogLevel;
+	} else {
+		return logLevelStrings [logLevel - 1];
+	}
+}

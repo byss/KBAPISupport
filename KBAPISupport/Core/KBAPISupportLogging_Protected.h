@@ -1,8 +1,8 @@
 //
-//  KBJSONParsingOperation.m
+//  KBAPISupportLogging_Protected.h
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 3/17/16.
+//  Created by Kirill Bystrov on 4/1/16.
 //  Copyright © 2016 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,32 +24,16 @@
 //  THE SOFTWARE.
 //
 
-#import "KBJSONParsingOperation.h"
-
-#import "KBOperation_Protected.h"
-#import "KBAPISupportLogging_Protected.h"
-
-@implementation KBJSONParsingOperation
-
-@dynamic operationCompletionBlock;
-@synthesize result = _result;
-
-- (void) main {
-	NSData *JSONData = self.JSONData;
-	if (JSONData) {
-		KBLOGI (@"Deserializing data (%ld bytes)", (long) JSONData.length);
-		NSError *JSONError = nil;
-		_result = [NSJSONSerialization JSONObjectWithData:JSONData options:NSJSONReadingAllowFragments error:&JSONError];
-		if (JSONError) {
-			KBLOGE (@"Deserialization error: %@", JSONError);
-		} else {
-			KBLOGI (@"Deserialization success");
-			KBLOGD (@"Deserialized object: %@", _result);
-		}
-		self.error = JSONError;
-	}
-	
-	[super main];
-}
-
-@end
+#if __has_include (<KBAPISupport/KBAPISupport+Logging.h>)
+#	import <KBAPISupport/KBAPISupport+Logging.h>
+#	define KBLOG_MACRO(lvl, fmt, args...) ([[KBLogger sharedLogger] logWithLevel:lvl file:__FILE__ line:__LINE__ function:__PRETTY_FUNCTION__ message:fmt, ##args])
+#	define KBLOGE(fmt, args...) KBLOG_MACRO (KBLogLevelError, fmt, ##args)
+#	define KBLOGW(fmt, args...) KBLOG_MACRO (KBLogLevelWarning, fmt, ##args)
+#	define KBLOGI(fmt, args...) KBLOG_MACRO (KBLogLevelInfo, fmt, ##args)
+#	define KBLOGD(fmt, args...) KBLOG_MACRO (KBLogLevelDebug, fmt, ##args)
+#else
+#	define KBLOGE(...)
+#	define KBLOGW(...)
+#	define KBLOGI(...)
+#	define KBLOGD(...)
+#endif

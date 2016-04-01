@@ -61,6 +61,9 @@ Pod::Spec.new do |spec|
 		sspec.source_files = 'KBAPISupport/NetworkIndicator/*.{h,m}'
 		sspec.ios.frameworks = 'UIKit'
 	end
+	spec.subspec 'Logging' do |sspec|
+		sspec.source_files = 'KBAPISupport/Logging/*.{h,m}'
+	end
 	
 	spec.default_subspecs = 'Core', 'NSURLSession', 'JSON', 'ObjectMapping', 'Blocks'
 end

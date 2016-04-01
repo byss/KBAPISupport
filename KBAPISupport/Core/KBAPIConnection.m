@@ -27,6 +27,7 @@
 #import "KBAPIConnection_Protected.h"
 
 #import "KBAPIRequestOperation.h"
+#import "KBAPISupportLogging_Protected.h"
 
 static NSOperationQueue *KBAPIConnectionDefaultCallbacksQueue = nil;
 
@@ -50,6 +51,7 @@ static NSOperationQueue *KBAPIConnectionDefaultCallbacksQueue = nil;
 + (void)initialize {
 	if (self == [KBAPIConnection class]) {
 		KBAPIConnectionDefaultCallbacksQueue = [NSOperationQueue mainQueue];
+		KBLOGI (@"%@ initialized", self);
 	}
 }
 
@@ -66,6 +68,7 @@ static NSOperationQueue *KBAPIConnectionDefaultCallbacksQueue = nil;
 + (void)registerOperationSetupHandlerWithPriority:(NSUInteger)priority handlerBlock:(void (^)(KBAPIConnection * _Nonnull, KBAPIRequestOperation * _Nonnull))handlerBlock {
 	KBAPIConnectionOperationSetupHandler *handler = [[KBAPIConnectionOperationSetupHandler alloc] initWithPriority:priority handlerBlock:handlerBlock];
 	if (handler) {
+		KBLOGI (@"Registering connection setup handler with priority %ld", (long) priority);
 		[[self registeredHandlers] addObject:handler];
 		[[self registeredHandlers] sortUsingComparator:^NSComparisonResult (KBAPIConnectionOperationSetupHandler *handler1, KBAPIConnectionOperationSetupHandler *handler2) {
 			if (handler1.priority > handler2.priority) {
@@ -76,6 +79,8 @@ static NSOperationQueue *KBAPIConnectionDefaultCallbacksQueue = nil;
 				return NSOrderedSame;
 			}
 		}];
+	} else {
+		KBLOGW (@"Cannot register handler block %@ with priority %ld", handlerBlock, (long) priority);
 	}
 }
 

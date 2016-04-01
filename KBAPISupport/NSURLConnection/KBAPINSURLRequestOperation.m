@@ -27,6 +27,8 @@
 #import "KBAPINSURLRequestOperation_Protected.h"
 
 #import "NSMutableURLRequest+KBAPIRequest.h"
+#import "KBAPISupportLogging_Protected.h"
+#import "KBAPIRequest.h"
 
 #if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
 #	import "KBNetworkIndicator.h"
@@ -42,6 +44,11 @@
 @implementation KBAPINSURLRequestOperation
 
 - (void) main {
+	KBLOGI (@"Starting request: %@ %@", self.request.HTTPMethod, self.request.URL);
+	KBLOGD (@"Headers: %@", self.request.additionalHeaders);
+	KBLOGD (@"Body length: %ld", (long) self.request.bodyData.length);
+	KBLOGD (@"Body string: %@", self.request.bodyString);
+
 #if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
 	[KBNetworkIndicator requestStarted];
 #endif
@@ -75,11 +82,13 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+	KBLOGE (@"Connection error: %@", error);
 	self.error = error;
 	[self releaseOperationSemaphore];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+	KBLOGI (@"Connection response: %@", response);
 	if (_buffer) {
 		_buffer.length = 0;
 	} else {
@@ -93,10 +102,14 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+	KBLOGD (@"Connection received %ld bytes", (long) data.length);
 	[_buffer appendData:data];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+	KBLOGI (@"Connection did finish loading");
+	KBLOGD (@"Response data length: %ld bytes", (long) _buffer.length);
+	KBLOGD (@"Response string: %@", [[NSString alloc] initWithData:_buffer encoding:NSUTF8StringEncoding]);
 	[self releaseOperationSemaphore];
 }
 

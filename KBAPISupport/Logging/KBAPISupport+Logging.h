@@ -1,8 +1,8 @@
 //
-//  KBJSONParsingOperation.m
+//  KBAPISupport+Logging.h
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 3/17/16.
+//  Created by Kirill Bystrov on 4/1/16.
 //  Copyright © 2016 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,32 +24,4 @@
 //  THE SOFTWARE.
 //
 
-#import "KBJSONParsingOperation.h"
-
-#import "KBOperation_Protected.h"
-#import "KBAPISupportLogging_Protected.h"
-
-@implementation KBJSONParsingOperation
-
-@dynamic operationCompletionBlock;
-@synthesize result = _result;
-
-- (void) main {
-	NSData *JSONData = self.JSONData;
-	if (JSONData) {
-		KBLOGI (@"Deserializing data (%ld bytes)", (long) JSONData.length);
-		NSError *JSONError = nil;
-		_result = [NSJSONSerialization JSONObjectWithData:JSONData options:NSJSONReadingAllowFragments error:&JSONError];
-		if (JSONError) {
-			KBLOGE (@"Deserialization error: %@", JSONError);
-		} else {
-			KBLOGI (@"Deserialization success");
-			KBLOGD (@"Deserialized object: %@", _result);
-		}
-		self.error = JSONError;
-	}
-	
-	[super main];
-}
-
-@end
+#import <KBAPISupport/KBLogger.h>

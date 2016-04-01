@@ -1,8 +1,8 @@
 //
-//  KBJSONParsingOperation.m
+//  KBLogger.h
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 3/17/16.
+//  Created by Kirill Bystrov on 4/1/16.
 //  Copyright © 2016 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,32 +24,28 @@
 //  THE SOFTWARE.
 //
 
-#import "KBJSONParsingOperation.h"
+#import <Foundation/Foundation.h>
 
-#import "KBOperation_Protected.h"
-#import "KBAPISupportLogging_Protected.h"
+typedef NS_ENUM (NSInteger, KBLogLevel) {
+	KBLogLevelNone = 0,
+	KBLogLevelError = 1,
+	KBLogLevelWarning = 2,
+	KBLogLevelInfo = 3,
+	KBLogLevelDebug = 4,
+};
 
-@implementation KBJSONParsingOperation
+@protocol KBLogger <NSObject>
 
-@dynamic operationCompletionBlock;
-@synthesize result = _result;
+@required
+@property (nonatomic, assign) KBLogLevel logLevel;
 
-- (void) main {
-	NSData *JSONData = self.JSONData;
-	if (JSONData) {
-		KBLOGI (@"Deserializing data (%ld bytes)", (long) JSONData.length);
-		NSError *JSONError = nil;
-		_result = [NSJSONSerialization JSONObjectWithData:JSONData options:NSJSONReadingAllowFragments error:&JSONError];
-		if (JSONError) {
-			KBLOGE (@"Deserialization error: %@", JSONError);
-		} else {
-			KBLOGI (@"Deserialization success");
-			KBLOGD (@"Deserialized object: %@", _result);
-		}
-		self.error = JSONError;
-	}
-	
-	[super main];
-}
+- (void) logWithLevel: (KBLogLevel) level file: (char const *_Nonnull) file line: (int) line function: (char const *_Nonnull) function message: (NSString *_Nullable) fmt, ...;
+
+@end
+
+@interface KBLogger: NSObject <KBLogger>
+
++ (id <KBLogger> _Nonnull) sharedLogger;
++ (void) setSharedLogger: (id <KBLogger> _Nullable) sharedLogger;
 
 @end
