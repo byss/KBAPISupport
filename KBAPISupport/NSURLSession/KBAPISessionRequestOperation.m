@@ -29,6 +29,10 @@
 
 #import "NSMutableURLRequest+KBAPIRequest.h"
 
+#if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
+#	import "KBNetworkIndicator.h"
+#endif
+
 static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 
 @interface KBAPISessionRequestOperation () {
@@ -65,6 +69,10 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 }
 
 - (void)main {
+#if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
+	[KBNetworkIndicator requestStarted];
+#endif
+
 	NSURLSession *session = (self.session ?: [self.class defaultSession]);
 	NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithAPIRequest:self.request];
 	req.timeoutInterval = self.timeout;
@@ -80,6 +88,10 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 	
 	dispatch_semaphore_wait (_semaphore, DISPATCH_TIME_FOREVER);
 	[super main];
+
+#if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
+	[KBNetworkIndicator requestFinished];
+#endif
 }
 
 - (void) handleTaskCompletionWithData: (NSData *) responseData error: (NSError *) error {

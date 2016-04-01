@@ -16,6 +16,7 @@ Pod::Spec.new do |spec|
 	spec.subspec 'Core' do |sspec|
 		sspec.source_files = 'KBAPISupport/Core/*.{h,m}'
 		sspec.private_header_files = 'KBAPISupport/Core/*_Protected.h'
+		sspec.frameworks = 'Foundation'
 	end
 	spec.subspec 'NSURLConnection' do |sspec|
 		sspec.source_files = 'KBAPISupport/NSURLConnection/*.{h,m}'
@@ -54,6 +55,10 @@ Pod::Spec.new do |spec|
 # 		sspec.source_files = 'KBAPISupport/Delegates/*.{h,m}'
 # 		sspec.dependency 'KBAPISupport/Core'
 # 	end
+	spec.subspec 'NetworkIndicator' do |sspec|
+		sspec.source_files = 'KBAPISupport/NetworkIndicator/*.{h,m}'
+		sspec.ios.frameworks = 'UIKit'
+	end
 	
 	spec.default_subspecs = 'Core', 'NSURLSession', 'JSON', 'ObjectMapping', 'Blocks'
 end

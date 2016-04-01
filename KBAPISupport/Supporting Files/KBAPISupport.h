@@ -66,3 +66,8 @@
 #if __has_include (<KBAPISupport/KBAPISupport+Delegates.h>)
 #	import <KBAPISupport/KBAPISupport+Delegates.h>
 #endif
+
+/* Network Indicator */
+#if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
+#	import <KBAPISupport/KBAPISupport+NetworkIndicator.h>
+#endif

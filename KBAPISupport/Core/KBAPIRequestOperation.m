@@ -28,6 +28,10 @@
 
 #import "KBOperation_Protected.h"
 
+#if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
+#	import "KBNetworkIndicator.h"
+#endif
+
 static NSTimeInterval KBAPIRequestOperationDefaultTimeout = 30.0;
 
 @implementation KBAPIRequestOperation
@@ -57,6 +61,18 @@ static NSTimeInterval KBAPIRequestOperationDefaultTimeout = 30.0;
 	}
 	
 	return self;
+}
+
+- (void)main {
+#if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
+	[KBNetworkIndicator requestStarted];
+#endif
+
+	[super main];
+	
+#if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
+	[KBNetworkIndicator requestFinished];
+#endif
 }
 
 @end

@@ -29,6 +29,10 @@
 
 #import "NSMutableURLRequest+KBAPIRequest.h"
 
+#if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
+#	import "KBNetworkIndicator.h"
+#endif
+
 @interface KBAPINSURLRequestOperation () <NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
 	__weak NSURLConnection *_connection;
 	
@@ -41,6 +45,10 @@
 @implementation KBAPINSURLRequestOperation
 
 - (void) main {
+#if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
+	[KBNetworkIndicator requestStarted];
+#endif
+	
 	_semaphore = dispatch_semaphore_create (0);
 	
 	NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithAPIRequest:self.request];
@@ -54,6 +62,10 @@
 	
 	dispatch_semaphore_wait (_semaphore, DISPATCH_TIME_FOREVER);
 	[super main];
+
+#if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
+	[KBNetworkIndicator requestFinished];
+#endif
 }
 
 - (void)cancel {
