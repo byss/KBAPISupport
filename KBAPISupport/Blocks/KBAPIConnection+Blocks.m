@@ -36,7 +36,7 @@
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 #	import "KBXMLParsingOperation.h"
 #endif
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
 #	import "KBMappingOperation.h"
 #endif
 
@@ -52,7 +52,7 @@
 @property (nonatomic, copy, nullable) void (^rawObjectCompletion) (GDataXMLDocument *_Nullable XMLResponse, NSError *_Nullable error);
 #endif
 
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
 @property (nonatomic, copy, nullable) void (^objectCompletion) (id <KBObject> _Nullable responseObject, NSError *_Nullable error);
 #endif
 
@@ -67,7 +67,7 @@
 }
 
 + (void) setupCompletionBlocksForOperation: (KBAPIRequestOperation *) operation usingConnection: (KBAPIConnection *) connection {
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
 	if (connection.objectCompletion) {
 		void (^connectionCompletion) (id <KBObject> _Nullable, NSError *_Nullable) = connection.objectCompletion;
 		connection.objectCompletion = NULL;
@@ -95,7 +95,7 @@
 		void (^connectionCompletion) (id _Nullable, NSError *_Nullable) = connection.rawObjectCompletion;
 		connection.rawObjectCompletion = NULL;
 		
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
 		NSMutableArray <KBMappingOperation *> *mappingOperations = [NSMutableArray new];
 		for (KBMappingOperation *mappingOperation in operation.suboperations) {
 			if ([mappingOperation isKindOfClass:[KBMappingOperation class]]) {
@@ -133,10 +133,10 @@
 		void (^connectionCompletion) (NSData *_Nullable, NSError *_Nullable) = connection.rawDataCompletion;
 		connection.rawDataCompletion = NULL;
 		
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>) || __has_include (<KBAPISupport/KBAPISupport+JSON.h>) || __has_include (<KBAPISupport/KBAPISupport+XML.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>) || __has_include (<KBAPISupport/KBAPISupport+JSON.h>) || __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 		NSMutableArray <KBOperation *> *mappingAndParsingOperations = [NSMutableArray new];
 		for (KBOperation *suboperation in operation.suboperations) {
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
 			if ([suboperation isKindOfClass:[KBMappingOperation class]]) {
 				[mappingAndParsingOperations addObject:suboperation];
 			}
@@ -217,7 +217,7 @@
 }
 #endif
 
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
 - (KBOperation *) startWithCompletion:(void (^)(id<KBObject> _Nullable, NSError * _Nullable))completion {
 	if (completion) {
 		typeof (self) strongSelf = self;
@@ -264,7 +264,7 @@
 }
 #endif
 
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
 - (void (^)(id<KBObject> _Nullable, NSError * _Nullable))objectCompletion {
 	return objc_getAssociatedObject (self, @selector (objectCompletion));
 }

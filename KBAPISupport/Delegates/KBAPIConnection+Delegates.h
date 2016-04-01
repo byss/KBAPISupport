@@ -30,7 +30,7 @@
 @class GDataXMLDocument;
 #endif
 
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
 @protocol KBObject;
 #endif
 
@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) apiConnection:(KBAPIConnection *)connection didReceiveXML: (GDataXMLDocument *) XML;
 #endif
 
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
 - (void) apiConnection:(KBAPIConnection *)connection didReceiveResponse: (id <KBObject>) response;
 #endif
 

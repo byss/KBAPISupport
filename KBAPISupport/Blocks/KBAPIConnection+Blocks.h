@@ -30,7 +30,7 @@
 @class GDataXMLDocument;
 #endif
 
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
 @protocol KBObject;
 #endif
 
@@ -46,7 +46,7 @@
 - (KBOperation *_Nullable) startWithRawObjectCompletion: (void (^_Nullable) (GDataXMLDocument *_Nullable XMLResponse, NSError *_Nullable error)) completion;
 #endif
 
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
 - (KBOperation *_Nullable) startWithCompletion: (void (^_Nonnull) (id <KBObject> _Nullable responseObject, NSError *_Nullable error)) completion;
 #endif
 
