@@ -11,6 +11,7 @@ Pod::Spec.new do |spec|
 	
 	spec.ios.deployment_target = '6.0'
 	spec.osx.deployment_target = '10.8'
+	spec.watchos.deployment_target = '2.0'
 	
 	spec.subspec 'Core' do |sspec|
 		sspec.source_files = 'KBAPISupport/Core/*.{h,m}'
@@ -36,9 +37,13 @@ Pod::Spec.new do |spec|
 # 		sspec.source_files = 'KBAPISupport/XML/*.{h,m}'
 # 		sspec.dependency 'KBAPISupport/Core'
 # 	end
-	spec.subspec 'Mapping' do |sspec|
-		sspec.source_files = 'KBAPISupport/Mapping/*.{h,m}'
+	spec.subspec 'CoreMapping' do |sspec|
+		sspec.source_files = 'KBAPISupport/CoreMapping/*.{h,m}'
 		sspec.dependency 'KBAPISupport/Core'
+	end
+	spec.subspec 'ObjectMapping' do |sspec|
+		sspec.source_files = 'KBAPISupport/ObjectMapping/*.{h,m}'
+		sspec.dependency 'KBAPISupport/CoreMapping'
 	end
 	spec.subspec 'Blocks' do |sspec|
 		sspec.source_files = 'KBAPISupport/Blocks/*.{h,m}'
@@ -50,5 +55,5 @@ Pod::Spec.new do |spec|
 # 		sspec.dependency 'KBAPISupport/Core'
 # 	end
 	
-	spec.default_subspecs = 'Core', 'NSURLSession', 'JSON', 'Mapping', 'Blocks'
+	spec.default_subspecs = 'Core', 'NSURLSession', 'JSON', 'ObjectMapping', 'Blocks'
 end

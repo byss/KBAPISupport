@@ -1,5 +1,5 @@
 //
-//  KBAPISupport+Mapping.h
+//  KBAPISupport+CoreMapping.h
 //  KBAPISupport
 //
 //  Created by Kirill byss Bystrov on 3/17/16.

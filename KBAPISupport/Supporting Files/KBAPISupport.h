@@ -47,9 +47,14 @@
 #	import <KBAPISupport/KBAPISupport+XML.h>
 #endif
 
-/* Mapping */
-#if __has_include (<KBAPISupport/KBAPISupport+Mapping.h>)
-#	import <KBAPISupport/KBAPISupport+Mapping.h>
+/* Core Mapping */
+#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
+#	import <KBAPISupport/KBAPISupport+CoreMapping.h>
+#endif
+
+/* Object Mapping */
+#if __has_include (<KBAPISupport/KBAPISupport+ObjectMapping.h>)
+#	import <KBAPISupport/KBAPISupport+ObjectMapping.h>
 #endif
 
 /* Blocks */
