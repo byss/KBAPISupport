@@ -26,10 +26,10 @@
 
 #if __has_include (<KBLogger/KBLogger.h>)
 #	import <KBLogger/KBLogger.h>
-#	define KBASLOGE(fmt, args...) KBLOGE(@"KBAPISupport: " fmt, ##args)
-#	define KBASLOGW(fmt, args...) KBLOGW(@"KBAPISupport: " fmt, ##args)
-#	define KBASLOGI(fmt, args...) KBLOGI(@"KBAPISupport: " fmt, ##args)
-#	define KBASLOGD(fmt, args...) KBLOGD(@"KBAPISupport: " fmt, ##args)
+#	define KBASLOGE(fmt, args...) KBLOG_MACRO (KBLogLevelError, "KBAPISupport", fmt, ##args)
+#	define KBASLOGW(fmt, args...) KBLOG_MACRO (KBLogLevelWarning, "KBAPISupport", fmt, ##args)
+#	define KBASLOGI(fmt, args...) KBLOG_MACRO (KBLogLevelInfo, "KBAPISupport", fmt, ##args)
+#	define KBASLOGD(fmt, args...) KBLOG_MACRO (KBLogLevelDebug, "KBAPISupport", fmt, ##args)
 #else
 #	define KBASLOGE(...)
 #	define KBASLOGW(...)
