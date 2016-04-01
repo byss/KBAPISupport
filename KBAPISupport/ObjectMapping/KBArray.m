@@ -10,6 +10,12 @@
 
 #import "KBMappingProperty.h"
 
+@interface KBArrayHelper: NSObject
+
+@property (nonatomic, strong) NSArray *array;
+
+@end
+
 @interface KBArray () {
 	NSArray *_backingArray;
 }
@@ -24,13 +30,11 @@
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 + (instancetype)objectFromJSON:(id)JSON {
-	static NSString *const key = @"key";
-	NSMutableDictionary *dict = [NSMutableDictionary new];
-	KBMappingProperty *property = [[KBArrayMappingProperty alloc] initWithKeyPath:key itemClass:self.itemClass];
-	[property setValueInObject:dict fromJSONObject:JSON];
-	NSArray *arrayValue = dict [key];
-	if (arrayValue) {
-		return [[self alloc] initWithArray:arrayValue];
+	KBArrayHelper *helper = [KBArrayHelper new];
+	KBMappingProperty *property = [[KBArrayMappingProperty alloc] initWithKeyPath:NSStringFromSelector (@selector (array)) itemClass:self.itemClass];
+	[property setValueInObject:helper fromJSONObject:JSON];
+	if (helper.array) {
+		return [[self alloc] initWithArray:helper.array];
 	} else {
 		return nil;
 	}
@@ -76,4 +80,7 @@
 }
 
 
+@end
+
+@implementation KBArrayHelper
 @end
