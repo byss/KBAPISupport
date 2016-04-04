@@ -9,8 +9,8 @@ Pod::Spec.new do |spec|
 	spec.requires_arc         = true
 	spec.source_files         = 'KBAPISupport/Supporting Files/KBAPISupport.h'
 	
-	spec.ios.deployment_target = '6.0'
-	spec.osx.deployment_target = '10.8'
+	spec.ios.deployment_target = '7.0'
+	spec.osx.deployment_target = '10.9'
 	spec.watchos.deployment_target = '2.0'
 	
 	spec.subspec 'Core' do |sspec|
@@ -22,13 +22,16 @@ Pod::Spec.new do |spec|
 		sspec.source_files = 'KBAPISupport/NSURLConnection/*.{h,m}'
 		sspec.private_header_files = 'KBAPISupport/NSURLConnection/*_Protected.h'
 		sspec.dependency 'KBAPISupport/Core'
+		sspec.ios.deployment_target = '7.0'
+		sspec.osx.deployment_target = '10.9'
 	end
 	spec.subspec 'NSURLSession' do |sspec|
 		sspec.source_files = 'KBAPISupport/NSURLSession/*.{h,m}'
 		sspec.private_header_files = 'KBAPISupport/NSURLSession/*_Protected.h'
 		sspec.dependency 'KBAPISupport/Core'
-		spec.ios.deployment_target = '7.0'
-		spec.osx.deployment_target = '10.9'
+		sspec.ios.deployment_target = '7.0'
+		sspec.osx.deployment_target = '10.9'
+		sspec.watchos.deployment_target = '2.0'
 	end
 	spec.subspec 'JSON' do |sspec|
 		sspec.source_files = 'KBAPISupport/JSON/*.{h,m}'
@@ -59,6 +62,7 @@ Pod::Spec.new do |spec|
 # 	end
 	spec.subspec 'NetworkIndicator' do |sspec|
 		sspec.source_files = 'KBAPISupport/NetworkIndicator/*.{h,m}'
+ 		sspec.dependency 'KBAPISupport/Core'
 		sspec.ios.frameworks = 'UIKit'
 	end
 	

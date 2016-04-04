@@ -28,8 +28,10 @@
 
 #import "KBObject.h"
 
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>) || __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 static inline NSString *KBStringValue (id object);
 static inline NSNumber *KBNumberValue (id object);
+#endif
 
 @implementation KBMappingProperty
 
@@ -530,6 +532,7 @@ static inline NSNumber *KBNumberValue (id object);
 @end
 #endif
 
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>) || __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 static inline NSString *KBStringValue (id object) {
 	if ([object isKindOfClass:[NSString class]]) {
 		return object;
@@ -549,3 +552,4 @@ static inline NSNumber *KBNumberValue (id object) {
 		return nil;
 	}
 }
+#endif
