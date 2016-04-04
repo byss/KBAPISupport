@@ -64,6 +64,7 @@ Pod::Spec.new do |spec|
 		sspec.source_files = 'KBAPISupport/NetworkIndicator/*.{h,m}'
  		sspec.dependency 'KBAPISupport/Core'
 		sspec.ios.frameworks = 'UIKit'
+		sspec.ios.deployment_target = '7.0'
 	end
 	
 	spec.default_subspecs = 'Core', 'NSURLSession', 'JSON', 'ObjectMapping', 'Blocks'
