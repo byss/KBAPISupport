@@ -28,7 +28,7 @@
 
 @implementation KBAPIRequest (Mapping)
 
-+ (Class) expectedEntityClass {
++ (Class) expectedObjectClass {
 	return nil;
 }
 

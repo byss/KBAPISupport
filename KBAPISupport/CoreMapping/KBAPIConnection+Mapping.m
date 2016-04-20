@@ -52,7 +52,7 @@
 + (void) addMappingOperationsToOperation: (KBAPIRequestOperation *) operation forRequest: (KBAPIRequest *) request {
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 	KBJSONMappingOperation *jsonMappingOperation = [KBJSONMappingOperation new];
-	jsonMappingOperation.expectedClass = [request.class expectedEntityClass];
+	jsonMappingOperation.expectedClass = [request.class expectedObjectClass];
 	jsonMappingOperation.errorClass = [request.class errorClass];
 	__weak typeof (jsonMappingOperation) weakJSONMappingOperation = jsonMappingOperation;
 #endif

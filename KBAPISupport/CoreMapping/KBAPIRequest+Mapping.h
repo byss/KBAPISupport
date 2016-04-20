@@ -28,7 +28,7 @@
 
 @interface KBAPIRequest (Mapping)
 
-+ (Class _Nullable) expectedEntityClass;
++ (Class _Nullable) expectedObjectClass;
 + (Class _Nullable) errorClass;
 
 @end
