@@ -41,6 +41,6 @@ typedef NS_ENUM (NSInteger, KBAPIRequestMethod) {
 @property (nonatomic, readonly, nonnull) NSString *HTTPMethod;
 @property (nonatomic, readonly, nullable) NSString *bodyString;
 @property (nonatomic, readonly, nullable) NSData *bodyData;
-@property (nonatomic, readonly, nullable) NSDictionary *additionalHeaders;
+@property (nonatomic, readonly, nullable) NSDictionary <NSString *, NSString *> *additionalHeaders;
 
 @end

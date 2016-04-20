@@ -62,7 +62,7 @@
 	return [self.bodyString dataUsingEncoding:NSUTF8StringEncoding];
 }
 
-- (NSDictionary *) additionalHeaders {
+- (NSDictionary <NSString *, NSString *> *) additionalHeaders {
 	return nil;
 }
 
