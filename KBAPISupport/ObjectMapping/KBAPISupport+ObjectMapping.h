@@ -25,5 +25,6 @@
 //
 
 #import <KBAPISupport/NSObject+KBMapping.h>
+#import <KBAPISupport/NSError+KBMapping.h>
 #import <KBAPISupport/KBMappingProperty.h>
 #import <KBAPISupport/KBArray.h>

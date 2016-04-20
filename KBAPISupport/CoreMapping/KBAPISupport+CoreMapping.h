@@ -29,4 +29,3 @@
 #import <KBAPISupport/KBJSONMappingOperation.h>
 #import <KBAPISupport/KBXMLMappingOperation.h>
 #import <KBAPISupport/KBAPIRequest+Mapping.h>
-#import <KBAPISupport/NSObject+KBMapping.h>

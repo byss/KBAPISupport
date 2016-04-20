@@ -70,7 +70,7 @@
 		43E622391CAD76EA00AFAF20 /* KBAPISessionConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622371CAD76EA00AFAF20 /* KBAPISessionConnection.m */; };
 		43E6223C1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6223A1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h */; };
 		43E6223D1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E6223B1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m */; };
-		43F902401CC7C237003B894B /* NSError+KBMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F9023E1CC7C237003B894B /* NSError+KBMapping.h */; };
+		43F902401CC7C237003B894B /* NSError+KBMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F9023E1CC7C237003B894B /* NSError+KBMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43F902411CC7C237003B894B /* NSError+KBMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F9023F1CC7C237003B894B /* NSError+KBMapping.m */; };
 /* End PBXBuildFile section */
 
