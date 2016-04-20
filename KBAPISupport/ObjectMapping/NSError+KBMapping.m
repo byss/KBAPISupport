@@ -46,6 +46,7 @@
 	return nil;
 }
 
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 + (instancetype)objectFromJSON:(id)JSON {
 	NSString *codeKeyPath = [self errorCodeKeyPath];
 	NSString *descriptionKeyPath = [self errorLocalizedDescriptionKeyPath];
@@ -78,5 +79,6 @@
 	
 	return [[self alloc] initWithDomain:domain code:errorCodeValue userInfo:userInfo];
 }
+#endif
 
 @end
