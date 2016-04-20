@@ -26,7 +26,15 @@
 
 #import "KBMappingProperty.h"
 
+#import <objc/runtime.h>
+
 #import "KBObject.h"
+
+@interface NSObject (safeNilValues)
+
+- (void) safeSetNilNumberValueForKeyPath: (NSString *) keyPath;
+
+@end
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>) || __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 static inline NSString *KBStringValue (id object);
@@ -176,7 +184,11 @@ static inline NSNumber *KBNumberValue (id object);
 - (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
 	NSString *stringValue = KBStringValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
 	NSNumber *enumValue = (stringValue ? self.enumValues [stringValue] : nil);
-	[object setValue:enumValue forKeyPath:self.objectKeyPath];
+	if (enumValue) {
+		[object setValue:enumValue forKeyPath:self.objectKeyPath];
+	} else {
+		[object safeSetNilNumberValueForKeyPath:self.objectKeyPath];
+	}
 }
 #endif
 
@@ -187,7 +199,11 @@ static inline NSNumber *KBNumberValue (id object);
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 - (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
 	NSNumber *numberValue = KBNumberValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
-	[object setValue:numberValue forKeyPath:self.objectKeyPath];
+	if (numberValue) {
+		[object setValue:numberValue forKeyPath:self.objectKeyPath];
+	} else {
+		[object safeSetNilNumberValueForKeyPath:self.objectKeyPath];
+	}
 }
 #endif
 
@@ -553,3 +569,20 @@ static inline NSNumber *KBNumberValue (id object) {
 	}
 }
 #endif
+
+@implementation NSObject (safeNilValues)
+
+- (void) safeSetNilNumberValueForKeyPath: (NSString *) keyPath {
+	@try {
+		[self setValue:nil forKeyPath:keyPath];
+	}
+	@catch (NSException *e) {
+		if ([e.name isEqualToString:NSInvalidArgumentException]) {
+			[self setValue:@0 forKeyPath:keyPath];
+		} else {
+			@throw e;
+		}
+	}
+}
+
+@end
