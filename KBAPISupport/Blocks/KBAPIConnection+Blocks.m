@@ -178,9 +178,9 @@
 	if (completion) {
 		typeof (self) strongSelf = self;
 		self.rawDataCompletion = ^(NSData * _Nullable data, NSError * _Nullable error) {
-			[strongSelf.callbacksQueue addOperationWithBlock:^{
+			[strongSelf.callbacksQueue addOperations:@[[NSBlockOperation blockOperationWithBlock:^{
 				completion (data, error);
-			}];
+			}]] waitUntilFinished:YES];
 			strongSelf.rawDataCompletion = NULL;
 		};
 	}
@@ -192,9 +192,9 @@
 	if (completion) {
 		typeof (self) strongSelf = self;
 		self.rawObjectCompletion = ^(id _Nullable JSONObject, NSError * _Nullable error) {
-			[strongSelf.callbacksQueue addOperationWithBlock:^{
+			[strongSelf.callbacksQueue addOperations:@[[NSBlockOperation blockOperationWithBlock:^{
 				completion (JSONObject, error);
-			}];
+			}]] waitUntilFinished:YES];
 			strongSelf.rawObjectCompletion = NULL;
 		};
 	}
@@ -207,9 +207,9 @@
 	if (completion) {
 		typeof (self) strongSelf = self;
 		self.rawObjectCompletion = ^(GDataXMLDocument *_Nullable XMLObject, NSError * _Nullable error) {
-			[strongSelf.callbacksQueue addOperationWithBlock:^{
+			[strongSelf.callbacksQueue addOperations:@[[NSBlockOperation blockOperationWithBlock:^{
 				completion (XMLObject, error);
-			}];
+			}]] waitUntilFinished:YES];
 			strongSelf.rawObjectCompletion = NULL;
 		};
 	}
@@ -222,9 +222,9 @@
 	if (completion) {
 		typeof (self) strongSelf = self;
 		self.objectCompletion = ^(id <KBObject> _Nullable responseObject, NSError * _Nullable error) {
-			[strongSelf.callbacksQueue addOperationWithBlock:^{
+			[strongSelf.callbacksQueue addOperations:@[[NSBlockOperation blockOperationWithBlock:^{
 				completion (responseObject, error);
-			}];
+			}]] waitUntilFinished:YES];
 			strongSelf.objectCompletion = NULL;
 		};
 	}
