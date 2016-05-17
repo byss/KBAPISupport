@@ -40,6 +40,12 @@
 #	import "KBMappingOperation.h"
 #endif
 
+@interface NSOperationQueue (safeSyncBlock)
+
+- (void) performSafeSynchronousOperationWithBlock: (void (^_Nonnull) (void)) block;
+
+@end
+
 @interface KBAPIConnection (BlocksStorage)
 
 @property (nonatomic, copy, nullable) void (^rawDataCompletion) (NSData *_Nullable data, NSError *_Nullable error);
@@ -178,9 +184,9 @@
 	if (completion) {
 		typeof (self) strongSelf = self;
 		self.rawDataCompletion = ^(NSData * _Nullable data, NSError * _Nullable error) {
-			[strongSelf.callbacksQueue addOperations:@[[NSBlockOperation blockOperationWithBlock:^{
+			[strongSelf.callbacksQueue performSafeSynchronousOperationWithBlock:^{
 				completion (data, error);
-			}]] waitUntilFinished:YES];
+			}];
 			strongSelf.rawDataCompletion = NULL;
 		};
 	}
@@ -192,9 +198,9 @@
 	if (completion) {
 		typeof (self) strongSelf = self;
 		self.rawObjectCompletion = ^(id _Nullable JSONObject, NSError * _Nullable error) {
-			[strongSelf.callbacksQueue addOperations:@[[NSBlockOperation blockOperationWithBlock:^{
+			[strongSelf.callbacksQueue performSafeSynchronousOperationWithBlock:^{
 				completion (JSONObject, error);
-			}]] waitUntilFinished:YES];
+			}];
 			strongSelf.rawObjectCompletion = NULL;
 		};
 	}
@@ -207,9 +213,9 @@
 	if (completion) {
 		typeof (self) strongSelf = self;
 		self.rawObjectCompletion = ^(GDataXMLDocument *_Nullable XMLObject, NSError * _Nullable error) {
-			[strongSelf.callbacksQueue addOperations:@[[NSBlockOperation blockOperationWithBlock:^{
+			[strongSelf.callbacksQueue performSafeSynchronousOperationWithBlock:^{
 				completion (XMLObject, error);
-			}]] waitUntilFinished:YES];
+			}];
 			strongSelf.rawObjectCompletion = NULL;
 		};
 	}
@@ -222,9 +228,9 @@
 	if (completion) {
 		typeof (self) strongSelf = self;
 		self.objectCompletion = ^(id <KBObject> _Nullable responseObject, NSError * _Nullable error) {
-			[strongSelf.callbacksQueue addOperations:@[[NSBlockOperation blockOperationWithBlock:^{
+			[strongSelf.callbacksQueue performSafeSynchronousOperationWithBlock:^{
 				completion (responseObject, error);
-			}]] waitUntilFinished:YES];
+			}];
 			strongSelf.objectCompletion = NULL;
 		};
 	}
@@ -273,5 +279,21 @@
 	objc_setAssociatedObject (self, @selector (objectCompletion), objectCompletion, OBJC_ASSOCIATION_COPY);
 }
 #endif
+
+@end
+
+@implementation NSOperationQueue (safeSyncBlock)
+
+- (void)performSafeSynchronousOperationWithBlock:(void (^)(void))block {
+	if (!block) {
+		return;
+	}
+	
+	if ([NSOperationQueue currentQueue] == self) {
+		block ();
+	} else {
+		[self addOperations:@[[NSBlockOperation blockOperationWithBlock:block]] waitUntilFinished:YES];
+	}
+}
 
 @end
