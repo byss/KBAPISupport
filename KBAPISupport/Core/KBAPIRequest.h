@@ -39,8 +39,10 @@ typedef NS_ENUM (NSInteger, KBAPIRequestMethod) {
 @property (nonatomic, readonly, nonnull) NSString *URLString;
 @property (nonatomic, readonly) KBAPIRequestMethod HTTPMethodType;
 @property (nonatomic, readonly, nonnull) NSString *HTTPMethod;
+@property (nonatomic, readonly, getter = isBodyStreamed) BOOL bodyStreamed;
 @property (nonatomic, readonly, nullable) NSString *bodyString;
 @property (nonatomic, readonly, nullable) NSData *bodyData;
+@property (nonatomic, readonly, nullable) NSInputStream *bodyStream;
 @property (nonatomic, readonly, nullable) NSDictionary <NSString *, NSString *> *additionalHeaders;
 
 @end

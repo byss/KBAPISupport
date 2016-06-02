@@ -38,7 +38,11 @@
 	
 	if (self = [self initWithURL:url]) {
 		self.HTTPMethod = request.HTTPMethod;
-		self.HTTPBody = request.bodyData;
+		if (request.bodyStreamed) {
+			self.HTTPBodyStream = request.bodyStream;
+		} else {
+			self.HTTPBody = request.bodyData;
+		}
 		for (NSString *header in request.additionalHeaders) {
 			[self setValue:request.additionalHeaders [header] forHTTPHeaderField:header];
 		}
