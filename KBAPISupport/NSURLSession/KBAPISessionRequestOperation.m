@@ -28,6 +28,8 @@
 
 #import "NSMutableURLRequest+KBAPIRequest.h"
 #import "KBAPISupportLogging_Protected.h"
+#import "NSURLSession+KBAPISupport.h"
+#import "KBURLSessionDelegate.h"
 #import "KBAPIRequest.h"
 
 #if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
@@ -38,7 +40,9 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 
 @interface KBAPISessionRequestOperation () {
 	dispatch_semaphore_t _semaphore;
-	NSData *_result;
+	NSURLResponse *_response;
+	NSMutableData *_responseData;
+	NSError *_error;
 }
 
 @end
@@ -47,7 +51,7 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 
 + (void)initialize {
 	if (self == [KBAPISessionRequestOperation class]) {
-		KBAPISessionRequestOperationDefaultSession = [NSURLSession sharedSession];
+		KBAPISessionRequestOperationDefaultSession = [NSURLSession kb_sharedSession];
 		KBASLOGI (@"%@ initialized", self);
 	}
 }
@@ -57,15 +61,28 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 }
 
 + (void)setDefaultSession:(NSURLSession *)session {
-	KBAPISessionRequestOperationDefaultSession = (session ?: [NSURLSession sharedSession]);
+	if (session && ![session.delegate isKindOfClass:[KBURLSessionDelegate class]]) {
+		@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Cannot use a session that is not created by using one of NSURLSession (KBAPISupport) methods" userInfo:nil];
+	}
+	
+	KBAPISessionRequestOperationDefaultSession = (session ?: [NSURLSession kb_sharedSession]);
 }
 
 - (instancetype)initWithRequest:(KBAPIRequest *)request session:(NSURLSession *)session completion:(void (^)(NSData * _Nullable, NSError * _Nullable))completion {
+	if (session && ![session.delegate isKindOfClass:[KBURLSessionDelegate class]]) {
+		@throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Cannot use a session that is not created by using one of NSURLSession (KBAPISupport) methods" userInfo:nil];
+	}
+	
 	if (self = [super initWithRequest:request completion:completion]) {
 		_session = session;
 	}
 	
 	return self;
+}
+
+- (void) dealloc {
+	NSURLSession *session = (self.session ?: [self.class defaultSession]);
+	[(KBURLSessionDelegate *) session.delegate unregisterOperation:self];
 }
 
 - (void)main {
@@ -82,13 +99,11 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 	NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithAPIRequest:self.request];
 	req.timeoutInterval = self.timeout;
 
-	__weak typeof (self) weakSelf = self;
-	NSURLSessionTask *task = [session dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-		[weakSelf handleTaskCompletionWithData:data response:response error:error];
-	}];
+	NSURLSessionTask *task = [session dataTaskWithRequest:req];
 	_task = task;
 
 	_semaphore = dispatch_semaphore_create (0);
+	[(KBURLSessionDelegate *) session.delegate registerOperation:self];
 	[task resume];
 	
 	dispatch_semaphore_wait (_semaphore, DISPATCH_TIME_FOREVER);
@@ -97,6 +112,23 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 #if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
 	[KBNetworkIndicator requestFinished];
 #endif
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+	[self handleTaskCompletionWithData:_responseData response:_response error:error];
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition disposition)) completionHandler {
+	_response = response;
+	completionHandler (NSURLSessionResponseAllow);
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
+	if (_responseData) {
+		[_responseData appendData:data];
+	} else {
+		_responseData = [data mutableCopy];
+	}
 }
 
 - (void) handleTaskCompletionWithData: (NSData *) responseData response: (NSURLResponse *) response error: (NSError *) error {
@@ -109,7 +141,6 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 		KBASLOGD (@"Response string: %@", [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
 	}
 	
-	_result = responseData;
 	self.error = error;
 	
 	[self releaseOperationSemaphore];
@@ -125,7 +156,7 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 }
 
 - (id) result {
-	return _result;
+	return _responseData;
 }
 
 @end

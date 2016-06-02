@@ -30,6 +30,11 @@
 @class KBAPIConnection;
 @interface NSURLSession (KBAPISupport)
 
++ (NSURLSession *_Nonnull) kb_sharedSession;
+
++ (NSURLSession *_Nonnull) kb_sessionWithConfiguration:(NSURLSessionConfiguration *_Nonnull) configuration;
++ (NSURLSession *_Nonnull) kb_sessionWithConfiguration:(NSURLSessionConfiguration *_Nonnull) configuration delegate:(nullable id<NSURLSessionDelegate>)delegate;
+
 - (KBAPIConnection *_Nullable) connectionWithRequest:  (KBAPIRequest *_Nonnull) request;
 
 @end

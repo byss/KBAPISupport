@@ -26,9 +26,30 @@
 
 #import "NSURLSession+KBAPISupport.h"
 
+#import "KBURLSessionDelegate.h"
 #import "KBAPISessionConnection.h"
 
 @implementation NSURLSession (KBAPISupport)
+
++ (NSURLSession *) kb_sharedSession {
+	static NSURLSession *instance = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once (&onceToken, ^{
+		instance = [NSURLSession kb_sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+	});
+	
+	return instance;
+}
+
++ (NSURLSession *) kb_sessionWithConfiguration:(NSURLSessionConfiguration *) configuration {
+	return [self kb_sessionWithConfiguration:configuration delegate:nil];
+}
+
++ (NSURLSession *_Nonnull) kb_sessionWithConfiguration:(NSURLSessionConfiguration *_Nonnull) configuration delegate:(nullable id<NSURLSessionDelegate>)delegate {
+	KBURLSessionDelegate *kb_delegate = [KBURLSessionDelegate new];
+	kb_delegate.sessionDelegate = delegate;
+	return [NSURLSession sessionWithConfiguration:configuration delegate:kb_delegate delegateQueue:nil];
+}
 
 - (KBAPIConnection *)connectionWithRequest:(KBAPIRequest *)request {
 	return [[KBAPISessionConnection alloc] initWithRequest:request session:self];

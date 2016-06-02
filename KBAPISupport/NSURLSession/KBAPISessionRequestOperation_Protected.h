@@ -27,7 +27,7 @@
 #import <KBAPISupport/KBAPISessionRequestOperation.h>
 #import <KBAPISupport/KBAPIRequestOperation_Protected.h>
 
-@interface KBAPISessionRequestOperation ()
+@interface KBAPISessionRequestOperation () <NSURLSessionTaskDelegate, NSURLSessionDataDelegate>
 
 @property (nonatomic, readonly, weak, nullable) NSURLSessionTask *task;
 

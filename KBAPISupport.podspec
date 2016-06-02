@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'KBAPISupport'
-	spec.version              = '3.0.0-b03'
+	spec.version              = '3.0.0-b04'
 	spec.license              = { :type => 'MIT' }
 	spec.homepage             = 'https://github.com/byss/' + spec.name
 	spec.authors              = { 'Kirill byss Bystrov' => 'kirrbyss@gmail.com' }
@@ -26,6 +26,7 @@ Pod::Spec.new do |spec|
 	end
 	spec.subspec 'NSURLSession' do |sspec|
 		sspec.source_files = 'KBAPISupport/NSURLSession/*.{h,m}'
+		sspec.private_header_files = 'KBAPISupport/NSURLSession/KBURLSessionDelegate.h'
 		sspec.dependency 'KBAPISupport/Core'
 		sspec.ios.deployment_target = '7.0'
 		sspec.osx.deployment_target = '10.9'
