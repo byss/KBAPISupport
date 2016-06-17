@@ -88,8 +88,12 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 - (void)main {
 	KBASLOGI (@"Starting request: %@ %@", self.request.HTTPMethod, self.request.URL);
 	KBASLOGD (@"Headers: %@", self.request.additionalHeaders);
-	KBASLOGD (@"Body length: %ld", (long) self.request.bodyData.length);
-	KBASLOGD (@"Body string: %@", self.request.bodyString);
+	if (self.request.bodyStreamed) {
+		KBASLOGD (@"Body stream: %@", self.request.bodyStream);
+	} else {
+		KBASLOGD (@"Body length: %ld", (long) self.request.bodyData.length);
+		KBASLOGD (@"Body string: %@", self.request.bodyString);
+	}
 	
 #if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
 	[KBNetworkIndicator requestStarted];
