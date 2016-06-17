@@ -65,6 +65,9 @@ Pod::Spec.new do |spec|
 		sspec.ios.frameworks = 'UIKit'
 		sspec.ios.deployment_target = '7.0'
 	end
+	spec.subspec 'KBLogger-dependency' do |sspec|
+		sspec.dependency 'KBLogger', '~> 1.0'
+	end
 	
 	spec.default_subspecs = 'Core', 'NSURLSession', 'JSON', 'ObjectMapping', 'Blocks'
 end
