@@ -29,7 +29,7 @@
 
 @interface KBAPISessionRequestOperation () <NSURLSessionTaskDelegate, NSURLSessionDataDelegate>
 
-@property (nonatomic, readonly, weak, nullable) NSURLSessionTask *task;
+@property (nonatomic, readonly, nullable) NSURLSessionTask *task;
 
 - (void) handleTaskCompletionWithData: (NSData *_Nullable) responseData response: (NSURLResponse *_Nullable) response error: (NSError *_Nullable) error;
 - (void) releaseOperationSemaphore;

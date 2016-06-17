@@ -99,12 +99,11 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 	NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithAPIRequest:self.request];
 	req.timeoutInterval = self.timeout;
 
-	NSURLSessionTask *task = [session dataTaskWithRequest:req];
-	_task = task;
+	_task = [session dataTaskWithRequest:req];
 
 	_semaphore = dispatch_semaphore_create (0);
 	[(KBURLSessionDelegate *) session.delegate registerOperation:self];
-	[task resume];
+	[self.task resume];
 	
 	dispatch_semaphore_wait (_semaphore, DISPATCH_TIME_FOREVER);
 	[super main];
