@@ -43,10 +43,12 @@
 		return self.sessionDelegate;
 	}
 	
-	for (NSURLSessionTask *task in _registeredOperations) {
-		KBAPISessionRequestOperation *operation = [_registeredOperations objectForKey:task];
-		if ([operation respondsToSelector:aSelector]) {
-			return operation;
+	@synchronized (self) {
+		for (NSURLSessionTask *task in _registeredOperations) {
+			KBAPISessionRequestOperation *operation = [_registeredOperations objectForKey:task];
+			if ([operation respondsToSelector:aSelector]) {
+				return operation;
+			}
 		}
 	}
 	
