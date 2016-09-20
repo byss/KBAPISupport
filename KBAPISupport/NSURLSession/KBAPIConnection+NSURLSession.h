@@ -28,8 +28,7 @@
 
 @interface KBAPIConnection (NSURLSession)
 
-+ (NSURLSession *_Nonnull) defaultSession;
-+ (void) setDefaultSession: (NSURLSession *_Nullable) session;
+@property (nonatomic, null_resettable, strong, class) NSURLSession *defaultSession;
 
 + (instancetype _Nullable) connectionWithRequest: (KBAPIRequest *_Nonnull) request session: (NSURLSession *_Nullable) session;
 

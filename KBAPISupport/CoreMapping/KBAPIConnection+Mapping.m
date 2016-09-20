@@ -24,7 +24,10 @@
 //  THE SOFTWARE.
 //
 
+#import "KBAPIConnection+Mapping.h"
 #import "KBAPIConnection_Protected.h"
+
+#import <objc/runtime.h>
 
 #import "KBAPIRequest+Mapping.h"
 #import "KBAPIRequestOperation.h"
@@ -37,23 +40,21 @@
 #	import "KBXMLParsingOperation.h"
 #endif
 
-@interface KBAPIConnection (Mapping)
-
-@end
+static id KBAPIConnectionDefaultMappingContext = nil;
 
 @implementation KBAPIConnection (Mapping)
 
 + (void)load {
 	[self registerOperationSetupHandlerWithPriority:300 handlerBlock:^(KBAPIConnection * _Nonnull connection, KBAPIRequestOperation * _Nonnull operation) {
-		[self addMappingOperationsToOperation:operation forRequest:connection.request];
+		[self addMappingOperationsToOperation:operation forConnection:connection];
 	}];
 }
 
-+ (void) addMappingOperationsToOperation: (KBAPIRequestOperation *) operation forRequest: (KBAPIRequest *) request {
++ (void) addMappingOperationsToOperation: (KBAPIRequestOperation *) operation forConnection: (KBAPIConnection *) connection {
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 	KBJSONMappingOperation *jsonMappingOperation = [KBJSONMappingOperation new];
-	jsonMappingOperation.expectedClass = [request.class expectedObjectClass];
-	jsonMappingOperation.errorClass = [request.class errorClass];
+	jsonMappingOperation.expectedClass = [connection.request.class expectedObjectClass];
+	jsonMappingOperation.errorClass = [connection.request.class errorClass];
 	__weak typeof (jsonMappingOperation) weakJSONMappingOperation = jsonMappingOperation;
 #endif
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
@@ -73,6 +74,7 @@
 				
 				typeof (jsonMappingOperation) strongJSONMappingOperation = weakJSONMappingOperation;
 				strongJSONMappingOperation.JSONObject = parsedObject;
+				strongJSONMappingOperation.mappingContext = connection.mappingContext;
 				if (error) {
 					[strongJSONMappingOperation setError:(NSError *) error];
 				}
@@ -86,6 +88,27 @@
 #	endif
 	}
 #endif
+}
+
++ (id) defaultMappingContext {
+	return KBAPIConnectionDefaultMappingContext;
+}
+
++ (void) setDefaultMappingContext: (id) defaultMappingContext {
+	KBAPIConnectionDefaultMappingContext = defaultMappingContext;
+}
+
+- (id) mappingContext {
+	id mappingContext = objc_getAssociatedObject (self, @selector (mappingContext));
+	if (mappingContext) {
+		return mappingContext;
+	}
+	
+	return self.class.defaultMappingContext;
+}
+
+- (void) setMappingContext: (id) mappingContext {
+	objc_setAssociatedObject (self, @selector (mappingContext), mappingContext, OBJC_ASSOCIATION_RETAIN);
 }
 
 @end

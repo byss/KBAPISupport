@@ -30,14 +30,12 @@
 @class KBAPIRequest;
 @interface KBAPIConnection: NSObject
 
+@property (nonatomic, assign, class) NSTimeInterval defaultTimeout;
+@property (nonatomic, null_resettable, strong, class) NSOperationQueue *defaultCallbacksQueue;
+
 @property (nonatomic, assign) NSTimeInterval timeout;
 @property (nonatomic, weak, null_resettable) NSOperationQueue *callbacksQueue;
 @property (nonatomic, copy, nullable) NSDictionary *userInfo;
-
-+ (NSTimeInterval) defaultTimeout;
-+ (void) setDefaultTimeout: (NSTimeInterval) defaultTimeout;
-+ (NSOperationQueue *_Nonnull) defaultCallbacksQueue;
-+ (void) setDefaultCallbacksQueue: (NSOperationQueue *_Nullable) defaultCallbacksQueue;
 
 + (instancetype _Nullable) connectionWithRequest: (KBAPIRequest *_Nonnull) request;
 

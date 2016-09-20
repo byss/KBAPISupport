@@ -29,9 +29,9 @@
 
 @interface NSError (KBMapping) <KBObject>
 
-+ (NSString *_Nullable) errorCodeKeyPath;
-+ (NSString *_Nullable) errorLocalizedDescriptionKeyPath;
-+ (NSString *_Nullable) errorDomainKeyPath;
-+ (NSString *_Nullable) defaultErrorDomain;
+@property (nonatomic, nullable, readonly, class) NSString *errorCodeKeyPath;
+@property (nonatomic, nullable, readonly, class) NSString *errorLocalizedDescriptionKeyPath;
+@property (nonatomic, nullable, readonly, class) NSString *errorDomainKeyPath;
+@property (nonatomic, nullable, readonly, class) NSString *defaultErrorDomain;
 
 @end

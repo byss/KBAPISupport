@@ -31,6 +31,7 @@
 
 @property (nonatomic, nullable, unsafe_unretained) Class expectedClass;
 @property (nonatomic, nullable, unsafe_unretained) Class errorClass;
+@property (nonatomic, nullable, strong) id mappingContext;
 @property (nonatomic, nullable, copy) void (^operationCompletionBlock) (id <KBObject> _Nullable responseObject, NSError *_Nullable error);
 
 @end

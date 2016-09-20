@@ -56,7 +56,7 @@ static inline NSNumber *KBNumberValue (id object);
 
 - (instancetype) init {
 	NSString *keyPath = nil;
-	return [self initWithKeyPath:keyPath sourceKeyPath:nil];
+	return [self initWithKeyPath:(id _Nonnull) keyPath sourceKeyPath:nil];
 }
 
 - (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath {
@@ -329,7 +329,7 @@ static inline NSNumber *KBNumberValue (id object);
 
 - (instancetype)initWithKeyPath:(NSString *)keyPath sourceKeyPath:(NSString *)sourceKeyPath {
 	Class valueClass = NULL;
-	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath valueClass:valueClass];
+	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath valueClass:(id _Nonnull) valueClass];
 }
 
 - (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath valueClass: (Class _Nonnull) valueClass {
@@ -382,7 +382,7 @@ static inline NSNumber *KBNumberValue (id object);
 
 - (instancetype)initWithKeyPath:(NSString *)keyPath sourceKeyPath:(NSString *)sourceKeyPath {
 	Class itemClass = NULL;
-	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath itemClass:itemClass];
+	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath itemClass:(id _Nonnull) itemClass];
 }
 
 - (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath itemClass: (Class _Nonnull) itemClass {

@@ -28,6 +28,6 @@
 
 @interface KBArray: NSArray <KBObject>
 
-+ (Class) itemClass;
+@property (nonatomic, nonnull, readonly, class) Class itemClass;
 
 @end

@@ -28,10 +28,8 @@
 
 @interface KBAPISessionRequestOperation: KBAPIRequestOperation
 
+@property (nonatomic, null_resettable, strong, class) NSURLSession *defaultSession;
 @property (nonatomic, nullable, weak, readonly) NSURLSession *session;
-
-+ (NSURLSession *_Nonnull) defaultSession;
-+ (void) setDefaultSession: (NSURLSession *_Nullable) session;
 
 - (instancetype _Nullable) initWithRequest: (KBAPIRequest *_Nonnull) request session: (NSURLSession *_Nullable) session completion: (void (^_Nullable) (NSData *_Nullable responseData, NSError *_Nullable error)) completion;
 

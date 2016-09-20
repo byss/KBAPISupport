@@ -43,13 +43,13 @@
 @implementation KBArray
 
 + (Class) itemClass {
-	return nil;
+	return (Class _Nonnull) nil;
 }
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 + (instancetype)objectFromJSON:(id)JSON {
 	KBArrayHelper *helper = [KBArrayHelper new];
-	KBMappingProperty *property = [[KBArrayMappingProperty alloc] initWithKeyPath:NSStringFromSelector (@selector (array)) sourceKeyPath:@"" itemClass:self.itemClass];
+	KBMappingProperty *property = [[KBArrayMappingProperty alloc] initWithKeyPath:@"array" sourceKeyPath:@"" itemClass:self.itemClass];
 	[property setValueInObject:helper fromJSONObject:JSON];
 	if (helper.array) {
 		return [[self alloc] initWithArray:helper.array];

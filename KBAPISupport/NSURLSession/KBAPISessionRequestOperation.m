@@ -139,12 +139,11 @@ static NSURLSession *KBAPISessionRequestOperationDefaultSession = nil;
 	KBASLOGI (@"Response: %@", response);
 	if (error) {
 		KBASLOGE (@"Error: %@", error);
+		self.error = error;		
 	} else {
 		KBASLOGD (@"Response data length: %ld bytes", (long) responseData.length);
 		KBASLOGD (@"Response string: %@", [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
 	}
-	
-	self.error = error;
 	
 	[self releaseOperationSemaphore];
 }
