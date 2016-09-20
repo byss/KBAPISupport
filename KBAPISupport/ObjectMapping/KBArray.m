@@ -47,10 +47,10 @@
 }
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-+ (instancetype)objectFromJSON:(id)JSON {
++ (instancetype)objectFromJSON:(id)JSON mappingContext: (id _Nullable) mappingContext {
 	KBArrayHelper *helper = [KBArrayHelper new];
 	KBMappingProperty *property = [[KBArrayMappingProperty alloc] initWithKeyPath:@"array" sourceKeyPath:@"" itemClass:self.itemClass];
-	[property setValueInObject:helper fromJSONObject:JSON];
+	[property setValueInObject:helper fromJSONObject:JSON mappingContext:mappingContext];
 	if (helper.array) {
 		return [[self alloc] initWithArray:helper.array];
 	} else {

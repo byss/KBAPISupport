@@ -56,7 +56,7 @@ static void const *const KBMappingPropertiesInitializedKey = "mapping-properties
 }
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-+ (instancetype) newInstanceForJSONObject: (id) JSONObject {
++ (instancetype) newInstanceForJSONObject: (id) JSONObject mappingContext: (id _Nullable) mappingContext {
 	if ([JSONObject isKindOfClass:[NSDictionary class]]) {
 		return [self new];
 	} else {
@@ -64,15 +64,15 @@ static void const *const KBMappingPropertiesInitializedKey = "mapping-properties
 	}
 }
 
-+ (instancetype)objectFromJSON:(id)JSON {
-	NSObject <KBObject> *result = [self newInstanceForJSONObject:JSON];
++ (instancetype)objectFromJSON:(id)JSON mappingContext: (id _Nullable) mappingContext {
+	NSObject <KBObject> *result = [self newInstanceForJSONObject:JSON mappingContext:mappingContext];
 	if (!result) {
 		return nil;
 	}
 	
 	NSArray <id <KBMappingProperty>> *mappingProperties = self.mappingProperties;
 	for (id <KBMappingProperty> mappingProperty in mappingProperties) {
-		[mappingProperty setValueInObject:result fromJSONObject:JSON];
+		[mappingProperty setValueInObject:result fromJSONObject:JSON mappingContext:mappingContext];
 	}
 	
 	return result;
@@ -80,7 +80,7 @@ static void const *const KBMappingPropertiesInitializedKey = "mapping-properties
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-+ (instancetype) newInstanceForXMLObject: (GDataXMLElement *) XMLObject {
++ (instancetype) newInstanceForXMLObject: (GDataXMLElement *) XMLObject mappingContext: (id _Nullable) mappingContext {
 	if ([JSONObject isKindOfClass:[NSDictionary class]]) {
 		return [self new];
 	} else {
@@ -88,8 +88,8 @@ static void const *const KBMappingPropertiesInitializedKey = "mapping-properties
 	}
 }
 
-+ (instancetype)objectFromXML:(GDataXMLElement *) XML {
-	NSObject <KBObject> *result = [self newInstanceForXMLObject:XML];
++ (instancetype)objectFromXML:(GDataXMLElement *) XML mappingContext: (id _Nullable) mappingContext {
+	NSObject <KBObject> *result = [self newInstanceForXMLObject:XML mappingContext:mappingContext];
 	if (!result) {
 		return nil;
 	}

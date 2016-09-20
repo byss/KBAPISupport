@@ -44,11 +44,11 @@
 @property (nonatomic, copy, nonnull) NSString *sourceKeyPath;
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (void) setValueInObject: (NSObject *_Nonnull) object fromJSONObject: (id _Nullable) JSONObject;
+- (void) setValueInObject: (NSObject *_Nonnull) object fromJSONObject: (id _Nullable) JSONObject mappingContext: (id _Nullable) mappingContext;
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-- (void) setValueInObject: (NSObject *_Nonnull) object fromXMLObject: (GDataXMLElement * _Nullable) XMLObject;
+- (void) setValueInObject: (NSObject *_Nonnull) object fromXMLObject: (GDataXMLElement * _Nullable) XMLObject mappingContext: (id _Nullable) mappingContext;
 #endif
 
 @end

@@ -77,13 +77,13 @@ static inline NSNumber *KBNumberValue (id object);
 }
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	[object setValue:[JSONObject JSONValueForKeyPath:self.sourceKeyPath] forKeyPath:self.objectKeyPath];
 }
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-- (void) setValueInObject: (NSObject *_Nonnull) object fromXMLObject: (GDataXMLElement * _Nullable) XMLObject {
+- (void) setValueInObject: (NSObject *_Nonnull) object fromXMLObject: (GDataXMLElement * _Nullable) XMLObject mappingContext: (id _Nullable) mappingContext {
 	// TODO
 	[self doesNotRecognizeSelector:_cmd];
 }
@@ -94,7 +94,7 @@ static inline NSNumber *KBNumberValue (id object);
 @implementation KBStringMappingProperty
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	NSString *stringValue = KBStringValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
 	[object setValue:stringValue forKeyPath:self.objectKeyPath];
 }
@@ -105,7 +105,7 @@ static inline NSNumber *KBNumberValue (id object);
 @implementation KBStringArrayMappingProperty
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	id value = [JSONObject JSONValueForKeyPath:self.sourceKeyPath];
 	__strong id *strings = NULL;
 	NSUInteger stringCount = 0;
@@ -134,7 +134,7 @@ static inline NSNumber *KBNumberValue (id object);
 @implementation KBURLMappingProperty
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	NSString *stringValue = KBStringValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
 	NSURL *URLValue = (stringValue ? [[NSURL alloc] initWithString:stringValue] : nil);
 	[object setValue:URLValue forKeyPath:self.objectKeyPath];
@@ -181,7 +181,7 @@ static inline NSNumber *KBNumberValue (id object);
 }
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	NSString *stringValue = KBStringValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
 	NSNumber *enumValue = (stringValue ? self.enumValues [stringValue] : nil);
 	if (enumValue) {
@@ -197,7 +197,7 @@ static inline NSNumber *KBNumberValue (id object);
 @implementation KBNumberMappingProperty
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	NSNumber *numberValue = KBNumberValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
 	if (numberValue) {
 		[object setValue:numberValue forKeyPath:self.objectKeyPath];
@@ -212,7 +212,7 @@ static inline NSNumber *KBNumberValue (id object);
 @implementation KBTimestampMappingProperty
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	NSNumber *numberValue = KBNumberValue ([JSONObject JSONValueForKeyPath:self.sourceKeyPath]);
 	NSDate *dateValue = (numberValue ? [[NSDate alloc] initWithTimeIntervalSince1970:numberValue.doubleValue] : nil);
 	[object setValue:dateValue forKeyPath:self.objectKeyPath];
@@ -265,7 +265,7 @@ static inline NSNumber *KBNumberValue (id object);
 	return self;
 }
 
-- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	self.JSONMappingBlock (object, JSONObject);
 }
 #endif
@@ -300,7 +300,7 @@ static inline NSNumber *KBNumberValue (id object);
 	return self;
 }
 
-- (void) setValueInObject: (NSObject *) object fromXMLObject: (GDataXMLElement *) XMLObject {
+- (void) setValueInObject: (NSObject *) object fromXMLObject: (GDataXMLElement *) XMLObject mappingContext: (id _Nullable) mappingContext {
 	self.XMLMappingBlock (object, XMLObject);
 }
 #endif
@@ -349,9 +349,9 @@ static inline NSNumber *KBNumberValue (id object);
 }
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	id JSONValue = [JSONObject JSONValueForKeyPath:self.sourceKeyPath];
-	id <KBObject> objectValue = [self.valueClass objectFromJSON:JSONValue];
+	id <KBObject> objectValue = [self.valueClass objectFromJSON:JSONValue mappingContext:mappingContext];
 	[object setValue:objectValue forKeyPath:self.objectKeyPath];
 }
 #endif
@@ -402,7 +402,7 @@ static inline NSNumber *KBNumberValue (id object);
 }
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject {
+- (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	id value = [JSONObject JSONValueForKeyPath:self.sourceKeyPath];
 	__strong id *objects = NULL;
 	NSUInteger objectCount = 0;
@@ -411,7 +411,7 @@ static inline NSNumber *KBNumberValue (id object);
 		objects = (__strong id *) calloc (arrayValue.count, sizeof (*objects));
 		Class const itemClass = self.itemClass;
 		for (id arrayItem in arrayValue) {
-			id objectValue = [itemClass objectFromJSON:arrayItem];
+			id objectValue = [itemClass objectFromJSON:arrayItem mappingContext:mappingContext];
 			if (objectValue) {
 				objects [objectCount++] = objectValue;
 			}

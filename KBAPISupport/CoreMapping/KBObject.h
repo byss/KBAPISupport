@@ -35,11 +35,11 @@
 @required
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-+ (instancetype _Nullable) objectFromJSON: (id _Nonnull) JSON;
++ (instancetype _Nullable) objectFromJSON: (id _Nonnull) JSON mappingContext: (id _Nullable) mappingContext;
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-+ (instancetype _Nullable) objectFromXML: (GDataXMLElement *_Nonnull) XML;
++ (instancetype _Nullable) objectFromXML: (GDataXMLElement *_Nonnull) XML mappingContext: (id _Nullable) mappingContext;
 #endif
 
 @end

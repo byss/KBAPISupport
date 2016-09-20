@@ -47,7 +47,7 @@
 }
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-+ (instancetype)objectFromJSON:(id)JSON {
++ (instancetype)objectFromJSON:(id)JSON mappingContext: (id _Nullable) mappingContext {
 	NSString *codeKeyPath = [self errorCodeKeyPath];
 	NSString *descriptionKeyPath = [self errorLocalizedDescriptionKeyPath];
 	NSString *domainKeyPath = [self errorDomainKeyPath];

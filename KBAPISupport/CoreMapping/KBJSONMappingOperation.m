@@ -45,7 +45,7 @@
 	if (JSONObject) {
 		Class expectedClass = self.expectedClass;
 		if ([expectedClass conformsToProtocol:@protocol (KBObject)]) {
-			_result = [expectedClass objectFromJSON:JSONObject];
+			_result = [expectedClass objectFromJSON:JSONObject mappingContext:self.mappingContext];
 		} else {
 			KBASLOGW (@"Object class %@ does not conform to %@", expectedClass, @protocol (KBObject));
 		}
@@ -57,7 +57,7 @@
 			Class errorClass = self.errorClass;
 			NSError *mappedError = nil;
 			if ([errorClass conformsToProtocol:@protocol (KBObject)]) {
-				mappedError = [errorClass objectFromJSON:JSONObject];
+				mappedError = [errorClass objectFromJSON:JSONObject mappingContext:self.mappingContext];
 			} else {
 				KBASLOGI (@"Error class %@ does not conform to %@", errorClass, @protocol (KBObject));
 			}
