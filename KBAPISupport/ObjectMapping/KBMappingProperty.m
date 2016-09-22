@@ -501,9 +501,14 @@ static inline NSNumber *KBNumberValue (id object);
 	
 	if ([self isKindOfClass:[NSDictionary class]]) {
 		return ((NSDictionary *) self) [unescapedKey];
+	} else {
+		@try {
+			return [self valueForKey:unescapedKey];
+		}
+		@catch (NSException *e) {
+			return nil;
+		}
 	}
-	
-	return nil;
 }
 
 - (id) JSONValueForKey: (NSString *) key {
