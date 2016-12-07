@@ -41,14 +41,21 @@
 
 - (NSString *) HTTPMethod {
 	switch (self.HTTPMethodType) {
+		case KBAPIRequestMethodHEAD:
+			return @"HEAD";
 	  case KBAPIRequestMethodGET:
 			return @"GET";
 		case KBAPIRequestMethodPOST:
 			return @"POST";
 		case KBAPIRequestMethodPUT:
 			return @"PUT";
+		case KBAPIRequestMethodPATCH:
+			return @"PATCH";
 		case KBAPIRequestMethodDELETE:
 			return @"DELETE";
+		case KBAPIRequestMethodCustom:
+			return nil;
+			
 	  default:
 			return @"GET"; // well, we need _some_ default
 	}

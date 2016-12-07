@@ -27,9 +27,13 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM (NSInteger, KBAPIRequestMethod) {
+	KBAPIRequestMethodCustom = -1,
+	
+	KBAPIRequestMethodHEAD,
 	KBAPIRequestMethodGET,
 	KBAPIRequestMethodPOST,
 	KBAPIRequestMethodPUT,
+	KBAPIRequestMethodPATCH,
 	KBAPIRequestMethodDELETE,
 };
 
