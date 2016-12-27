@@ -52,7 +52,7 @@
 
 		if (_result) {
 			KBASLOGI (@"Mapping successful");
-			KBASLOGD (@"Mapped object: %@", _result);
+			KBASLOGD (@"Mapped object: %@ instance", _result.class);
 		} else {
 			Class errorClass = self.errorClass;
 			NSError *mappedError = nil;

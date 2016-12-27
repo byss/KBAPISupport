@@ -54,7 +54,7 @@
 		case KBAPIRequestMethodDELETE:
 			return @"DELETE";
 		case KBAPIRequestMethodCustom:
-			return nil;
+			return @"";
 			
 	  default:
 			return @"GET"; // well, we need _some_ default
