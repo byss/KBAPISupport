@@ -47,7 +47,7 @@
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
-- (KBOperation *_Nullable) startWithCompletion: (void (^_Nonnull) (id <KBObject> _Nullable responseObject, NSError *_Nullable error)) completion;
+- (KBOperation *_Nullable) startWithCompletion: (void (^_Nullable) (id <KBObject> _Nullable responseObject, NSError *_Nullable error)) completion;
 #endif
 
 @end
