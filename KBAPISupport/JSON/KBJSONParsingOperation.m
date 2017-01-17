@@ -35,23 +35,32 @@
 @synthesize result = _result;
 
 - (void) main {
-	NSData *JSONData = self.JSONData;
-	if (JSONData.length) {
-		KBASLOGI (@"Deserializing data (%ld bytes)", (long) JSONData.length);
-		NSError *JSONError = nil;
-		_result = [NSJSONSerialization JSONObjectWithData:JSONData options:NSJSONReadingAllowFragments error:&JSONError];
-		if (JSONError) {
-			KBASLOGE (@"Deserialization error: %@", JSONError);
-		} else {
-			KBASLOGI (@"Deserialization success");
-			KBASLOGD (@"Deserialized object: %@", _result);
-		}
-		self.error = JSONError;
-	} else {
-		self.error = [[NSError alloc] initWithDomain:@"KBAPIConnection" code:-2 userInfo:@{NSLocalizedDescriptionKey: @"No data received"}];
+	[self parseJSONData];
+	[super main];
+}
+
+- (void) parseJSONData {
+	if (self.error) {
+		return;
 	}
 	
-	[super main];
+	NSData *JSONData = self.JSONData;
+	if (!JSONData.length) {
+		self.error = [[NSError alloc] initWithDomain:@"KBAPIConnection" code:-2 userInfo:@{NSLocalizedDescriptionKey: @"No data received"}];
+		return;
+	}
+	
+	KBASLOGI (@"Deserializing data (%ld bytes)", (long) JSONData.length);
+	NSError *JSONError = nil;
+	_result = [NSJSONSerialization JSONObjectWithData:JSONData options:NSJSONReadingAllowFragments error:&JSONError];
+	if (JSONError) {
+		KBASLOGE (@"Deserialization error: %@", JSONError);
+		self.error = JSONError;
+		return;
+	}
+	
+	KBASLOGI (@"Deserialization success");
+	KBASLOGD (@"Deserialized object: %@", _result);
 }
 
 @end
