@@ -1,11 +1,28 @@
+class Pod::Specification
+	def kb_subspec (name, priv_hdr = false, &block)
+		self.subspec name do |sspec|
+			sspec.source_files = "#{self.name}/#{name}/*.{h,m}"
+			
+			if priv_hdr
+				sspec.private_header_files = "#{self.name}/#{name}/*_Protected.h"
+			end
+			if name != 'Core'
+				sspec.dependency "#{self.name}/Core"
+			end
+			
+			yield self
+		end
+	end
+end
+
 Pod::Spec.new do |spec|
 	spec.name                 = 'KBAPISupport'
 	spec.version              = '3.0.0-b07'
 	spec.license              = { :type => 'MIT' }
-	spec.homepage             = 'https://github.com/byss/' + spec.name
+	spec.homepage             = "https://github.com/byss/#{spec.name}"
 	spec.authors              = { 'Kirill byss Bystrov' => 'kirrbyss@gmail.com' }
 	spec.summary              = 'Simple library for HTTP/HTTPS requests and parsing & mapping JSON/XML responses to native objects.'
-	spec.source               = { :git => spec.homepage + '.git', :tag => 'v' + spec.version.to_s }
+	spec.source               = { :git => "#{spec.homepage}.git", :tag => "v#{spec.version}" }
 	spec.requires_arc         = true
 	spec.source_files         = 'KBAPISupport/Supporting Files/KBAPISupport.h'
 	
@@ -13,58 +30,38 @@ Pod::Spec.new do |spec|
 	spec.osx.deployment_target = '10.9'
 	spec.watchos.deployment_target = '2.0'
 	
-	spec.subspec 'Core' do |sspec|
-		sspec.source_files = 'KBAPISupport/Core/*.{h,m}'
-		sspec.private_header_files = 'KBAPISupport/Core/KBAPISupportLogging_Protected.h'
+	spec.kb_subspec 'Core', true do |sspec|
 		sspec.frameworks = 'Foundation'
 	end
-	spec.subspec 'NSURLConnection' do |sspec|
-		sspec.source_files = 'KBAPISupport/NSURLConnection/*.{h,m}'
-		sspec.dependency 'KBAPISupport/Core'
+	
+	spec.kb_subspec 'NSURLConnection' do |sspec|
 		sspec.ios.deployment_target = '7.0'
 		sspec.osx.deployment_target = '10.9'
 	end
-	spec.subspec 'NSURLSession' do |sspec|
-		sspec.source_files = 'KBAPISupport/NSURLSession/*.{h,m}'
-		sspec.private_header_files = 'KBAPISupport/NSURLSession/KBURLSessionDelegate.h'
-		sspec.dependency 'KBAPISupport/Core'
+	spec.kb_subspec 'NSURLSession', true do |sspec|
 		sspec.ios.deployment_target = '7.0'
 		sspec.osx.deployment_target = '10.9'
 		sspec.watchos.deployment_target = '2.0'
 	end
-	spec.subspec 'JSON' do |sspec|
-		sspec.source_files = 'KBAPISupport/JSON/*.{h,m}'
-		sspec.dependency 'KBAPISupport/Core'
-	end
+	
+	spec.kb_subspec 'JSON'
 # 	TODO
-# 	spec.subspec 'XML' do |sspec|
+# 	spec.kb_subspec 'XML' do |sspec|
 # 		sspec.dependency 'GDataXML-HTML', '~> 1.2.0'
-# 		sspec.source_files = 'KBAPISupport/XML/*.{h,m}'
-# 		sspec.dependency 'KBAPISupport/Core'
 # 	end
-	spec.subspec 'CoreMapping' do |sspec|
-		sspec.source_files = 'KBAPISupport/CoreMapping/*.{h,m}'
-		sspec.dependency 'KBAPISupport/Core'
-	end
-	spec.subspec 'ObjectMapping' do |sspec|
-		sspec.source_files = 'KBAPISupport/ObjectMapping/*.{h,m}'
-		sspec.dependency 'KBAPISupport/CoreMapping'
-	end
-	spec.subspec 'Blocks' do |sspec|
-		sspec.source_files = 'KBAPISupport/Blocks/*.{h,m}'
-		sspec.dependency 'KBAPISupport/Core'
-	end
+
+	spec.kb_subspec 'CoreMapping'
+	spec.kb_subspec 'ObjectMapping'
+	
+	spec.kb_subspec 'Blocks'
 # 	TODO
-# 	spec.subspec 'Delegates' do |sspec|
-# 		sspec.source_files = 'KBAPISupport/Delegates/*.{h,m}'
-# 		sspec.dependency 'KBAPISupport/Core'
-# 	end
-	spec.subspec 'NetworkIndicator' do |sspec|
-		sspec.source_files = 'KBAPISupport/NetworkIndicator/*.{h,m}'
- 		sspec.dependency 'KBAPISupport/Core'
+#	spec.kb_subspec 'Delegates'
+
+	spec.kb_subspec 'NetworkIndicator' do |sspec|
 		sspec.ios.frameworks = 'UIKit'
 		sspec.ios.deployment_target = '7.0'
 	end
+	
 	spec.subspec 'KBLogger-dependency' do |sspec|
 		sspec.dependency 'KBLogger', '~> 1.0'
 	end
