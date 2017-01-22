@@ -1,10 +1,10 @@
 class Pod::Specification
 	def kb_subspec (name, priv_hdr = false, &block)
 		self.subspec name do |sspec|
-			sspec.source_files = "#{self.name}/#{name}/*.{h,m}"
+			sspec.source_files = "#{sspec.name}/*.{h,m}"
 			
 			if priv_hdr
-				sspec.private_header_files = "#{self.name}/#{name}/*_Protected.h"
+				sspec.private_header_files = "#{sspec.name}/*_Protected.h"
 			end
 			if name != 'Core'
 				sspec.dependency "#{self.name}/Core"
@@ -24,7 +24,6 @@ Pod::Spec.new do |spec|
 	spec.summary      = 'Simple library for HTTP/HTTPS requests and parsing & mapping JSON/XML responses to native objects.'
 	spec.source       = { :git => "#{spec.homepage}.git", :tag => "v#{spec.version}" }
 	spec.requires_arc = true
-	spec.source_files = "#{spec.name}/Supporting Files/#{spec.name}.h"
 	spec.module_map   = "#{spec.name}/Supporting Files/#{spec.name}.modulemap"
 	
 	spec.ios.deployment_target = '7.0'
@@ -33,6 +32,7 @@ Pod::Spec.new do |spec|
 	spec.tvos.deployment_target = '9.0'
 	
 	spec.kb_subspec 'Core', true do |sspec|
+		sspec.source_files = "#{sspec.name}/*.{h,m}", "#{spec.name}/Supporting Files/#{spec.name}.h"
 		sspec.frameworks = 'Foundation'
 	end
 	
@@ -40,7 +40,9 @@ Pod::Spec.new do |spec|
 		sspec.ios.deployment_target = '7.0'
 		sspec.osx.deployment_target = '10.9'
 	end
-	spec.kb_subspec 'NSURLSession', true
+	spec.kb_subspec 'NSURLSession', true do |sspec|
+		sspec.private_header_files = "#{sspec.name}/*_Protected.h", "#{sspec.name}/KBURLSessionDelegate.h"
+	end
 	
 	spec.kb_subspec 'JSON'
 # 	TODO

@@ -24,4 +24,5 @@
 //  THE SOFTWARE.
 //
 
+#import <KBAPISupport/KBAPINSURLRequestOperation.h>
 #import <KBAPISupport/KBAPINSURLConnection.h>
