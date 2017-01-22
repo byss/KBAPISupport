@@ -78,6 +78,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		431C82BF1E350BA000BB461F /* KBAPISupport.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; path = KBAPISupport.podspec; sourceTree = "<group>"; };
+		431C82C01E350DD800BB461F /* KBAPISupport.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = KBAPISupport.modulemap; sourceTree = "<group>"; };
 		43A166171CAE7EC60002E021 /* KBMappingProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBMappingProperty.h; sourceTree = "<group>"; };
 		43A166181CAE7EC60002E021 /* KBMappingProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBMappingProperty.m; sourceTree = "<group>"; };
 		43A166191CAE7EC60002E021 /* NSObject+KBMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KBMapping.h"; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 		43D1BD761C9A115500A807F8 = {
 			isa = PBXGroup;
 			children = (
+				431C82BF1E350BA000BB461F /* KBAPISupport.podspec */,
 				43D1BD821C9A115500A807F8 /* KBAPISupport */,
 				43D1BD811C9A115500A807F8 /* Products */,
 			);
@@ -224,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				43D1BD8D1C9A11DA00A807F8 /* KBAPISupport.h */,
+				431C82C01E350DD800BB461F /* KBAPISupport.modulemap */,
 				43D1BD8C1C9A11DA00A807F8 /* Info.plist */,
 			);
 			path = "Supporting Files";

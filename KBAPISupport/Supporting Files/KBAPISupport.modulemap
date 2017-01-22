@@ -1,0 +1,6 @@
+framework module KBAPISupport {
+	umbrella header "KBAPISupport.h"
+	
+	export *
+	module * { export * }
+}
