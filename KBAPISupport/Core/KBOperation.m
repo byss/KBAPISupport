@@ -38,7 +38,7 @@
 	NSMutableArray *_suboperations;
 }
 
-@property (nonatomic, readonly, nonnull) NSOperation *completionOperation;
+@property (nonatomic, readonly, nonnull) NSOperation *kb_completionOperation;
 
 @end
 
@@ -55,7 +55,7 @@
 		_operationCompletionBlock = [completion copy];
 		
 		__weak typeof (self) weakSelf = self;
-		_completionOperation = [NSBlockOperation blockOperationWithBlock:^{
+		_kb_completionOperation = [NSBlockOperation blockOperationWithBlock:^{
 			typeof (self) strongSelf = weakSelf;
 			if (!strongSelf) {
 				return;
@@ -75,9 +75,9 @@
 	NSOperationQueue *queue = [NSOperationQueue currentQueue];
 	
 	if (self.error) {
-		NSArray <NSOperation *> *completionDependencies = self.completionOperation.dependencies;
+		NSArray <NSOperation *> *completionDependencies = self.kb_completionOperation.dependencies;
 		for (NSOperation *operation in completionDependencies) {
-			[self.completionOperation removeDependency:operation];
+			[self.kb_completionOperation removeDependency:operation];
 		}
 	} else {
 		NSArray <NSOperation *> *suboperations = self.suboperations;
@@ -85,7 +85,7 @@
 			[queue addOperations:suboperations waitUntilFinished:NO];
 		}
 	}
-	[queue addOperations:@[self.completionOperation] waitUntilFinished:YES];
+	[queue addOperations:@[self.kb_completionOperation] waitUntilFinished:YES];
 }
 
 - (void) cancel {
@@ -93,7 +93,7 @@
 		self.operationCompletionBlock (nil, [[NSError alloc] initWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil]);
 	}
 	
-	[self.completionOperation cancel];
+	[self.kb_completionOperation cancel];
 	for (NSOperation *operation in self.suboperations) {
 		[operation cancel];
 	}
@@ -106,11 +106,11 @@
 	}
 	
 	[_suboperations addObject:operation];
-	[self.completionOperation addDependency:operation];
+	[self.kb_completionOperation addDependency:operation];
 }
 
 - (void)removeSuboperation:(NSOperation *)operation {
-	[self.completionOperation removeDependency:operation];
+	[self.kb_completionOperation removeDependency:operation];
 	[_suboperations removeObject:operation];
 }
 
