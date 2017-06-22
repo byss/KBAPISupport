@@ -45,8 +45,8 @@ NS_ASSUME_NONNULL_END
 
 @interface NSError (KBMappingDeprecated)
 
-@property (nonatomic, nullable, readonly, class) NSString *errorCodeKeyPath NS_DEPRECATED_IOS (2_0, 2_0, "Please use +initalizeMappingProperties and return one for KBErrorCodeMapppingKeyPath");
-@property (nonatomic, nullable, readonly, class) NSString *errorLocalizedDescriptionKeyPath NS_DEPRECATED_IOS (2_0, 2_0, "Please use +initalizeMappingProperties and return one for KBErrorLocalizedDescriptionMapppingKeyPath");
-@property (nonatomic, nullable, readonly, class) NSString *errorDomainKeyPath NS_DEPRECATED_IOS (2_0, 2_0, "Please use +initalizeMappingProperties and return one for KBErrorDomainMapppingKeyPath");
+@property (nonatomic, nullable, readonly, class) NSString *errorCodeKeyPath NS_DEPRECATED (10_10, 10_10, 2_0, 2_0,  "Please use +initalizeMappingProperties and return one for KBErrorCodeMapppingKeyPath");
+@property (nonatomic, nullable, readonly, class) NSString *errorLocalizedDescriptionKeyPath NS_DEPRECATED (10_10, 10_10, 2_0, 2_0, "Please use +initalizeMappingProperties and return one for KBErrorLocalizedDescriptionMapppingKeyPath");
+@property (nonatomic, nullable, readonly, class) NSString *errorDomainKeyPath NS_DEPRECATED (10_10, 10_10, 2_0, 2_0, "Please use +initalizeMappingProperties and return one for KBErrorDomainMapppingKeyPath");
 
 @end
