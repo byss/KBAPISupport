@@ -27,11 +27,26 @@
 #import <Foundation/Foundation.h>
 #import <KBAPISupport/KBObject.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
+typedef NSString *KBErrorMappingKeyPath NS_STRING_ENUM;
+
+extern KBErrorMappingKeyPath const KBErrorCodeMappingKeyPath;
+extern KBErrorMappingKeyPath const KBErrorLocalizedDescriptionMappingKeyPath;
+extern KBErrorMappingKeyPath const KBErrorDomainMappingKeyPath;
+
+NS_ASSUME_NONNULL_END
+
 @interface NSError (KBMapping) <KBObject>
 
-@property (nonatomic, nullable, readonly, class) NSString *errorCodeKeyPath;
-@property (nonatomic, nullable, readonly, class) NSString *errorLocalizedDescriptionKeyPath;
-@property (nonatomic, nullable, readonly, class) NSString *errorDomainKeyPath;
 @property (nonatomic, nullable, readonly, class) NSString *defaultErrorDomain;
+
+@end
+
+@interface NSError (KBMappingDeprecated)
+
+@property (nonatomic, nullable, readonly, class) NSString *errorCodeKeyPath NS_DEPRECATED_IOS (2_0, 2_0, "Please use +initalizeMappingProperties and return one for KBErrorCodeMapppingKeyPath");
+@property (nonatomic, nullable, readonly, class) NSString *errorLocalizedDescriptionKeyPath NS_DEPRECATED_IOS (2_0, 2_0, "Please use +initalizeMappingProperties and return one for KBErrorLocalizedDescriptionMapppingKeyPath");
+@property (nonatomic, nullable, readonly, class) NSString *errorDomainKeyPath NS_DEPRECATED_IOS (2_0, 2_0, "Please use +initalizeMappingProperties and return one for KBErrorDomainMapppingKeyPath");
 
 @end

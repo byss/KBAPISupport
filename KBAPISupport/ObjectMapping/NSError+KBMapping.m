@@ -27,58 +27,129 @@
 #import "NSError+KBMapping.h"
 
 #import "KBMappingProperty.h"
+#import "NSObject+KBMapping.h"
+
+@interface NSError (KBMappingDeprecatedSupport)
+
++ (void) enableDeprecatedClassPropertiesSupportIfNeeded;
+
+@end
+
+KBErrorMappingKeyPath const KBErrorCodeMappingKeyPath = @"_kb_error_key_path_code";
+KBErrorMappingKeyPath const KBErrorLocalizedDescriptionMappingKeyPath = @"_kb_error_key_path_localized_description";
+KBErrorMappingKeyPath const KBErrorDomainMappingKeyPath = @"_kb_error_key_path_domain";
 
 @implementation NSError (KBMapping)
-
-+ (NSString *_Nullable) errorCodeKeyPath {
-	return nil;
-}
-
-+ (NSString *_Nullable) errorLocalizedDescriptionKeyPath {
-	return nil;
-}
-
-+ (NSString *_Nullable) errorDomainKeyPath {
-	return nil;
-}
 
 + (NSString *_Nullable) defaultErrorDomain {
 	return nil;
 }
 
++ (instancetype) newInstanceForJSONObject: (id) JSONObject mappingContext: (id) mappingContext {
+	if ([JSONObject isKindOfClass:[NSDictionary class]]) {
+		return (id) [NSMutableDictionary <NSString *, id> new];
+	} else {
+		return nil;
+	}
+}
+
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-+ (instancetype)objectFromJSON:(id)JSON mappingContext: (id _Nullable) mappingContext {
-	NSString *codeKeyPath = [self errorCodeKeyPath];
-	NSString *descriptionKeyPath = [self errorLocalizedDescriptionKeyPath];
-	NSString *domainKeyPath = [self errorDomainKeyPath];
-	NSString *defaultDomain = [self defaultErrorDomain];
-	if (!(codeKeyPath && (domainKeyPath || defaultDomain))) {
++ (instancetype) objectFromJSON:(id)JSON mappingContext: (id _Nullable) mappingContext {
+	[self enableDeprecatedClassPropertiesSupportIfNeeded];
+	
+	NSMutableDictionary <NSString *, id> *mappedUserInfo = (id) [super objectFromJSON:JSON mappingContext:mappingContext];
+	
+	NSNumber *code = mappedUserInfo [KBErrorCodeMappingKeyPath];
+	[mappedUserInfo removeObjectForKey:KBErrorCodeMappingKeyPath];
+	
+	NSString *domain = mappedUserInfo [KBErrorDomainMappingKeyPath];
+	[mappedUserInfo removeObjectForKey:KBErrorDomainMappingKeyPath];
+	if (!domain) {
+		domain = [self defaultErrorDomain];
+	}
+	
+	if (!(code && domain)) {
 		return nil;
 	}
 	
-	NSInteger errorCodeValue = 0;
-	id errorCode = [JSON JSONValueForKeyPath:codeKeyPath];
-	if ([errorCode isKindOfClass:[NSString class]] || [errorCode isKindOfClass:[NSNumber class]]) {
-		errorCodeValue = [errorCode integerValue];
-	} else {
-		return nil;
+	NSString *localizedDescription = mappedUserInfo [KBErrorLocalizedDescriptionMappingKeyPath];
+	if (localizedDescription) {
+		[mappedUserInfo removeObjectForKey:KBErrorLocalizedDescriptionMappingKeyPath];
+		mappedUserInfo [NSLocalizedDescriptionKey] = localizedDescription;
 	}
 	
-	NSString *domain = nil;
-	NSString *domainFromKeyPath = (domainKeyPath ? [JSON JSONValueForKeyPath:domainKeyPath] : nil);
-	if ([domainFromKeyPath isKindOfClass:[NSString class]]) {
-		domain = domainFromKeyPath;
-	} else if (defaultDomain) {
-		domain = defaultDomain;
-	} else {
-		return nil;
-	}
-	
-	NSString *description = [JSON JSONValueForKeyPath:descriptionKeyPath];
-	NSDictionary *userInfo = ([description isKindOfClass:[NSString class]] ? @{NSLocalizedDescriptionKey: description} : nil);
-	
-	return [[self alloc] initWithDomain:domain code:errorCodeValue userInfo:userInfo];
+	return [[self alloc] initWithDomain:domain code:code.integerValue userInfo:mappedUserInfo];
 }
 #endif
+
+@end
+
+#import <objc/runtime.h>
+
+@implementation NSError (KBMappingDeprecatedSupport)
+
++ (void) enableDeprecatedClassPropertiesSupportIfNeeded {
+	if (objc_getAssociatedObject (self, _cmd)) {
+		return;
+	}
+	
+	@synchronized (self) {
+		if (objc_getAssociatedObject (self, _cmd)) {
+			return;
+		}
+		
+		if ([self respondsToSelector:@selector (errorCodeKeyPath)] ||
+		    [self respondsToSelector:@selector (errorLocalizedDescriptionKeyPath)] ||
+		    [self respondsToSelector:@selector (errorDomainKeyPath)]) {
+			Class metaclass = object_getClass (self);
+			Method originalMethod = class_getInstanceMethod (metaclass, @selector (initializeMappingProperties));
+			Method swizzledMethod = class_getInstanceMethod (metaclass, @selector (kb_deprecated_support_initializeMappingProperies));
+			if (class_addMethod (metaclass, @selector (initializeMappingProperties), method_getImplementation (swizzledMethod), method_getTypeEncoding (swizzledMethod))) {
+				class_replaceMethod (metaclass, @selector (kb_deprecated_support_initializeMappingProperies), method_getImplementation (originalMethod), method_getTypeEncoding (originalMethod));
+			} else {
+				method_exchangeImplementations (originalMethod, swizzledMethod);
+			}
+		}
+		
+		objc_setAssociatedObject (self, _cmd, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	}
+}
+
++ (NSArray <id <KBMappingProperty>> *) kb_deprecated_support_initializeMappingProperies {
+	NSMutableArray <id <KBMappingProperty>> *mappingProperties = [[NSMutableArray <id <KBMappingProperty>> alloc] initWithCapacity:3];
+	if ([self respondsToSelector:@selector (errorCodeKeyPath)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+		NSString *errorCodeKeyPath = [self errorCodeKeyPath];
+#pragma clang diagnostic pop
+		if (errorCodeKeyPath) {
+			[mappingProperties addObject:(id) [[KBNumberMappingProperty alloc] initWithKeyPath:KBErrorCodeMappingKeyPath sourceKeyPath:errorCodeKeyPath]];
+		}
+	}
+	if ([self respondsToSelector:@selector (errorLocalizedDescriptionKeyPath)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+		NSString *errorLocalizedDescriptionKeyPath = [self errorLocalizedDescriptionKeyPath];
+#pragma clang diagnostic pop
+		if (errorLocalizedDescriptionKeyPath) {
+			[mappingProperties addObject:(id) [[KBNumberMappingProperty alloc] initWithKeyPath:KBErrorLocalizedDescriptionMappingKeyPath sourceKeyPath:errorLocalizedDescriptionKeyPath]];
+		}
+	}
+	if ([self respondsToSelector:@selector (errorDomainKeyPath)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+		NSString *errorDomainKeyPath = [self errorDomainKeyPath];
+#pragma clang diagnostic pop
+		if (errorDomainKeyPath) {
+			[mappingProperties addObject:(id) [[KBNumberMappingProperty alloc] initWithKeyPath:KBErrorDomainMappingKeyPath sourceKeyPath:errorDomainKeyPath]];
+		}
+	}
+	
+	NSArray <id <KBMappingProperty>> *otherProperties = [self kb_deprecated_support_initializeMappingProperies];
+	if (otherProperties) {
+		[mappingProperties addObjectsFromArray:otherProperties];
+	}
+	return mappingProperties;
+}
 
 @end
