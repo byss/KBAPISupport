@@ -99,19 +99,19 @@
 @interface KBMappingPropertyWithBlock: KBMappingProperty
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-+ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock;
-+ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock;
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON, id _Nullable mappingContext)) JSONMappingBlock;
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON, id _Nullable mappingContext)) JSONMappingBlock;
 
-- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock;
-- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock NS_DESIGNATED_INITIALIZER;
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON, id _Nullable mappingContext)) JSONMappingBlock;
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON, id _Nullable mappingContext)) JSONMappingBlock NS_DESIGNATED_INITIALIZER;
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-+ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock;
-+ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock;
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML, id _Nullable mappingContext)) XMLMappingBlock;
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML, id _Nullable mappingContext)) XMLMappingBlock;
 
-- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock;
-- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock NS_DESIGNATED_INITIALIZER;
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML, id _Nullable mappingContext)) XMLMappingBlock;
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML, id _Nullable mappingContext)) XMLMappingBlock NS_DESIGNATED_INITIALIZER;
 #endif
 
 @end

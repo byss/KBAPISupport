@@ -224,11 +224,11 @@ static inline NSNumber *KBNumberValue (id object);
 @interface KBMappingPropertyWithBlock ()
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-@property (nonatomic, readonly) void (^JSONMappingBlock) (NSObject *object, id JSONObject);
+@property (nonatomic, readonly) void (^JSONMappingBlock) (NSObject *object, id JSONObject, id _Nullable mappingContext);
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-@property (nonatomic, readonly) void (^XMLMappingBlock) (NSObject *object, GDataXMLElement *XMLObject);
+@property (nonatomic, readonly) void (^XMLMappingBlock) (NSObject *object, GDataXMLElement *XMLObject, id _Nullable mappingContext);
 #endif
 
 @end
@@ -236,24 +236,24 @@ static inline NSNumber *KBNumberValue (id object);
 @implementation KBMappingPropertyWithBlock
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-+ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock {
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON, id _Nullable mappingContext)) JSONMappingBlock {
 	return [[self alloc] initWithKeyPath:keyPath JSONMappingBlock:JSONMappingBlock];
 }
 
-+ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock {
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON, id _Nullable mappingContext)) JSONMappingBlock {
 	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath JSONMappingBlock:JSONMappingBlock];
 }
 
 - (instancetype)initWithKeyPath:(NSString *)keyPath sourceKeyPath:(NSString *)sourceKeyPath {
-	void (^JSONMappingBlock) (NSObject *, id) = NULL;
+	void (^JSONMappingBlock) (NSObject *, id, id) = NULL;
 	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath JSONMappingBlock:JSONMappingBlock];
 }
 
-- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock {
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON, id _Nullable mappingContext)) JSONMappingBlock {
 	return [self initWithKeyPath:keyPath sourceKeyPath:nil JSONMappingBlock:JSONMappingBlock];
 }
 
-- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON)) JSONMappingBlock {
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath JSONMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, id _Nullable JSON, id _Nullable mappingContext)) JSONMappingBlock {
 	if (!JSONMappingBlock) {
 		return nil;
 	}
@@ -266,29 +266,29 @@ static inline NSNumber *KBNumberValue (id object);
 }
 
 - (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
-	self.JSONMappingBlock (object, JSONObject);
+	self.JSONMappingBlock (object, JSONObject, mappingContext);
 }
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-+ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock {
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML, id _Nullable mappingContext)) XMLMappingBlock {
 	return [[self alloc] initWithKeyPath:keyPath XMLMappingBlock:XMLMappingBlock];
 }
 
-+ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock {
++ (instancetype _Nullable) mappingPropertyWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML, id _Nullable mappingContext)) XMLMappingBlock {
 	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath XMLMappingBlock:XMLMappingBlock];
 }
 
 - (instancetype)initWithKeyPath:(NSString *)keyPath sourceKeyPath:(NSString *)sourceKeyPath {
-	void (^JSONMappingBlock) (NSObject *, GDataXMLElement *) = NULL;
+	void (^JSONMappingBlock) (NSObject *, GDataXMLElement *, id) = NULL;
 	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath XMLMappingBlock:XMLMappingBlock];
 }
 
-- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock {
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML, id _Nullable mappingContext)) XMLMappingBlock {
 	return [self initWithKeyPath:keyPath sourceKeyPath:nil XMLMappingBlock:XMLMappingBlock];
 }
 
-- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML)) XMLMappingBlock {
+- (instancetype _Nullable) initWithKeyPath: (NSString *_Nonnull) keyPath sourceKeyPath: (NSString *_Nullable) sourceKeyPath XMLMappingBlock: (void (^_Nonnull) (NSObject *_Nonnull object, GDataXMLElement *_Nullable XML, id _Nullable mappingContext)) XMLMappingBlock {
 	if (!XMLMappingBlock) {
 		return nil;
 	}
@@ -301,7 +301,7 @@ static inline NSNumber *KBNumberValue (id object);
 }
 
 - (void) setValueInObject: (NSObject *) object fromXMLObject: (GDataXMLElement *) XMLObject mappingContext: (id _Nullable) mappingContext {
-	self.XMLMappingBlock (object, XMLObject);
+	self.XMLMappingBlock (object, XMLObject, mappingContext);
 }
 #endif
 
