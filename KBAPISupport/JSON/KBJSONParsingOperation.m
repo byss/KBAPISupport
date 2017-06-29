@@ -60,7 +60,7 @@
 	}
 	
 	KBASLOGI (@"Deserialization success");
-	KBASLOGD (@"Deserialized object: %@", _result);
+	KBASLOGD (@"Deserialized object: %@", (_result ? [[NSString alloc] initWithData:(id) [NSJSONSerialization dataWithJSONObject:(id) _result options:NSJSONWritingPrettyPrinted error:NULL] encoding:NSUTF8StringEncoding] : nil));
 }
 
 @end
