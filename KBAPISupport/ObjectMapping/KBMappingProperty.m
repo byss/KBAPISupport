@@ -107,11 +107,11 @@ static inline NSNumber *KBNumberValue (id object);
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 - (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	id value = [JSONObject JSONValueForKeyPath:self.sourceKeyPath];
-	__strong id *strings = NULL;
+	__unsafe_unretained id *strings = NULL;
 	NSUInteger stringCount = 0;
 	if ([value isKindOfClass:[NSArray class]]) {
 		NSArray *arrayValue = value;
-		strings = (__strong id *) calloc (arrayValue.count, sizeof (*strings));
+		strings = (__unsafe_unretained id *) calloc (arrayValue.count, sizeof (*strings));
 		for (id arrayItem in arrayValue) {
 			NSString *stringItem = KBStringValue (arrayItem);
 			if (stringItem) {
@@ -323,7 +323,7 @@ static inline NSNumber *KBNumberValue (id object);
 	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath valueClass:valueClass];
 }
 
-+ (id) collectionValueWithObjects: (__strong id *) objects count: (NSUInteger) count {
++ (id) collectionValueWithObjects: (__unsafe_unretained id *) objects count: (NSUInteger) count {
 	return nil;
 }
 
@@ -362,7 +362,7 @@ static inline NSNumber *KBNumberValue (id object);
 
 @property (nonatomic, unsafe_unretained) Class itemClass;
 
-+ (id) collectionValueWithObjects: (__strong id *) objects count: (NSUInteger) count;
++ (id) collectionValueWithObjects: (__unsafe_unretained id *) objects count: (NSUInteger) count;
 
 @end
 
@@ -376,7 +376,7 @@ static inline NSNumber *KBNumberValue (id object);
 	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath itemClass:itemClass];
 }
 
-+ (id) collectionValueWithObjects: (__strong id *) objects count: (NSUInteger) count {
++ (id) collectionValueWithObjects: (__unsafe_unretained id *) objects count: (NSUInteger) count {
 	return nil;
 }
 
@@ -404,11 +404,11 @@ static inline NSNumber *KBNumberValue (id object);
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 - (void)setValueInObject:(NSObject *)object fromJSONObject:(id)JSONObject mappingContext: (id _Nullable) mappingContext {
 	id value = [JSONObject JSONValueForKeyPath:self.sourceKeyPath];
-	__strong id *objects = NULL;
+	__unsafe_unretained id *objects = NULL;
 	NSUInteger objectCount = 0;
 	if ([value isKindOfClass:[NSArray class]]) {
 		NSArray *arrayValue = value;
-		objects = (__strong id *) calloc (arrayValue.count, sizeof (*objects));
+		objects = (__unsafe_unretained id *) calloc (arrayValue.count, sizeof (*objects));
 		Class const itemClass = self.itemClass;
 		for (id arrayItem in arrayValue) {
 			id objectValue = [itemClass objectFromJSON:arrayItem mappingContext:mappingContext];
@@ -430,7 +430,7 @@ static inline NSNumber *KBNumberValue (id object);
 
 @implementation KBArrayMappingProperty
 
-+ (id)collectionValueWithObjects:(__strong id *)objects count:(NSUInteger)count {
++ (id)collectionValueWithObjects:(__unsafe_unretained id *)objects count:(NSUInteger)count {
 	return [[NSArray alloc] initWithObjects:objects count:count];
 }
 
@@ -438,7 +438,7 @@ static inline NSNumber *KBNumberValue (id object);
 
 @implementation KBSetMappingProperty
 
-+ (id)collectionValueWithObjects:(__strong id *)objects count:(NSUInteger)count {
++ (id)collectionValueWithObjects:(__unsafe_unretained id *)objects count:(NSUInteger)count {
 	return [[NSSet alloc] initWithObjects:objects count:count];
 }
 
@@ -446,7 +446,7 @@ static inline NSNumber *KBNumberValue (id object);
 
 @implementation KBOrderedSetMappingProperty
 
-+ (id)collectionValueWithObjects:(__strong id *)objects count:(NSUInteger)count {
++ (id)collectionValueWithObjects:(__unsafe_unretained id *)objects count:(NSUInteger)count {
 	return [[NSOrderedSet alloc] initWithObjects:objects count:count];
 }
 

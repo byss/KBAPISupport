@@ -97,7 +97,6 @@
 	return [_backingArray count];
 }
 
-
 @end
 
 @implementation KBArrayHelper
