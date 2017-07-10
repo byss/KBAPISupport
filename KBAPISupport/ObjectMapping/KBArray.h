@@ -24,10 +24,20 @@
 //  THE SOFTWARE.
 //
 
-#import <KBAPISupport/KBObject.h>
+#import <KBAPISupport/KBCollection.h>
 
-@interface KBArray: NSArray <KBObject>
+@interface KBArrayBase <ObjectType>: NSArray <ObjectType> <KBCollection>
 
-@property (nonatomic, nonnull, readonly, class) Class itemClass;
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
++ (instancetype _Nullable) objectFromJSON: (id _Nonnull) JSON mappingContext: (id _Nullable) mappingContext itemClass: (Class _Nonnull) itemClass;
+#endif
+
+#if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
++ (instancetype _Nullable) objectFromXML: (GDataXMLElement *_Nonnull) XML mappingContext: (id _Nullable) mappingContext itemClass: (Class _Nonnull) itemClass;
+#endif
+
+@end
+
+@interface KBArray <ObjectType>: KBArrayBase <ObjectType>
 
 @end

@@ -53,6 +53,7 @@ Pod::Spec.new do |spec|
 	spec.kb_subspec 'CoreMapping'
 	spec.kb_subspec 'ObjectMapping' do |sspec|
 		sspec.dependency "#{spec.name}/CoreMapping"
+		sspec.private_header_files = "#{sspec.name}/*_Protected.h"
 	end
 
 	spec.kb_subspec 'Blocks'
