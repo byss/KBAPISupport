@@ -148,7 +148,7 @@
 - (instancetype) initWithObjects: (__unsafe_unretained id const []) objects count: (NSUInteger) cnt {
 	if (self = [self initWithCapacity:cnt]) {
 		if (self.kb_capacity < cnt) {
-			[NSException raise:NSInvalidArgumentException format:@"%@ instance has insufficient capacity (%ld) to be initialized with %ld objects", self.class, self.kb_capacity, cnt];
+			[NSException raise:NSInvalidArgumentException format:@"%@ instance has insufficient capacity (%ld) to be initialized with %ld objects", self.class, (long) self.kb_capacity, (long) cnt];
 		}
 		
 		[self kb_addObjects:objects count:cnt];
