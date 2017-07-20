@@ -10,9 +10,9 @@
 		4339D0631F1398320055BEEB /* KBArray_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 4339D0621F1398320055BEEB /* KBArray_Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		43446B341F139DAF006026F8 /* KBCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 43446B331F139DAF006026F8 /* KBCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43446B361F139DE7006026F8 /* KBCollection_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 43446B351F139DE7006026F8 /* KBCollection_Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		43A1661B1CAE7EC60002E021 /* KBMappingProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A166171CAE7EC60002E021 /* KBMappingProperty.h */; };
+		43A1661B1CAE7EC60002E021 /* KBMappingProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A166171CAE7EC60002E021 /* KBMappingProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43A1661C1CAE7EC60002E021 /* KBMappingProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A166181CAE7EC60002E021 /* KBMappingProperty.m */; };
-		43A1661D1CAE7EC60002E021 /* NSObject+KBMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A166191CAE7EC60002E021 /* NSObject+KBMapping.h */; };
+		43A1661D1CAE7EC60002E021 /* NSObject+KBMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A166191CAE7EC60002E021 /* NSObject+KBMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43A1661E1CAE7EC60002E021 /* NSObject+KBMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A1661A1CAE7EC60002E021 /* NSObject+KBMapping.m */; };
 		43A166221CAE80E60002E021 /* KBArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A166201CAE80E60002E021 /* KBArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43A166231CAE80E60002E021 /* KBArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A166211CAE80E60002E021 /* KBArray.m */; };
@@ -22,7 +22,7 @@
 		43A1662C1CAEAF280002E021 /* KBAPISupport+NetworkIndicator.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A1662B1CAEAF130002E021 /* KBAPISupport+NetworkIndicator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43A1662E1CAEC0C30002E021 /* KBAPINSURLRequestOperation_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A1662D1CAEC0C30002E021 /* KBAPINSURLRequestOperation_Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		43A166301CAEC1A30002E021 /* KBAPISessionRequestOperation_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A1662F1CAEC1A30002E021 /* KBAPISessionRequestOperation_Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		43A166391CAECA730002E021 /* KBAPISupportLogging_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A166381CAECA730002E021 /* KBAPISupportLogging_Protected.h */; };
+		43A166391CAECA730002E021 /* KBAPISupportLogging_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A166381CAECA730002E021 /* KBAPISupportLogging_Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		43D1BD8F1C9A11DA00A807F8 /* KBAPISupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D1BD8D1C9A11DA00A807F8 /* KBAPISupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D1BD981C9A16AD00A807F8 /* KBOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D1BD961C9A16AD00A807F8 /* KBOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D1BD991C9A16AD00A807F8 /* KBOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D1BD971C9A16AD00A807F8 /* KBOperation.m */; };
@@ -51,7 +51,7 @@
 		43D1BDE01C9A362600A807F8 /* KBAPIConnection+Delegates.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D1BDDF1C9A362600A807F8 /* KBAPIConnection+Delegates.m */; };
 		43D1BDE21C9A369E00A807F8 /* KBAPIConnection+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D1BDE11C9A369E00A807F8 /* KBAPIConnection+Blocks.m */; };
 		43D1BDE41C9A36B900A807F8 /* KBAPISupport+CoreMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D1BDE31C9A36B900A807F8 /* KBAPISupport+CoreMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		43D7A2981D0055F2002E9772 /* KBURLSessionDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D7A2961D0055F2002E9772 /* KBURLSessionDelegate.h */; };
+		43D7A2981D0055F2002E9772 /* KBURLSessionDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D7A2961D0055F2002E9772 /* KBURLSessionDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D7A2991D0055F2002E9772 /* KBURLSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A2971D0055F2002E9772 /* KBURLSessionDelegate.m */; };
 		43E621EE1CAAFF1900AFAF20 /* NSMutableURLRequest+KBAPIRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E621EC1CAAFF1900AFAF20 /* NSMutableURLRequest+KBAPIRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E621EF1CAAFF1900AFAF20 /* NSMutableURLRequest+KBAPIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E621ED1CAAFF1900AFAF20 /* NSMutableURLRequest+KBAPIRequest.m */; };
@@ -60,20 +60,20 @@
 		43E621F81CAC0EE300AFAF20 /* KBAPINSURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E621F61CAC0EE300AFAF20 /* KBAPINSURLConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E621F91CAC0EE300AFAF20 /* KBAPINSURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E621F71CAC0EE300AFAF20 /* KBAPINSURLConnection.m */; };
 		43E621FC1CAC135D00AFAF20 /* KBAPIConnection_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E621FB1CAC135D00AFAF20 /* KBAPIConnection_Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		43E621FF1CAC13EE00AFAF20 /* KBAPINSURLRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E621FD1CAC13EE00AFAF20 /* KBAPINSURLRequestOperation.h */; };
+		43E621FF1CAC13EE00AFAF20 /* KBAPINSURLRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E621FD1CAC13EE00AFAF20 /* KBAPINSURLRequestOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E622001CAC13EE00AFAF20 /* KBAPINSURLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E621FE1CAC13EE00AFAF20 /* KBAPINSURLRequestOperation.m */; };
 		43E622031CAC44F400AFAF20 /* KBJSONMappingOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E622011CAC44F400AFAF20 /* KBJSONMappingOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E622041CAC44F400AFAF20 /* KBJSONMappingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622021CAC44F400AFAF20 /* KBJSONMappingOperation.m */; };
 		43E622071CAC450B00AFAF20 /* KBXMLMappingOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E622051CAC450B00AFAF20 /* KBXMLMappingOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E622081CAC450B00AFAF20 /* KBXMLMappingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622061CAC450B00AFAF20 /* KBXMLMappingOperation.m */; };
 		43E6220A1CAC464A00AFAF20 /* KBObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E622091CAC464A00AFAF20 /* KBObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		43E6220D1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6220B1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h */; };
+		43E6220D1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6220B1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E6220E1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E6220C1CAC488B00AFAF20 /* KBAPIRequest+Mapping.m */; };
 		43E622111CAD3B9100AFAF20 /* KBMappingOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6220F1CAD3B9100AFAF20 /* KBMappingOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E622121CAD3B9100AFAF20 /* KBMappingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622101CAD3B9100AFAF20 /* KBMappingOperation.m */; };
 		43E622381CAD76EA00AFAF20 /* KBAPISessionConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E622361CAD76EA00AFAF20 /* KBAPISessionConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E622391CAD76EA00AFAF20 /* KBAPISessionConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E622371CAD76EA00AFAF20 /* KBAPISessionConnection.m */; };
-		43E6223C1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6223A1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h */; };
+		43E6223C1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E6223A1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43E6223D1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E6223B1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.m */; };
 		43F403431D91BB4F002E4C47 /* KBAPIConnection+Mapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F403421D91BB2E002E4C47 /* KBAPIConnection+Mapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43F902401CC7C237003B894B /* NSError+KBMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F9023E1CC7C237003B894B /* NSError+KBMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -353,29 +353,30 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43E6220D1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h in Headers */,
+				43E621FF1CAC13EE00AFAF20 /* KBAPINSURLRequestOperation.h in Headers */,
+				43D7A2981D0055F2002E9772 /* KBURLSessionDelegate.h in Headers */,
+				43A1661B1CAE7EC60002E021 /* KBMappingProperty.h in Headers */,
+				43A1661D1CAE7EC60002E021 /* NSObject+KBMapping.h in Headers */,
+				43E6223C1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h in Headers */,
 				43A166221CAE80E60002E021 /* KBArray.h in Headers */,
 				43D1BDC31C9A310B00A807F8 /* KBAPISupport+NSURLSession.h in Headers */,
-				43E6223C1CAD7B0500AFAF20 /* KBAPISessionRequestOperation.h in Headers */,
 				43E622031CAC44F400AFAF20 /* KBJSONMappingOperation.h in Headers */,
 				43E622071CAC450B00AFAF20 /* KBXMLMappingOperation.h in Headers */,
 				43D1BDBC1C9A2E9400A807F8 /* KBAPIRequestOperation_Protected.h in Headers */,
 				43E621F11CAAFFD100AFAF20 /* KBAPISupport-Core.h in Headers */,
-				43A1661D1CAE7EC60002E021 /* NSObject+KBMapping.h in Headers */,
 				43A166241CAE81040002E021 /* KBAPISupport+ObjectMapping.h in Headers */,
 				43446B341F139DAF006026F8 /* KBCollection.h in Headers */,
 				4339D0631F1398320055BEEB /* KBArray_Protected.h in Headers */,
 				43D1BD981C9A16AD00A807F8 /* KBOperation.h in Headers */,
-				43A166391CAECA730002E021 /* KBAPISupportLogging_Protected.h in Headers */,
 				43D1BDE41C9A36B900A807F8 /* KBAPISupport+CoreMapping.h in Headers */,
 				43E622111CAD3B9100AFAF20 /* KBMappingOperation.h in Headers */,
-				43A1661B1CAE7EC60002E021 /* KBMappingProperty.h in Headers */,
 				43D1BDCB1C9A335200A807F8 /* KBAPIConnection+NSURLSession.h in Headers */,
 				43D1BDB51C9A2A3F00A807F8 /* KBAPIConnection+Delegates.h in Headers */,
 				43F902401CC7C237003B894B /* NSError+KBMapping.h in Headers */,
 				43446B361F139DE7006026F8 /* KBCollection_Protected.h in Headers */,
 				43A166291CAEAAFF0002E021 /* KBNetworkIndicator.h in Headers */,
 				43D1BDCF1C9A337300A807F8 /* NSURLSession+KBAPISupport.h in Headers */,
-				43D7A2981D0055F2002E9772 /* KBURLSessionDelegate.h in Headers */,
 				43A1662E1CAEC0C30002E021 /* KBAPINSURLRequestOperation_Protected.h in Headers */,
 				43D1BD8F1C9A11DA00A807F8 /* KBAPISupport.h in Headers */,
 				43E6220A1CAC464A00AFAF20 /* KBObject.h in Headers */,
@@ -386,6 +387,7 @@
 				43D1BD9E1C9A1AFD00A807F8 /* KBAPIRequestOperation.h in Headers */,
 				43D1BDB11C9A25AD00A807F8 /* KBAPIConnection+Blocks.h in Headers */,
 				43D1BDC41C9A311000A807F8 /* KBAPISupport+NSURLConnection.h in Headers */,
+				43A166391CAECA730002E021 /* KBAPISupportLogging_Protected.h in Headers */,
 				43E622381CAD76EA00AFAF20 /* KBAPISessionConnection.h in Headers */,
 				43D1BDD61C9A34D900A807F8 /* KBAPISupport+JSON.h in Headers */,
 				43E621F81CAC0EE300AFAF20 /* KBAPINSURLConnection.h in Headers */,
@@ -394,10 +396,8 @@
 				43D1BDD41C9A34BF00A807F8 /* KBAPISupport+Delegates.h in Headers */,
 				43D1BDAB1C9A209D00A807F8 /* KBAPIConnection.h in Headers */,
 				43E621EE1CAAFF1900AFAF20 /* NSMutableURLRequest+KBAPIRequest.h in Headers */,
-				43E621FF1CAC13EE00AFAF20 /* KBAPINSURLRequestOperation.h in Headers */,
 				43E621FC1CAC135D00AFAF20 /* KBAPIConnection_Protected.h in Headers */,
 				43D1BD9B1C9A17A900A807F8 /* KBOperation_Protected.h in Headers */,
-				43E6220D1CAC488B00AFAF20 /* KBAPIRequest+Mapping.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
