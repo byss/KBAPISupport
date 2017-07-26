@@ -25,13 +25,16 @@
 //
 
 #import <KBAPISupport/KBArray.h>
-#import <KBAPISupport/KBCollection_Protected.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface KBArrayBase () <KBCollection_Protected>
+@interface KBArrayBase ()
 
 + (instancetype) kb_unsealedArrayWithCapacity: (NSUInteger) capacity;
+
+- (NSUInteger) kb_capacity;
+- (void) kb_addObject: (id _Nullable) object;
+- (void) kb_addObjects: (__unsafe_unretained id const _Nonnull [_Nullable]) objects count: (NSUInteger) count;
 
 - (void) kb_sealArray;
 

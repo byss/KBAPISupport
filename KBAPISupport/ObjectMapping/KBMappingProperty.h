@@ -34,6 +34,11 @@
 @end
 #endif
 
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>) || __has_include (<KBAPISupport/KBAPISupport+XML.h>)
+FOUNDATION_EXTERN NSString *_Nullable KBStringValue (id _Nullable object);
+FOUNDATION_EXTERN NSNumber *_Nullable KBNumberValue (id _Nullable object);
+#endif
+
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 @class GDataXMLElement;
 #endif

@@ -64,6 +64,38 @@
 
 @implementation KBArrayBase
 
+#pragma mark - Public interface
+
++ (Class) itemClass {
+	[self doesNotRecognizeSelector:_cmd];
+	return self; // To make compiler happy
+}
+
+#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
++ (instancetype) arrayFromJSON: (NSArray *) JSON mappingContext: (id) mappingContext itemClass: (Class) itemClass {
+	if (![itemClass conformsToProtocol:@protocol (KBObject)]) {
+		return nil;
+	}
+	if (![JSON isKindOfClass:[NSArray class]]) {
+		return nil;
+	}
+	
+	KBArray *result = [self kb_unsealedArrayWithCapacity:JSON.count];
+	for (id arrayItem in JSON) {
+		[result kb_addObject:[itemClass objectFromJSON:arrayItem mappingContext:mappingContext]];
+	}
+	[result kb_sealArray];
+	return result;
+}
+#endif
+
+#if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
++ (instancetype) arrayFromXML: (GDataXMLElement *) XML mappingContext: (id) mappingContext itemClass: (Class) itemClass {
+	[self doesNotRecognizeSelector:_cmd];
+	return nil;
+}
+#endif
+
 #pragma mark - Memory management
 
 + (instancetype) allocArrayWithCapacity: (NSUInteger) capacity {
@@ -116,6 +148,30 @@
 
 + (instancetype) kb_unsealedArrayWithCapacity: (NSUInteger) capacity {
 	return [(KBArrayBase *) [self allocArrayWithCapacity:capacity] initWithCapacity:capacity];
+}
+
+- (NSUInteger) kb_capacity {
+	[self doesNotRecognizeSelector:_cmd];
+	return 0; // To make compiler happy
+}
+
+- (void) kb_addObject: (id) object {
+	if (self.count >= self.kb_capacity) {
+		[NSException raise:NSRangeException format:@"Array capacity (%ld) exceeded", (long) self.kb_capacity];
+	}
+	
+	if (!object) {
+		return;
+	}
+	
+	self.kb_storage [_count++] = object;
+}
+
+- (void) kb_addObjects: (__unsafe_unretained id const _Nonnull [_Nullable]) objects count: (NSUInteger) count {
+	__unsafe_unretained id const *const objectsEnd = objects + count;
+	for (__unsafe_unretained id const *objectPtr = objects; objectPtr < objectsEnd; objectPtr++) {
+		[self kb_addObject:*objectPtr];
+	}
 }
 
 - (Class) kb_classForMutableCopying {
@@ -203,23 +259,7 @@
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 + (instancetype) objectFromJSON: (id) JSON mappingContext: (id) mappingContext {
-	return [self objectFromJSON:JSON mappingContext:mappingContext itemClass:self.itemClass];
-}
-
-+ (instancetype) objectFromJSON: (NSArray *) JSON mappingContext: (id) mappingContext itemClass: (Class) itemClass {
-	if (![itemClass conformsToProtocol:@protocol (KBObject)]) {
-		return nil;
-	}
-	if (![JSON isKindOfClass:[NSArray class]]) {
-		return nil;
-	}
-	
-	KBArray *result = [self kb_unsealedArrayWithCapacity:JSON.count];
-	for (id arrayItem in JSON) {
-		[result kb_addObject:[itemClass objectFromJSON:arrayItem mappingContext:mappingContext]];
-	}
-	[result kb_sealArray];
-	return result;
+	return [self arrayFromJSON:JSON mappingContext:mappingContext itemClass:self.itemClass];
 }
 #endif
 
@@ -228,53 +268,7 @@
 	[self doesNotRecognizeSelector:_cmd];
 	return [self objectFromXML:XML mappingContext:mappingContext itemClass:self.itemClass];
 }
-
-+ (instancetype) objectFromXML: (GDataXMLElement *) XML mappingContext: (id) mappingContext itemClass: (Class) itemClass {
-	[self doesNotRecognizeSelector:_cmd];
-	return nil;
-}
 #endif
-
-#pragma mark - KBCollection conformance
-
-+ (Class) itemClass {
-	[self doesNotRecognizeSelector:_cmd];
-	return self; // To make compiler happy
-}
-
-#pragma mark - KBCollection_Protected conformance
-
-+ (instancetype) kb_unsealedCollectionWithCapacity: (NSUInteger) capacity {
-	return [self kb_unsealedArrayWithCapacity:capacity];
-}
-
-- (NSUInteger) kb_capacity {
-	[self doesNotRecognizeSelector:_cmd];
-	return 0; // To make compiler happy
-}
-
-- (void) kb_addObject: (id) object {
-	if (self.count >= self.kb_capacity) {
-		[NSException raise:NSRangeException format:@"Array capacity (%ld) exceeded", (long) self.kb_capacity];
-	}
-	
-	if (!object) {
-		return;
-	}
-	
-	self.kb_storage [_count++] = object;
-}
-
-- (void) kb_addObjects: (__unsafe_unretained id const _Nonnull [_Nullable]) objects count: (NSUInteger) count {
-	__unsafe_unretained id const *const objectsEnd = objects + count;
-	for (__unsafe_unretained id const *objectPtr = objects; objectPtr < objectsEnd; objectPtr++) {
-		[self kb_addObject:*objectPtr];
-	}
-}
-
-- (void) kb_sealCollection {
-	[self kb_sealArray];
-}
 
 @end
 
@@ -353,13 +347,13 @@
 #pragma mark - Empty implementation
 
 #define KBArrayCommonSized(size) \
-	- (NSUInteger) kb_capacity { \
-		return size; \
-	} \
-	\
-	- (Class) classForCoder { \
-		return [KBArrayBase class]; \
-	}
+- (NSUInteger) kb_capacity { \
+return size; \
+} \
+\
+- (Class) classForCoder { \
+return [KBArrayBase class]; \
+}
 
 @implementation KBArray0
 
@@ -384,24 +378,24 @@ KBArrayCommonSized (0)
 #pragma mark - Implementations with inline storage
 
 #define KBArraySized(size) \
-	@implementation KBArray ## size { \
-		__strong id _storage [size]; \
-	} \
-  \
-	- (void) dealloc { \
-		NSUInteger const count = self.count; \
-		for (NSUInteger i = 0; i < count; i++) { \
-			_storage [i] = nil; \
-		} \
-	} \
-	 \
-	- (__strong id *) kb_storage { \
-		return _storage; \
-	} \
-	\
-	KBArrayCommonSized (size) \
-	\
-	@end
+@implementation KBArray ## size { \
+__strong id _storage [size]; \
+} \
+\
+- (void) dealloc { \
+NSUInteger const count = self.count; \
+for (NSUInteger i = 0; i < count; i++) { \
+_storage [i] = nil; \
+} \
+} \
+\
+- (__strong id *) kb_storage { \
+return _storage; \
+} \
+\
+KBArrayCommonSized (size) \
+\
+@end
 
 KBArraySized (2);
 KBArraySized (6);

@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4339D0631F1398320055BEEB /* KBArray_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 4339D0621F1398320055BEEB /* KBArray_Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		43446B341F139DAF006026F8 /* KBCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 43446B331F139DAF006026F8 /* KBCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		43446B361F139DE7006026F8 /* KBCollection_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 43446B351F139DE7006026F8 /* KBCollection_Protected.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		43A1661B1CAE7EC60002E021 /* KBMappingProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A166171CAE7EC60002E021 /* KBMappingProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43A1661C1CAE7EC60002E021 /* KBMappingProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A166181CAE7EC60002E021 /* KBMappingProperty.m */; };
 		43A1661D1CAE7EC60002E021 /* NSObject+KBMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A166191CAE7EC60002E021 /* NSObject+KBMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -84,8 +82,6 @@
 		431C82BF1E350BA000BB461F /* KBAPISupport.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; path = KBAPISupport.podspec; sourceTree = "<group>"; };
 		431C82C01E350DD800BB461F /* KBAPISupport.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = KBAPISupport.modulemap; sourceTree = "<group>"; };
 		4339D0621F1398320055BEEB /* KBArray_Protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KBArray_Protected.h; sourceTree = "<group>"; };
-		43446B331F139DAF006026F8 /* KBCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBCollection.h; sourceTree = "<group>"; };
-		43446B351F139DE7006026F8 /* KBCollection_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBCollection_Protected.h; sourceTree = "<group>"; };
 		43A166171CAE7EC60002E021 /* KBMappingProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBMappingProperty.h; sourceTree = "<group>"; };
 		43A166181CAE7EC60002E021 /* KBMappingProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KBMappingProperty.m; sourceTree = "<group>"; };
 		43A166191CAE7EC60002E021 /* NSObject+KBMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KBMapping.h"; sourceTree = "<group>"; };
@@ -179,8 +175,6 @@
 				43F9023F1CC7C237003B894B /* NSError+KBMapping.m */,
 				43A166171CAE7EC60002E021 /* KBMappingProperty.h */,
 				43A166181CAE7EC60002E021 /* KBMappingProperty.m */,
-				43446B331F139DAF006026F8 /* KBCollection.h */,
-				43446B351F139DE7006026F8 /* KBCollection_Protected.h */,
 				43A166201CAE80E60002E021 /* KBArray.h */,
 				4339D0621F1398320055BEEB /* KBArray_Protected.h */,
 				43A166211CAE80E60002E021 /* KBArray.m */,
@@ -366,7 +360,6 @@
 				43D1BDBC1C9A2E9400A807F8 /* KBAPIRequestOperation_Protected.h in Headers */,
 				43E621F11CAAFFD100AFAF20 /* KBAPISupport-Core.h in Headers */,
 				43A166241CAE81040002E021 /* KBAPISupport+ObjectMapping.h in Headers */,
-				43446B341F139DAF006026F8 /* KBCollection.h in Headers */,
 				4339D0631F1398320055BEEB /* KBArray_Protected.h in Headers */,
 				43D1BD981C9A16AD00A807F8 /* KBOperation.h in Headers */,
 				43D1BDE41C9A36B900A807F8 /* KBAPISupport+CoreMapping.h in Headers */,
@@ -374,7 +367,6 @@
 				43D1BDCB1C9A335200A807F8 /* KBAPIConnection+NSURLSession.h in Headers */,
 				43D1BDB51C9A2A3F00A807F8 /* KBAPIConnection+Delegates.h in Headers */,
 				43F902401CC7C237003B894B /* NSError+KBMapping.h in Headers */,
-				43446B361F139DE7006026F8 /* KBCollection_Protected.h in Headers */,
 				43A166291CAEAAFF0002E021 /* KBNetworkIndicator.h in Headers */,
 				43D1BDCF1C9A337300A807F8 /* NSURLSession+KBAPISupport.h in Headers */,
 				43A1662E1CAEC0C30002E021 /* KBAPINSURLRequestOperation_Protected.h in Headers */,
