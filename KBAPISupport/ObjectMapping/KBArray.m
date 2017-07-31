@@ -222,7 +222,7 @@
 }
 
 - (void) getObjects: (__unsafe_unretained id  _Nonnull *) objects range: (NSRange) range {
-	memcpy (objects, (void const *) self.kb_storage + range.location, range.length * sizeof (id));
+	memcpy (objects, (void const *) (self.kb_storage + range.location), range.length * sizeof (id));
 }
 
 #pragma mark - NSArray protocols conformance (NSCoding, NSCopying, NSMutableCopying)
