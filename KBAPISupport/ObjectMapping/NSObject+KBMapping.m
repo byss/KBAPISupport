@@ -26,6 +26,7 @@
 
 #import "NSObject+KBMapping.h"
 
+#import <objc/message.h>
 #import <objc/runtime.h>
 
 #import "KBArray_Protected.h"
@@ -50,10 +51,6 @@ static void const *const KBMappingPropertiesInitializedKey = "mapping-properties
 	}
 	
 	return mappingProperties;
-}
-
-+ (NSArray <id <KBMappingProperty>> *) initializeMappingProperties {
-	return nil;
 }
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
@@ -152,7 +149,7 @@ NSValueTransformerName const KBCamelCaseToSnakeCaseStringTransformerName = @OS_S
 	}
 	if (lastCopiedCharIdx + 1 < valueLen) {
 		NSUInteger const copiedCharactersCount = valueLen - lastCopiedCharIdx;
-		[value getCharacters:resultCharsEnd range:NSMakeRange (lastCopiedCharIdx, valueLen)];
+		[value getCharacters:resultCharsEnd range:NSMakeRange (lastCopiedCharIdx, copiedCharactersCount)];
 		resultCharsEnd += copiedCharactersCount;
 	}
 	
@@ -187,7 +184,7 @@ NSValueTransformerName const KBCamelCaseToSnakeCaseStringTransformerName = @OS_S
 	}
 	if (lastCopiedCharIdx + 1 < valueLen) {
 		NSUInteger const copiedCharactersCount = valueLen - lastCopiedCharIdx;
-		[value getCharacters:resultCharsEnd range:NSMakeRange (lastCopiedCharIdx, valueLen)];
+		[value getCharacters:resultCharsEnd range:NSMakeRange (lastCopiedCharIdx, copiedCharactersCount)];
 		resultCharsEnd += copiedCharactersCount;
 	}
 	
@@ -198,15 +195,18 @@ NSValueTransformerName const KBCamelCaseToSnakeCaseStringTransformerName = @OS_S
 
 static NSValueTransformer *KBDefaultPropertyNamesTransformer = nil;
 
-static IMP KBInitializeMappingPropertiesDefaultImplementation = NULL;
+static char const KBInitializeMappingPropertiesEncoding [] = { _C_ID, _C_ID, _C_SEL, '\0' };
+static char const KBInitializeMappingPropertiesCustomImplementation [] = "$_initializeMappingProperties";
 static NSArray <id <KBMappingProperty>> *KBInstallProperMappingPropertiesMethodImplementation (Class clazz, SEL _cmd);
-static NSArray <id <KBMappingProperty>> *KBAutomaticallyFoundMappingProperties (Class clazz, SEL _cmd);
+static NSArray <id <KBMappingProperty>> *KBDefaultInitializeMappingProperties (__unused Class clazz, __unused SEL _cmd) __attribute__((const));
+static NSArray <id <KBMappingProperty>> *KBDefaultInitializeMappingPropertiesQueryingOriginalImplementation (Class clazz, SEL _cmd);
+static NSArray <id <KBMappingProperty>> *KBDefaultInitializeMappingPropertiesIgnoringOriginalImplementation (Class clazz, SEL _cmd);
 
 @implementation NSObject (KBAutoMapping)
 
 + (void) load {
-	Method const originalMethod = class_getClassMethod (self, @selector (initializeMappingProperties));
-	KBInitializeMappingPropertiesDefaultImplementation = method_setImplementation (originalMethod, (IMP) KBInstallProperMappingPropertiesMethodImplementation);
+	sel_registerName (KBInitializeMappingPropertiesCustomImplementation);
+	class_addMethod (self, @selector (initializeMappingProperties), (IMP) KBInstallProperMappingPropertiesMethodImplementation, KBInitializeMappingPropertiesEncoding);
 }
 
 + (BOOL) shouldAutomaticallyInitializeMappingProperties {
@@ -240,18 +240,56 @@ static NSArray <id <KBMappingProperty>> *KBAutomaticallyFoundMappingProperties (
 
 @end
 
-static NSArray <id <KBMappingProperty>> *KBInstallProperMappingPropertiesMethodImplementation (Class clazz, SEL _cmd) {
-	Method const targetMethod = class_getClassMethod (clazz, _cmd);
-	IMP const targetImplementation = ([clazz shouldAutomaticallyInitializeMappingProperties] ? (IMP) KBAutomaticallyFoundMappingProperties : KBInitializeMappingPropertiesDefaultImplementation);
-	if (!class_addMethod (clazz, _cmd, (IMP) KBAutomaticallyFoundMappingProperties, method_getTypeEncoding (targetMethod))) {
-		method_setImplementation (targetMethod, targetImplementation);
+static NSArray <id <KBMappingProperty>> *KBInstallProperMappingPropertiesMethodImplementation (Class const clazz, SEL const _cmd) {
+	static Class NSObjectClass = Nil;
+	static SEL customImplementationSel = NULL;
+	static dispatch_once_t onceToken;
+	dispatch_once (&onceToken, ^{
+		NSObjectClass = [NSObject class];
+		customImplementationSel = sel_registerName (KBInitializeMappingPropertiesCustomImplementation);
+	});
+	if (clazz == NSObjectClass) {
+		return nil;
 	}
+	
+	Class const metaclass = object_getClass (clazz);
+	BOOL const useAutoInitialization = [clazz shouldAutomaticallyInitializeMappingProperties];
+	if (useAutoInitialization) {
+		if (!class_addMethod (metaclass, _cmd, (IMP) KBDefaultInitializeMappingPropertiesIgnoringOriginalImplementation, KBInitializeMappingPropertiesEncoding)) {
+			Method const existingMethod = class_getClassMethod (metaclass, _cmd);
+			class_addMethod (metaclass, customImplementationSel, method_getImplementation (existingMethod), method_getTypeEncoding (existingMethod));
+			method_setImplementation (existingMethod, (IMP) KBDefaultInitializeMappingPropertiesQueryingOriginalImplementation);
+		}
+	} else {
+		if (!class_addMethod (clazz, _cmd, (IMP) KBDefaultInitializeMappingProperties, KBInitializeMappingPropertiesEncoding)) {
+			Method const existingMethod = class_getClassMethod (metaclass, _cmd);
+			method_setImplementation (existingMethod, (IMP) KBDefaultInitializeMappingProperties);
+		}
+	}
+
+	return [clazz initializeMappingProperties];
 }
 
-static NSArray <id <KBMappingProperty>> *KBAutomaticallyFoundMappingProperties (Class clazz, SEL _cmd) {
+static NSArray <id <KBMappingProperty>> *KBDefaultInitializeMappingProperties (__unused Class const clazz, __unused SEL const _cmd) {
+	return nil;
+}
+
+NS_INLINE NSArray <id <KBMappingProperty>> *KBAutomaticallyFindMappingProperties (Class const clazz, __unused SEL const _cmd, BOOL const queryOriginalImplementation) {
+	static NSArray <id <KBMappingProperty>> *(*const objc_msgSend_customImpl) (Class, SEL) = (id (*) (Class, SEL)) objc_msgSend;
 	unsigned propertiesCount = 0;
 	objc_property_t *const properties = class_copyPropertyList (clazz, &propertiesCount);
-	KBArray <id <KBMappingProperty>> *mappingProperties = [KBArray kb_unsealedArrayWithCapacity:propertiesCount];
+	KBArray <id <KBMappingProperty>> *mappingProperties = nil;
+	
+	if (queryOriginalImplementation) {
+		NSArray <id <KBMappingProperty>> *originalMappingProperties = objc_msgSend_customImpl (clazz, sel_registerName (KBInitializeMappingPropertiesCustomImplementation));
+		mappingProperties = [KBArray kb_unsealedArrayWithCapacity:originalMappingProperties.count + propertiesCount];
+		for (id <KBMappingProperty> mappingProperty in originalMappingProperties) {
+			[mappingProperties kb_addObject:mappingProperty];
+		}
+	} else {
+		mappingProperties = [KBArray kb_unsealedArrayWithCapacity:propertiesCount];
+	}
+	
 	for (unsigned i = 0; i < propertiesCount; i++) {
 		char const *const propertyName = property_getName (properties [i]);
 		char *const readonlyValue = property_copyAttributeValue (properties [i], "R");
@@ -317,6 +355,8 @@ static NSArray <id <KBMappingProperty>> *KBAutomaticallyFoundMappingProperties (
 				} else if ([valueClass isSubclassOfClass:[NSOrderedSet class]]) {
 					Class const itemClass = [clazz mappedCollectionItemClassForKeyPath:keyPath];
 					mappingProperty = [[KBOrderedSetMappingProperty alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath itemClass:itemClass];
+				} else if ([valueClass conformsToProtocol:@protocol (KBObject)]) {
+					mappingProperty = [[KBObjectMappingProperty alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath valueClass:valueClass];
 				}
 			} break;
 		}
@@ -334,4 +374,12 @@ static NSArray <id <KBMappingProperty>> *KBAutomaticallyFoundMappingProperties (
 	} else {
 		return mappingProperties;
 	}
+}
+
+static NSArray <id <KBMappingProperty>> *KBDefaultInitializeMappingPropertiesQueryingOriginalImplementation (Class const clazz, __unused SEL const _cmd) {
+	return KBAutomaticallyFindMappingProperties (clazz, _cmd, YES);
+}
+
+static NSArray <id <KBMappingProperty>> *KBDefaultInitializeMappingPropertiesIgnoringOriginalImplementation (Class const clazz, __unused SEL const _cmd) {
+	return KBAutomaticallyFindMappingProperties (clazz, _cmd, NO);
 }

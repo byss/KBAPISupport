@@ -33,7 +33,6 @@
 @interface NSObject (KBMapping) <KBObject>
 
 + (NSArray <id <KBMappingProperty>> *_Nullable) mappingProperties;
-+ (NSArray <id <KBMappingProperty>> *_Nullable) initializeMappingProperties;
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
 + (instancetype _Nullable) newInstanceForJSONObject: (id _Nullable) JSONObject mappingContext: (id _Nullable) mappingContext;
@@ -42,6 +41,12 @@
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
 + (instancetype _Nullable) newInstanceForXMLObject: (GDataXMLElement *_Nullable) XMLObject mappingContext: (id _Nullable) mappingContext;
 #endif
+
+@end
+
+@interface NSObject (KBMappingInitialization)
+
++ (NSArray <id <KBMappingProperty>> *_Nullable) initializeMappingProperties;
 
 @end
 
