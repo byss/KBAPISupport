@@ -28,12 +28,12 @@
 
 @implementation KBAPIRequest (Mapping)
 
-+ (Class) expectedObjectClass {
-	return nil;
++ (Class <KBObject>) expectedObjectClass {
+	return Nil;
 }
 
-+ (Class) errorClass {
-	return nil;
++ (Class <KBObject>) errorClass {
+	return Nil;
 }
 
 @end

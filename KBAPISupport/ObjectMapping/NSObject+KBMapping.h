@@ -44,3 +44,21 @@
 #endif
 
 @end
+
+NS_ASSUME_NONNULL_BEGIN
+
+FOUNDATION_EXPORT NSValueTransformerName const KBCamelCaseToSnakeCaseStringTransformerName;
+
+@interface NSObject (KBAutoMapping)
+
+@property (nonatomic, readonly, class) BOOL shouldAutomaticallyInitializeMappingProperties;
+@property (nonatomic, strong, nullable, class) NSValueTransformer *defaultPropertyNamesTransformer;
+
++ (BOOL) shouldAutomaticallyMapProperty: (NSString *) propertyKeyPath;
++ (NSString *) sourceKeyPathForKeyPath: (NSString *) keyPath;
++ (id <KBMappingProperty> _Nullable) mappingPropertyForKeyPath: (NSString *) keyPath sourceKeyPath: (NSString *) sourceKeyPath;
++ (Class <KBObject> _Nullable) mappedCollectionItemClassForKeyPath: (NSString *) keyPath;
+
+@end
+
+NS_ASSUME_NONNULL_END

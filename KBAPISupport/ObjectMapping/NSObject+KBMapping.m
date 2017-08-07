@@ -28,13 +28,14 @@
 
 #import <objc/runtime.h>
 
+#import "KBArray_Protected.h"
 #import "KBMappingProperty.h"
 
 static void const *const KBMappingPropertiesInitializedKey = "mapping-properties-initialized";
 
 @implementation NSObject (KBMapping)
 
-+ (NSArray<id<KBMappingProperty>> *)mappingProperties {
++ (NSArray <id <KBMappingProperty>> *) mappingProperties {
 	NSArray <id <KBMappingProperty>> *mappingProperties = nil;
 	if (__builtin_expect (!objc_getAssociatedObject (self, KBMappingPropertiesInitializedKey), 0)) {
 		@synchronized (self) {
@@ -51,7 +52,7 @@ static void const *const KBMappingPropertiesInitializedKey = "mapping-properties
 	return mappingProperties;
 }
 
-+ (NSArray<id<KBMappingProperty>> *)initializeMappingProperties {
++ (NSArray <id <KBMappingProperty>> *) initializeMappingProperties {
 	return nil;
 }
 
@@ -104,3 +105,233 @@ static void const *const KBMappingPropertiesInitializedKey = "mapping-properties
 #endif
 
 @end
+
+@interface KBCamelCaseToSnakeCaseStringTransformer: NSValueTransformer
+
+@end
+
+NSValueTransformerName const KBCamelCaseToSnakeCaseStringTransformerName = @OS_STRINGIFY (KBCamelCaseToSnakeCaseStringTransformer);
+
+@implementation KBCamelCaseToSnakeCaseStringTransformer
+
++ (Class) transformedValueClass {
+	return [NSString class];
+}
+
++ (BOOL) allowsReverseTransformation {
+	return YES;
+}
+
+- (NSString *) transformedValue: (NSString *) value {
+	if (!value.length) {
+		return value;
+	}
+	
+	NSUInteger const valueLen = value.length;
+	unichar *const resultChars = malloc ((valueLen + (valueLen / 2)) * sizeof (unichar));
+	unichar *resultCharsEnd = resultChars;
+	BOOL prevCharIsUpper = YES;
+	NSUInteger lastCopiedCharIdx = 0;
+	for (NSUInteger i = 0; i < valueLen; i++) {
+		unichar const currentChar = [value characterAtIndex:i];
+		if (isupper (currentChar)) {
+			if (lastCopiedCharIdx + 1 < i) {
+				NSUInteger const copiedCharactersCount = i - lastCopiedCharIdx - 1;
+				[value getCharacters:resultCharsEnd range:NSMakeRange (lastCopiedCharIdx, copiedCharactersCount)];
+				resultCharsEnd += copiedCharactersCount;
+			}
+			if (!prevCharIsUpper) {
+				*resultCharsEnd++ = '_';
+			}
+			*resultCharsEnd++ = (unichar) tolower (currentChar);
+			prevCharIsUpper = YES;
+			lastCopiedCharIdx = i;
+		} else {
+			prevCharIsUpper = NO;
+		}
+	}
+	if (lastCopiedCharIdx + 1 < valueLen) {
+		NSUInteger const copiedCharactersCount = valueLen - lastCopiedCharIdx;
+		[value getCharacters:resultCharsEnd range:NSMakeRange (lastCopiedCharIdx, valueLen)];
+		resultCharsEnd += copiedCharactersCount;
+	}
+	
+	return [[NSString alloc] initWithCharactersNoCopy:resultChars length:(NSUInteger) (resultCharsEnd - resultChars) freeWhenDone:YES];
+}
+
+- (NSString *) reverseTransformedValue: (NSString *) value {
+	if (!value.length) {
+		return value;
+	}
+	
+	NSUInteger const valueLen = value.length;
+	unichar *const resultChars = malloc (valueLen * sizeof (unichar));
+	unichar *resultCharsEnd = resultChars;
+	NSUInteger lastCopiedCharIdx = 0;
+	BOOL prevCharIsUnderscore = NO;
+	for (NSUInteger i = 0; i < valueLen; i++) {
+		unichar const currentChar = [value characterAtIndex:i];
+		if (currentChar == '_') {
+			if (lastCopiedCharIdx + 1 < i) {
+				NSUInteger const copiedCharactersCount = i - lastCopiedCharIdx - 1;
+				[value getCharacters:resultCharsEnd range:NSMakeRange (lastCopiedCharIdx, copiedCharactersCount)];
+				resultCharsEnd += copiedCharactersCount;
+			}
+			lastCopiedCharIdx = i;
+			prevCharIsUnderscore = YES;
+		} else if (prevCharIsUnderscore) {
+			*resultCharsEnd++ = (unichar) toupper (currentChar);
+			lastCopiedCharIdx = i;
+			prevCharIsUnderscore = NO;
+		}
+	}
+	if (lastCopiedCharIdx + 1 < valueLen) {
+		NSUInteger const copiedCharactersCount = valueLen - lastCopiedCharIdx;
+		[value getCharacters:resultCharsEnd range:NSMakeRange (lastCopiedCharIdx, valueLen)];
+		resultCharsEnd += copiedCharactersCount;
+	}
+	
+	return [[NSString alloc] initWithCharactersNoCopy:resultChars length:(NSUInteger) (resultCharsEnd - resultChars) freeWhenDone:YES];
+}
+
+@end
+
+static NSValueTransformer *KBDefaultPropertyNamesTransformer = nil;
+
+static IMP KBInitializeMappingPropertiesDefaultImplementation = NULL;
+static NSArray <id <KBMappingProperty>> *KBInstallProperMappingPropertiesMethodImplementation (Class clazz, SEL _cmd);
+static NSArray <id <KBMappingProperty>> *KBAutomaticallyFoundMappingProperties (Class clazz, SEL _cmd);
+
+@implementation NSObject (KBAutoMapping)
+
++ (void) load {
+	Method const originalMethod = class_getClassMethod (self, @selector (initializeMappingProperties));
+	KBInitializeMappingPropertiesDefaultImplementation = method_setImplementation (originalMethod, (IMP) KBInstallProperMappingPropertiesMethodImplementation);
+}
+
++ (BOOL) shouldAutomaticallyInitializeMappingProperties {
+	return NO;
+}
+
++ (NSValueTransformer *) defaultPropertyNamesTransformer {
+	return KBDefaultPropertyNamesTransformer;
+}
+
++ (void) setDefaultPropertyNamesTransformer: (NSValueTransformer *) defaultPropertyNamesTransformer {
+	KBDefaultPropertyNamesTransformer = defaultPropertyNamesTransformer;
+}
+
++ (BOOL) shouldAutomaticallyMapProperty: (NSString *) propertyKeyPath {
+	return YES;
+}
+
++ (NSString *) sourceKeyPathForKeyPath: (NSString *) keyPath {
+	NSValueTransformer *transformer = self.defaultPropertyNamesTransformer;
+	return (transformer ? (NSString *) [transformer transformedValue:keyPath] : keyPath);
+}
+
++ (id <KBMappingProperty>) mappingPropertyForKeyPath: (NSString *) keyPath sourceKeyPath: (NSString *) sourceKeyPath {
+	return nil;
+}
+
++ (Class <KBObject>) mappedCollectionItemClassForKeyPath: (NSString *) keyPath {
+	return Nil;
+}
+
+@end
+
+static NSArray <id <KBMappingProperty>> *KBInstallProperMappingPropertiesMethodImplementation (Class clazz, SEL _cmd) {
+	Method const targetMethod = class_getClassMethod (clazz, _cmd);
+	IMP const targetImplementation = ([clazz shouldAutomaticallyInitializeMappingProperties] ? (IMP) KBAutomaticallyFoundMappingProperties : KBInitializeMappingPropertiesDefaultImplementation);
+	if (!class_addMethod (clazz, _cmd, (IMP) KBAutomaticallyFoundMappingProperties, method_getTypeEncoding (targetMethod))) {
+		method_setImplementation (targetMethod, targetImplementation);
+	}
+}
+
+static NSArray <id <KBMappingProperty>> *KBAutomaticallyFoundMappingProperties (Class clazz, SEL _cmd) {
+	unsigned propertiesCount = 0;
+	objc_property_t *const properties = class_copyPropertyList (clazz, &propertiesCount);
+	KBArray <id <KBMappingProperty>> *mappingProperties = [KBArray kb_unsealedArrayWithCapacity:propertiesCount];
+	for (unsigned i = 0; i < propertiesCount; i++) {
+		char const *const propertyName = property_getName (properties [i]);
+		char *const readonlyValue = property_copyAttributeValue (properties [i], "R");
+		BOOL const isReadonly = !!readonlyValue;
+		free (readonlyValue);
+		if (isReadonly) {
+			continue;
+		}
+		
+		NSString *const keyPath = @(propertyName);
+		if (![clazz shouldAutomaticallyMapProperty:keyPath]) {
+			continue;
+		}
+		NSString *const sourceKeyPath = [clazz sourceKeyPathForKeyPath:keyPath];
+		
+		id <KBMappingProperty> mappingProperty = [clazz mappingPropertyForKeyPath:keyPath sourceKeyPath:sourceKeyPath];
+		if (mappingProperty) {
+			[mappingProperties kb_addObject:mappingProperty];
+			continue;
+		}
+		
+		char *const propertyType = property_copyAttributeValue (properties [i], "T");
+		switch (*propertyType) {
+			case _C_CHR: case _C_UCHR:
+			case _C_SHT: case _C_USHT:
+			case _C_INT: case _C_UINT:
+			case _C_LNG: case _C_ULNG:
+			case _C_LNG_LNG: case _C_ULNG_LNG:
+			case _C_FLT: case _C_DBL: case _C_BFLD:
+			case _C_BOOL:
+				mappingProperty = [[KBNumberMappingProperty alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath];
+				break;
+			
+			case _C_ID: {
+				unsigned long const typeLength = strlen (propertyType);
+				if (!((typeLength > 3) && (propertyType [1] == '"') && (propertyType [typeLength - 1] == '"'))) {
+					break;
+				}
+				propertyType [typeLength - 1] = '\0';
+				Class const valueClass = objc_getClass (propertyType + 2);
+				if (!valueClass) {
+					break;
+				}
+				
+				if ([valueClass isSubclassOfClass:[NSNumber class]]) {
+					mappingProperty = [[KBNumberMappingProperty alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath];
+				} else if ([valueClass isSubclassOfClass:[NSString class]]) {
+					mappingProperty = [[KBStringMappingProperty alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath];
+				} else if ([valueClass isSubclassOfClass:[NSURL class]]) {
+					mappingProperty = [[KBURLMappingProperty alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath];
+				} else if ([valueClass isSubclassOfClass:[NSDate class]]) {
+					mappingProperty = [[KBTimestampMappingProperty alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath];
+				} else if ([valueClass isSubclassOfClass:[NSArray class]]) {
+					Class const itemClass = [clazz mappedCollectionItemClassForKeyPath:keyPath];
+					if ([itemClass isSubclassOfClass:[NSString class]]) {
+						mappingProperty = [[KBStringArrayMappingProperty alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath];
+					} else if (itemClass) {
+						mappingProperty = [[KBArrayMappingProperty alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath itemClass:itemClass];
+					}
+				} else if ([valueClass isSubclassOfClass:[NSSet class]]) {
+					Class const itemClass = [clazz mappedCollectionItemClassForKeyPath:keyPath];
+					mappingProperty = [[KBSetMappingProperty alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath itemClass:itemClass];
+				} else if ([valueClass isSubclassOfClass:[NSOrderedSet class]]) {
+					Class const itemClass = [clazz mappedCollectionItemClassForKeyPath:keyPath];
+					mappingProperty = [[KBOrderedSetMappingProperty alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath itemClass:itemClass];
+				}
+			} break;
+		}
+		
+		free (propertyType);
+		[mappingProperties kb_addObject:mappingProperty];
+	}
+	
+	free (properties);
+	[mappingProperties kb_sealArray];
+	
+	NSArray <id <KBMappingProperty>> *superProperties = [class_getSuperclass (clazz) mappingProperties];
+	if (superProperties.count) {
+		return [superProperties arrayByAddingObjectsFromArray:mappingProperties];
+	} else {
+		return mappingProperties;
+	}
+}

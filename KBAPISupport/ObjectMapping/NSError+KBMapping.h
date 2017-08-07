@@ -31,9 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef NSString *KBErrorMappingKeyPath NS_STRING_ENUM;
 
-extern KBErrorMappingKeyPath const KBErrorCodeMappingKeyPath;
-extern KBErrorMappingKeyPath const KBErrorLocalizedDescriptionMappingKeyPath;
-extern KBErrorMappingKeyPath const KBErrorDomainMappingKeyPath;
+FOUNDATION_EXPORT KBErrorMappingKeyPath const KBErrorCodeMappingKeyPath;
+FOUNDATION_EXPORT KBErrorMappingKeyPath const KBErrorLocalizedDescriptionMappingKeyPath;
+FOUNDATION_EXPORT KBErrorMappingKeyPath const KBErrorDomainMappingKeyPath;
 
 NS_ASSUME_NONNULL_END
 

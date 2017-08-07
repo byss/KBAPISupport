@@ -296,31 +296,31 @@ NS_INLINE NSNumber *KBNumberValueImpl (id object);
 
 @interface KBObjectMappingProperty ()
 
-@property (nonatomic, unsafe_unretained) Class valueClass;
+@property (nonatomic, unsafe_unretained) Class <KBObject> valueClass;
 
 @end
 
 @implementation KBObjectMappingProperty
 
-+ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath valueClass: (Class _Nonnull) valueClass {
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath valueClass: (Class <KBObject> _Nonnull) valueClass {
 	return [[self alloc] initWithKeyPath:keyPath valueClass:valueClass];
 }
 
-+ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath valueClass: (Class _Nonnull) valueClass {
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath valueClass: (Class <KBObject> _Nonnull) valueClass {
 	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath valueClass:valueClass];
 }
 
 - (instancetype)initWithKeyPath:(NSString *)keyPath sourceKeyPath:(NSString *)sourceKeyPath {
-	Class valueClass = NULL;
+	Class <KBObject> valueClass = NULL;
 	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath valueClass:(id _Nonnull) valueClass];
 }
 
-- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath valueClass: (Class _Nonnull) valueClass {
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath valueClass: (Class <KBObject> _Nonnull) valueClass {
 	return [self initWithKeyPath:keyPath sourceKeyPath:nil valueClass:valueClass];
 }
 
-- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath valueClass: (Class _Nonnull) valueClass {
-	if (![valueClass conformsToProtocol:@protocol (KBObject)]) {
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath valueClass: (Class <KBObject> _Nonnull) valueClass {
+	if (![(id <NSObject>) valueClass conformsToProtocol:@protocol (KBObject)]) {
 		return nil;
 	}
 	
@@ -343,7 +343,7 @@ NS_INLINE NSNumber *KBNumberValueImpl (id object);
 
 @interface KBCollectionMappingProperty ()
 
-@property (nonatomic, unsafe_unretained) Class itemClass;
+@property (nonatomic, unsafe_unretained) Class <KBObject> itemClass;
 
 + (id) collectionValueWithArrayValue: (NSArray *) arrayValue;
 
@@ -351,11 +351,11 @@ NS_INLINE NSNumber *KBNumberValueImpl (id object);
 
 @implementation KBCollectionMappingProperty
 
-+ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath itemClass: (Class _Nonnull) itemClass {
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath itemClass: (Class <KBObject> _Nonnull) itemClass {
 	return [[self alloc] initWithKeyPath:keyPath itemClass:itemClass];
 }
 
-+ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath itemClass: (Class _Nonnull) itemClass {
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath itemClass: (Class <KBObject> _Nonnull) itemClass {
 	return [[self alloc] initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath itemClass:itemClass];
 }
 
@@ -365,16 +365,16 @@ NS_INLINE NSNumber *KBNumberValueImpl (id object);
 }
 
 - (instancetype) initWithKeyPath:(NSString *)keyPath sourceKeyPath:(NSString *)sourceKeyPath {
-	Class itemClass = NULL;
+	Class <KBObject> itemClass = NULL;
 	return [self initWithKeyPath:keyPath sourceKeyPath:sourceKeyPath itemClass:(id _Nonnull) itemClass];
 }
 
-- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath itemClass: (Class _Nonnull) itemClass {
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath itemClass: (Class <KBObject> _Nonnull) itemClass {
 	return [self initWithKeyPath:keyPath sourceKeyPath:nil itemClass:itemClass];
 }
 
-- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath itemClass: (Class _Nonnull) itemClass {
-	if (![itemClass conformsToProtocol:@protocol (KBObject)]) {
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath itemClass: (Class <KBObject> _Nonnull) itemClass {
+	if (![(id <NSObject>) itemClass conformsToProtocol:@protocol (KBObject)]) {
 		return nil;
 	}
 	

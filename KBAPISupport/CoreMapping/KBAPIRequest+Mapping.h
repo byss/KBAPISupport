@@ -26,9 +26,10 @@
 
 #import <KBAPISupport/KBAPIRequest.h>
 
+@protocol KBObject;
 @interface KBAPIRequest (Mapping)
 
-+ (Class _Nullable) expectedObjectClass;
-+ (Class _Nullable) errorClass;
+@property (nonatomic, readonly, nullable, class) Class <KBObject> expectedObjectClass;
+@property (nonatomic, readonly, nullable, class) Class <KBObject> errorClass;
 
 @end

@@ -26,50 +26,39 @@
 
 #import "KBNetworkIndicator.h"
 
+#import <stdatomic.h>
 #import <UIKit/UIKit.h>
 
 #import "KBAPISupportLogging_Protected.h"
 
-static int32_t KBNetworkRequestCount = 0;
-static dispatch_queue_t KBNetworkIndicatorQueue = NULL;
+static _Atomic NSUInteger KBNetworkRequestCount = ATOMIC_VAR_INIT (0);
 
 @implementation KBNetworkIndicator
 
-+ (void) initialize {
-	if (self == [KBNetworkIndicator class]) {
-		KBNetworkIndicatorQueue = dispatch_queue_create ("KBNetworkIndicatorQueue", dispatch_queue_attr_make_with_qos_class (DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INITIATED, 0));
-		KBASLOGI (@"%@ initialized", self);
++ (void) requestStarted {
+	if (!atomic_fetch_add (&KBNetworkRequestCount, 1)) {
+		dispatch_async (dispatch_get_main_queue (), ^{
+			[self setNetworkIndicatorActive:YES];
+		});
 	}
 }
 
-+ (void) requestStarted {
-	dispatch_async (KBNetworkIndicatorQueue, ^{
-		int32_t oldValue = KBNetworkRequestCount++;
-		if (oldValue == 0) {
-			[self setNetworkIndicatorActive:YES];
-		}
-	});
-}
-
 + (void) requestFinished {
-	dispatch_async (KBNetworkIndicatorQueue, ^{
-		if (KBNetworkRequestCount > 0) {
-			KBNetworkRequestCount--;
-		} else {
-			KBASLOGW (@"Network indicator counter gone below zero, resetting");
+	if (atomic_load (&KBNetworkRequestCount) > 0) {
+		atomic_fetch_add (&KBNetworkRequestCount, -1);
+	} else {
+		KBASLOGW (@"Network indicator counter gone below zero, resetting");
+	}
+	
+	dispatch_after (dispatch_time (DISPATCH_TIME_NOW, (int64_t) (0.15 * NSEC_PER_SEC)), dispatch_get_main_queue (), ^{
+		if (!atomic_load (&KBNetworkRequestCount)) {
+			[self setNetworkIndicatorActive:NO];
 		}
-		dispatch_after (dispatch_time (DISPATCH_TIME_NOW, (int64_t) (0.15 * NSEC_PER_SEC)), KBNetworkIndicatorQueue, ^{
-			if (KBNetworkRequestCount == 0) {
-				[self setNetworkIndicatorActive:NO];
-			}
-		});
 	});
 }
 
 + (void) setNetworkIndicatorActive: (BOOL) active {
-	dispatch_sync (dispatch_get_main_queue (), ^{
-		[UIApplication sharedApplication].networkActivityIndicatorVisible = active;
-	});
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = active;
 }
 
 @end

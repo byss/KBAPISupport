@@ -35,8 +35,8 @@
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+JSON.h>) || __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-FOUNDATION_EXTERN NSString *_Nullable KBStringValue (id _Nullable object);
-FOUNDATION_EXTERN NSNumber *_Nullable KBNumberValue (id _Nullable object);
+FOUNDATION_EXPORT NSString *_Nullable KBStringValue (id _Nullable object);
+FOUNDATION_EXPORT NSNumber *_Nullable KBNumberValue (id _Nullable object);
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
@@ -121,23 +121,24 @@ FOUNDATION_EXTERN NSNumber *_Nullable KBNumberValue (id _Nullable object);
 
 @end
 
+@protocol KBObject;
 @interface KBObjectMappingProperty: KBMappingProperty
 
-+ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath valueClass: (Class _Nonnull) valueClass;
-+ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath valueClass: (Class _Nonnull) valueClass;
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath valueClass: (Class <KBObject> _Nonnull) valueClass;
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath valueClass: (Class <KBObject> _Nonnull) valueClass;
 
-- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath valueClass: (Class _Nonnull) valueClass;
-- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath valueClass: (Class _Nonnull) valueClass NS_DESIGNATED_INITIALIZER;
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath valueClass: (Class <KBObject> _Nonnull) valueClass;
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath valueClass: (Class <KBObject> _Nonnull) valueClass NS_DESIGNATED_INITIALIZER;
 
 @end
 
 @interface KBCollectionMappingProperty: KBMappingProperty
 
-+ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath itemClass: (Class _Nonnull) itemClass;
-+ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath itemClass: (Class _Nonnull) itemClass;
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath itemClass: (Class <KBObject> _Nonnull) itemClass;
++ (instancetype _Nullable) mappingPropertyWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath itemClass: (Class <KBObject> _Nonnull) itemClass;
 
-- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath itemClass: (Class _Nonnull) itemClass;
-- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath itemClass: (Class _Nonnull) itemClass NS_DESIGNATED_INITIALIZER;
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath itemClass: (Class <KBObject> _Nonnull) itemClass;
+- (instancetype _Nullable) initWithKeyPath:(NSString *_Nonnull) keyPath sourceKeyPath:(NSString * _Nullable)sourceKeyPath itemClass: (Class <KBObject> _Nonnull) itemClass NS_DESIGNATED_INITIALIZER;
 
 @end
 
