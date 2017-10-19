@@ -28,12 +28,33 @@
 
 #import <stdatomic.h>
 #import <UIKit/UIKit.h>
+#import <objc/runtime.h>
 
 #import "KBAPISupportLogging_Protected.h"
 
 static _Atomic NSUInteger KBNetworkRequestCount = ATOMIC_VAR_INIT (0);
 
+@interface KBNetworkIndicator (dynamic)
+
++ (void) setNetworkIndicatorActive: (BOOL) active;
+
+@end
+
+__attribute__((visibility("hidden"))) static void KBNetworkIndicator_setNetworkIndicatorActive_UIApplication (id self, SEL _cmd, BOOL active);
+__attribute__((visibility("hidden"))) static void KBNetworkIndicator_setNetworkIndicatorActive_noop (id self, SEL _cmd, BOOL active);
+
 @implementation KBNetworkIndicator
+
++ (BOOL) resolveClassMethod: (SEL) sel {
+	if (sel_isEqual (sel, @selector (setNetworkIndicatorActive:))) {
+		BOOL const isExtension = !![[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSExtension"];
+		IMP const implementation = (IMP) (isExtension ? KBNetworkIndicator_setNetworkIndicatorActive_noop : KBNetworkIndicator_setNetworkIndicatorActive_UIApplication);
+		class_addMethod (object_getClass (self), sel, implementation, (char const []) { _C_ID, _C_SEL, _C_BOOL, '\0' });
+		return YES;
+	} else {
+		return [super resolveClassMethod:sel];
+	}
+}
 
 + (void) requestStarted {
 	if (!atomic_fetch_add (&KBNetworkRequestCount, 1)) {
@@ -57,8 +78,11 @@ static _Atomic NSUInteger KBNetworkRequestCount = ATOMIC_VAR_INIT (0);
 	});
 }
 
-+ (void) setNetworkIndicatorActive: (BOOL) active {
+@end
+
+__attribute__((visibility("hidden"))) static void KBNetworkIndicator_setNetworkIndicatorActive_UIApplication (id self, SEL _cmd, BOOL active) NS_EXTENSION_UNAVAILABLE ("") {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = active;
 }
 
-@end
+__attribute__((visibility("hidden"))) static void KBNetworkIndicator_setNetworkIndicatorActive_noop (id self, SEL _cmd, BOOL active) {
+}
