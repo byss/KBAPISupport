@@ -24,50 +24,9 @@
 //  THE SOFTWARE.
 //
 
-/* Core */
-#import <KBAPISupport/KBAPISupport-Core.h>
+#import <KBAPISupport/KBAtomicCounter.h>
+#import <KBAPISupport/KBAPIRequest.h>
 
-/* NSURLConnection */
-#if __has_include (<KBAPISupport/KBAPISupport+NSURLConnection.h>)
-#	import <KBAPISupport/KBAPISupport+NSURLConnection.h>
-#endif
-
-/* NSURLSession */
-#if __has_include (<KBAPISupport/KBAPISupport+NSURLSession.h>)
-#	import <KBAPISupport/KBAPISupport+NSURLSession.h>
-#endif
-
-/* JSON */
-#if __has_include (<KBAPISupport/KBAPISupport+JSON.h>)
-#	import <KBAPISupport/KBAPISupport+JSON.h>
-#endif
-
-/* XML */
-#if __has_include (<KBAPISupport/KBAPISupport+XML.h>)
-#	import <KBAPISupport/KBAPISupport+XML.h>
-#endif
-
-/* Core Mapping */
-#if __has_include (<KBAPISupport/KBAPISupport+CoreMapping.h>)
-#	import <KBAPISupport/KBAPISupport+CoreMapping.h>
-#endif
-
-/* Object Mapping */
-#if __has_include (<KBAPISupport/KBAPISupport+ObjectMapping.h>)
-#	import <KBAPISupport/KBAPISupport+ObjectMapping.h>
-#endif
-
-/* Blocks */
-#if __has_include (<KBAPISupport/KBAPISupport+Blocks.h>)
-#	import <KBAPISupport/KBAPISupport+Blocks.h>
-#endif
-
-/* Delegates */
-#if __has_include (<KBAPISupport/KBAPISupport+Delegates.h>)
-#	import <KBAPISupport/KBAPISupport+Delegates.h>
-#endif
-
-/* Network Indicator */
-#if __has_include (<KBAPISupport/KBAPISupport+NetworkIndicator.h>)
-#	import <KBAPISupport/KBAPISupport+NetworkIndicator.h>
+#if __has_include (<KBAPISupport/KBAPISupport-Swift.h>)
+#	import <KBAPISupport/KBAPISupport-Swift.h>
 #endif
