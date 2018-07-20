@@ -10,81 +10,126 @@ import Foundation
 
 private let KBAPIConnectionQueue = DispatchQueue (label: "KBAPISupport", qos: .userInitiated, attributes: .concurrent);
 
+private protocol CompletionWrapper {
+	associatedtype ResponseType;
+	
+	func call (with response: ResponseType);
+	func call (with error: Error);
+	func call (with result: Result <ResponseType>);
+}
+
+extension CompletionWrapper {
+	fileprivate func call (with response: ResponseType) {
+		self.call (with: .success (response));
+	}
+	
+	fileprivate func call (with error: Error) {
+		self.call (with: .failure (error));
+	}
+}
+
 open class KBAPIConnection <Request> where Request: KBAPIRequest {
 	public typealias RequestType = Request;
 	public typealias ResponseType = Request.ResponseType;
 	
-	private static var queue: DispatchQueue {
+	private var queue: DispatchQueue {
 		return KBAPIConnectionQueue;
 	}
 	
+	private let taskWrapper: SessionTaskWrapper;
+	
+	private var request: Request {
+		return self.taskWrapper.request;
+	}
+
 	open class func withRequest (_ request: Request) -> KBAPIConnection {
 		return KBAPIConnection (request: request);
 	}
 	
 	public init (request: Request, session: URLSession = .shared) {
-		self.request = request;
-		self.session = session;
+		self.taskWrapper = SessionTaskWrapper (session: session, request: request);
 	}
 
 	public func start () {
-		self.start (completion: nil);
+		self.queue.async {
+			self.start (completion: EmptyCompletionWrapper ());
+		}
 	}
 
 	public func start (completion: @escaping (Result <ResponseType>) -> ()) {
-		self.start (completion: .some (completion));
+		self.queue.async {
+			self.start (completion: CompletionBlockWrapper (completion));
+		}
 	}
 	
-	private func start (completion: ((Result <ResponseType>) -> ())? = nil) {
-		KBAPIConnection.queue.async {
-			let serializedRequest: URLRequest;
-			do {
-				try serializedRequest = self.request.serializer.serializeRequest (self.request);
-			} catch {
-				return completion.map {
-					self.connectionDidFinish (error: error, completion: $0);
-				} ?? ();
+	private func start <C> (completion: C) where C: CompletionWrapper, C.ResponseType == ResponseType {
+		do {
+			try self.taskWrapper.makeTask (for: self, completion: completion).resume ();
+		} catch {
+			completion.call (with: error);
+		}
+	}
+	
+	private func taskDidFinish <C> (data: Data?, response: URLResponse?, error: Error?, completion: C) where C: CompletionWrapper, C.ResponseType == ResponseType {
+		do {
+			if let error = error {
+				throw error;
 			}
-			
-			self.session.dataTask (with: serializedRequest) { data, _, error in
-				if let error = error {
-					return completion.map {
-						self.connectionDidFinish (error: error, completion: $0);
-					} ?? ();
-				}
-				
-				KBAPIConnection.queue.async {
-					let result: Result <ResponseType>;
-					do {
-						try result = .success (self.request.responseSerializer.decode (from: data ?? Data ()));
-					} catch {
-						result = .failure (error);
-					}
-					completion.map {
-						self.connectionDidFinish (result: result, completion: $0);
-					}
+			try completion.call (with: self.request.responseSerializer.decode (from: data ?? Data ()));
+		} catch {
+			completion.call (with: error);
+		}
+	}
+}
+
+fileprivate extension KBAPIConnection {
+	private struct SessionTaskWrapper {
+		fileprivate let request: Request;
+		
+		private unowned let session: URLSession;
+
+		fileprivate private (set) lazy var task: URLSessionTask = {
+			fatalError ("URL session task is not created yet");
+		} ();
+		
+		fileprivate init (session: URLSession, request: Request) {
+			self.session = session;
+			self.request = request;
+		}
+		
+		fileprivate func makeTask <C> (for connection: KBAPIConnection, completion: C) throws -> URLSessionTask where C: CompletionWrapper, C.ResponseType == ResponseType {
+			let serializedRequest = try self.request.serializer.serializeRequest (self.request);
+			return self.session.dataTask (with: serializedRequest, completionHandler: { data, response, error in
+				connection.queue.safeSync {
+					connection.taskDidFinish (data: data, response: response, error: error, completion: completion);
 				};
-			}.resume ();
-		};
+			});
+		}
 	}
-	
-	private func connectionDidFinish (error: Error, completion: (Result <ResponseType>) -> ()) {
-		self.connectionDidFinish (result: .failure (error), completion: completion);
-	}
-	
-	private func connectionDidFinish (response: Request.ResponseType, completion: (Result <ResponseType>) -> ()) {
-		self.connectionDidFinish (result: .success (response), completion: completion);
-	}
+}
 
-	private func connectionDidFinish (result: Result <ResponseType>, completion: (Result <ResponseType>) -> ()) {
-		DispatchQueue.main.safeSync {
-			completion (result);
-		};
+fileprivate extension KBAPIConnection {
+	private struct EmptyCompletionWrapper: CompletionWrapper {
+		fileprivate func call (with response: ResponseType) {}
+		fileprivate func call (with error: Error) {}
+		fileprivate func call (with result: Result <ResponseType>) {}
 	}
 	
-
-	private unowned let session: URLSession;
-	private let request: Request;
+	private struct CompletionBlockWrapper: CompletionWrapper {
+		fileprivate typealias ResponseType = KBAPIConnection.ResponseType;
+		
+		private let block: (Result <ResponseType>) -> ();
+		
+		fileprivate init (_ block: @escaping (Result <ResponseType>) -> ()) {
+			self.block = block;
+		}
+		
+		fileprivate func call (with result: Result <ResponseType>) {
+			DispatchQueue.main.safeSync {
+				self.block (result);
+			}
+		}
+	}
 }
 
 extension URLSession {

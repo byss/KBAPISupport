@@ -10,30 +10,26 @@ import Dispatch
 
 public extension DispatchQueue {
 	private static let identifierKey = DispatchSpecificKey <Int> ();
-	private static var identifiersCounter = KBAtomicCounter (2);
+	private static var identifiersCounter = KBAtomicCounter (1);
 	
 	private static var currentQueueIdentifier: Int? {
-		if Thread.isMainThread {
-			return 1;
-		}
-		
-		return self.getSpecific (key: .queueIdentifier);
+		return self.getSpecific (key: .queueIdentifier) ?? (Thread.isMainThread ? 0 : nil);
 	}
 	
 	private var identifier: Int {
-		if (self == DispatchQueue.main) {
-			return 1;
-		}
-		
 		if let identifier = self.getSpecific (key: .queueIdentifier) {
 			return identifier;
 		}
-		
-		let obtainedIdentifier = DispatchQueue.identifiersCounter.getNext ();
+
+		let obtainedIdentifier = DispatchQueue.identifier (for: self);
 		self.setSpecific (key: .queueIdentifier, value: obtainedIdentifier);
 		return obtainedIdentifier;
 	}
 	
+	private static func identifier (for queue: DispatchQueue) -> Int {
+		return ((queue !== DispatchQueue.main) ? self.identifiersCounter.getNext () : 0);
+	}
+
 	public func safeSync <T> (execute work: () throws -> T) rethrows -> T {
 		guard (self.identifier != DispatchQueue.currentQueueIdentifier) else {
 			return try work ();
