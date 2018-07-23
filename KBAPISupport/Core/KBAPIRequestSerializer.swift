@@ -18,7 +18,16 @@ public protocol KBAPIRequestSerializerProtocol {
 	func serializeParameters <P> (_ parameters: P, asBodyData: Bool, into request: inout URLRequest) throws where P: Encodable;
 }
 
+private let KBAPIRequestCommonHeaders = [
+	"Accept": "application/json",
+	"Accept-Encoding": "gzip, deflate",
+];
+
 public extension KBAPIRequestSerializerProtocol {
+	private var commonHeaders: [String: String] {
+		return KBAPIRequestCommonHeaders;
+	}
+	
 	public func shouldSerializeRequestParametersAsBodyData <R> (for request: R) -> Bool where R: KBAPIRequest {
 		switch (request.httpMethod) {
 		case .get, .delete:
@@ -31,7 +40,7 @@ public extension KBAPIRequestSerializerProtocol {
 	public func serializeRequest <R> (_ req: R) throws -> URLRequest where R: KBAPIRequest {
 		var result = URLRequest (url: req.url);
 		result.httpMethod = req.httpMethod.rawValue;
-		result.allHTTPHeaderFields = req.httpHeaders;
+		result.allHTTPHeaderFields = req.httpHeaders.merging (self.commonHeaders) { a, b in a };
 		try self.serializeParameters (req.parameters, asBodyData: self.shouldSerializeRequestParametersAsBodyData (for: req), into: &result);
 		return result;
 	}
@@ -45,8 +54,6 @@ open class KBAPIURLEncodingSerializer: KBAPIRequestSerializerProtocol {
 	}
 	
 	open func serializeParameters <P> (_ parameters: P, asBodyData: Bool, into request: inout URLRequest) throws where P: Encodable {
-		request.addValue ("application/json", forHTTPHeaderField: "Accept");
-		request.addValue ("gzip, deflate", forHTTPHeaderField: "Accept-Encoding");
 		if let acceptLanguageHeaderValue = Bundle.main.preferredLocalizationsHTTPHeader {
 			request.addValue (acceptLanguageHeaderValue, forHTTPHeaderField: "Accept-Language");
 		}
