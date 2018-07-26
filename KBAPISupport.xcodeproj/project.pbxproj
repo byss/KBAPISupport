@@ -14,15 +14,18 @@
 		4315B9C92100DB16007B0088 /* KBAPIResponseSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4315B9C82100DB16007B0088 /* KBAPIResponseSerializer.swift */; };
 		4315B9CB2100E8BC007B0088 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4315B9CA2100E8BC007B0088 /* Result.swift */; };
 		4315B9CD2100F182007B0088 /* DispatchQueue+safeSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4315B9CC2100F182007B0088 /* DispatchQueue+safeSync.swift */; };
-		4315B9CF2100F497007B0088 /* KBAtomicCounter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4315B9CE2100F45F007B0088 /* KBAtomicCounter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4315B9D12100F6AB007B0088 /* KBAtomicCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4315B9D02100F6AB007B0088 /* KBAtomicCounter.swift */; };
 		4332306C20FE2301001C67D0 /* KBArray.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4332306A20FE2301001C67D0 /* KBArray.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4332306D20FE2301001C67D0 /* KBArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 4332306B20FE2301001C67D0 /* KBArray.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4336C03B210A107000893B1C /* KBAPISupport+ObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = 4336C038210A0FB700893B1C /* KBAPISupport+ObjC.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4336C042210A212B00893B1C /* DispatchQueue+identifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 4336C040210A212A00893B1C /* DispatchQueue+identifier.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4336C043210A212B00893B1C /* DispatchQueue+identifier.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4336C041210A212B00893B1C /* DispatchQueue+identifier.mm */; };
+		4336C050210A3BCE00893B1C /* KBAPISupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 4336C04F210A3BCE00893B1C /* KBAPISupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4336C05A210A5F2300893B1C /* DispatchQueue+syncSafe.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4336C059210A5F2300893B1C /* DispatchQueue+syncSafe.mm */; };
+		4336C05C210A600100893B1C /* DispatchQueue+syncSafe.h in Headers */ = {isa = PBXBuildFile; fileRef = 4336C05B210A5F2E00893B1C /* DispatchQueue+syncSafe.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43B0BED32101F85E00061E65 /* KBAPIJSONCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0BED22101F85E00061E65 /* KBAPIJSONCoder.swift */; };
 		43B0BED52101F9F400061E65 /* KBAPIURLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0BED42101F9F400061E65 /* KBAPIURLEncoder.swift */; };
 		43BDFDB220FFB7870078A7F7 /* KBAPIConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDFDB120FFB7870078A7F7 /* KBAPIConnection.swift */; };
 		43BDFDB420FFB7DB0078A7F7 /* KBAPIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDFDB320FFB7DB0078A7F7 /* KBAPIRequest.swift */; };
-		43D1BD8F1C9A11DA00A807F8 /* KBAPISupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D1BD8D1C9A11DA00A807F8 /* KBAPISupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,19 +36,22 @@
 		4315B9C82100DB16007B0088 /* KBAPIResponseSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAPIResponseSerializer.swift; sourceTree = "<group>"; };
 		4315B9CA2100E8BC007B0088 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		4315B9CC2100F182007B0088 /* DispatchQueue+safeSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+safeSync.swift"; sourceTree = "<group>"; };
-		4315B9CE2100F45F007B0088 /* KBAtomicCounter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KBAtomicCounter.h; sourceTree = "<group>"; };
-		4315B9D02100F6AB007B0088 /* KBAtomicCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAtomicCounter.swift; sourceTree = "<group>"; };
-		431C82BF1E350BA000BB461F /* KBAPISupport.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; path = KBAPISupport.podspec; sourceTree = "<group>"; };
-		431C82C01E350DD800BB461F /* KBAPISupport.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = KBAPISupport.modulemap; sourceTree = "<group>"; };
+		431C82BF1E350BA000BB461F /* KBAPISupport.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; path = KBAPISupport.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		4332306A20FE2301001C67D0 /* KBArray.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = KBArray.mm; sourceTree = "<group>"; };
 		4332306B20FE2301001C67D0 /* KBArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KBArray.h; sourceTree = "<group>"; };
+		4336C038210A0FB700893B1C /* KBAPISupport+ObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KBAPISupport+ObjC.h"; sourceTree = "<group>"; };
+		4336C040210A212A00893B1C /* DispatchQueue+identifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DispatchQueue+identifier.h"; sourceTree = "<group>"; };
+		4336C041210A212B00893B1C /* DispatchQueue+identifier.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DispatchQueue+identifier.mm"; sourceTree = "<group>"; };
+		4336C04F210A3BCE00893B1C /* KBAPISupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPISupport.h; sourceTree = "<group>"; };
+		4336C059210A5F2300893B1C /* DispatchQueue+syncSafe.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "DispatchQueue+syncSafe.mm"; sourceTree = "<group>"; };
+		4336C05B210A5F2E00893B1C /* DispatchQueue+syncSafe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DispatchQueue+syncSafe.h"; sourceTree = "<group>"; };
+		4336C05D210A636500893B1C /* KBAPISupport.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = KBAPISupport.modulemap; sourceTree = "<group>"; };
 		43B0BED22101F85E00061E65 /* KBAPIJSONCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAPIJSONCoder.swift; sourceTree = "<group>"; };
 		43B0BED42101F9F400061E65 /* KBAPIURLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAPIURLEncoder.swift; sourceTree = "<group>"; };
 		43BDFDB120FFB7870078A7F7 /* KBAPIConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAPIConnection.swift; sourceTree = "<group>"; };
 		43BDFDB320FFB7DB0078A7F7 /* KBAPIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAPIRequest.swift; sourceTree = "<group>"; };
 		43D1BD801C9A115500A807F8 /* KBAPISupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KBAPISupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D1BD8C1C9A11DA00A807F8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		43D1BD8D1C9A11DA00A807F8 /* KBAPISupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPISupport.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,15 +68,43 @@
 		4332306920FE1C1F001C67D0 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				4332306B20FE2301001C67D0 /* KBArray.h */,
-				4332306A20FE2301001C67D0 /* KBArray.mm */,
-				4315B9CE2100F45F007B0088 /* KBAtomicCounter.h */,
-				4315B9D02100F6AB007B0088 /* KBAtomicCounter.swift */,
+				4336C03D210A12D500893B1C /* Private */,
+				4336C05B210A5F2E00893B1C /* DispatchQueue+syncSafe.h */,
+				4336C059210A5F2300893B1C /* DispatchQueue+syncSafe.mm */,
 				4315B9CC2100F182007B0088 /* DispatchQueue+safeSync.swift */,
 				4315B9CA2100E8BC007B0088 /* Result.swift */,
 				4315B9C421008DC3007B0088 /* URLEncode.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		4336C036210A0F4D00893B1C /* ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				4336C03C210A12BB00893B1C /* Private */,
+				4336C038210A0FB700893B1C /* KBAPISupport+ObjC.h */,
+				4315B9BE21001DE4007B0088 /* KBAPIRequest.h */,
+				4315B9BF21001DE4007B0088 /* KBAPIRequest.mm */,
+			);
+			path = ObjC;
+			sourceTree = "<group>";
+		};
+		4336C03C210A12BB00893B1C /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				4332306B20FE2301001C67D0 /* KBArray.h */,
+				4332306A20FE2301001C67D0 /* KBArray.mm */,
+			);
+			path = Private;
+			sourceTree = "<group>";
+		};
+		4336C03D210A12D500893B1C /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				4336C040210A212A00893B1C /* DispatchQueue+identifier.h */,
+				4336C041210A212B00893B1C /* DispatchQueue+identifier.mm */,
+			);
+			path = Private;
 			sourceTree = "<group>";
 		};
 		43BDFDB020FFB7730078A7F7 /* Core */ = {
@@ -81,8 +115,6 @@
 				4315B9C2210085E1007B0088 /* KBAPIRequestSerializer.swift */,
 				4315B9C82100DB16007B0088 /* KBAPIResponseSerializer.swift */,
 				43BDFDB320FFB7DB0078A7F7 /* KBAPIRequest.swift */,
-				4315B9BE21001DE4007B0088 /* KBAPIRequest.h */,
-				4315B9BF21001DE4007B0088 /* KBAPIRequest.mm */,
 				43BDFDB120FFB7870078A7F7 /* KBAPIConnection.swift */,
 			);
 			path = Core;
@@ -109,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				43BDFDB020FFB7730078A7F7 /* Core */,
+				4336C036210A0F4D00893B1C /* ObjC */,
 				4332306920FE1C1F001C67D0 /* Utils */,
 				43D1BD8B1C9A11DA00A807F8 /* Supporting Files */,
 			);
@@ -118,8 +151,8 @@
 		43D1BD8B1C9A11DA00A807F8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				43D1BD8D1C9A11DA00A807F8 /* KBAPISupport.h */,
-				431C82C01E350DD800BB461F /* KBAPISupport.modulemap */,
+				4336C04F210A3BCE00893B1C /* KBAPISupport.h */,
+				4336C05D210A636500893B1C /* KBAPISupport.modulemap */,
 				43D1BD8C1C9A11DA00A807F8 /* Info.plist */,
 			);
 			path = "Supporting Files";
@@ -132,10 +165,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43D1BD8F1C9A11DA00A807F8 /* KBAPISupport.h in Headers */,
+				4336C03B210A107000893B1C /* KBAPISupport+ObjC.h in Headers */,
+				4336C050210A3BCE00893B1C /* KBAPISupport.h in Headers */,
+				4336C05C210A600100893B1C /* DispatchQueue+syncSafe.h in Headers */,
 				4315B9C021001DE4007B0088 /* KBAPIRequest.h in Headers */,
-				4315B9CF2100F497007B0088 /* KBAtomicCounter.h in Headers */,
 				4332306D20FE2301001C67D0 /* KBArray.h in Headers */,
+				4336C042210A212B00893B1C /* DispatchQueue+identifier.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,11 +243,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				4315B9CD2100F182007B0088 /* DispatchQueue+safeSync.swift in Sources */,
-				4315B9D12100F6AB007B0088 /* KBAtomicCounter.swift in Sources */,
 				4315B9CB2100E8BC007B0088 /* Result.swift in Sources */,
 				4315B9C521008DC3007B0088 /* URLEncode.swift in Sources */,
 				4332306C20FE2301001C67D0 /* KBArray.mm in Sources */,
+				4336C043210A212B00893B1C /* DispatchQueue+identifier.mm in Sources */,
 				43B0BED52101F9F400061E65 /* KBAPIURLEncoder.swift in Sources */,
+				4336C05A210A5F2300893B1C /* DispatchQueue+syncSafe.mm in Sources */,
 				43B0BED32101F85E00061E65 /* KBAPIJSONCoder.swift in Sources */,
 				4315B9C3210085E1007B0088 /* KBAPIRequestSerializer.swift in Sources */,
 				4315B9C92100DB16007B0088 /* KBAPIResponseSerializer.swift in Sources */,

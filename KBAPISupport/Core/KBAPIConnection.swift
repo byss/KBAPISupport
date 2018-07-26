@@ -99,7 +99,6 @@ fileprivate extension KBAPIConnection {
 		
 		fileprivate func makeTask <C> (for connection: KBAPIConnection, completion: C) throws -> URLSessionTask where C: CompletionWrapper, C.ResponseType == ResponseType {
 			let serializedRequest = try self.request.serializer.serializeRequest (self.request);
-			print (serializedRequest.makeCurlCommand ());
 			return self.session.dataTask (with: serializedRequest, completionHandler: { data, response, error in
 				connection.queue.safeSync {
 					connection.taskDidFinish (data: data, response: response, error: error, completion: completion);

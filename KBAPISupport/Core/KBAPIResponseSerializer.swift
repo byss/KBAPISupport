@@ -13,9 +13,33 @@ public protocol KBAPIDecoder {
 }
 
 public protocol KBAPIResponseSerializerProtocol {
-	associatedtype ResponseType where ResponseType: Decodable;
+	associatedtype ResponseType;
 	
 	func decode (from data: Data) throws -> ResponseType;
+}
+
+open class KBAPIRawResponseSerializer: KBAPIResponseSerializerProtocol {
+	public typealias ResponseType = Data;
+	
+	public init () {}
+
+	open func decode (from data: Data) throws -> Data {
+		return data;
+	}
+}
+
+open class KBAPIRawJSONResponseSerializer: KBAPIResponseSerializerProtocol {
+	public typealias ResponseType = Any;
+	
+	open var options: JSONSerialization.ReadingOptions;
+	
+	public init (options: JSONSerialization.ReadingOptions = .allowFragments) {
+		self.options = options;
+	}
+
+	open func decode (from data: Data) throws -> Any {
+		return try JSONSerialization.jsonObject (with: data, options: self.options);
+	}
 }
 
 open class KBAPIJSONResponseSerializer <Response>: KBAPIResponseSerializerProtocol where Response: Decodable {

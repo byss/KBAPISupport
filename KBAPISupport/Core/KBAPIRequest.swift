@@ -8,6 +8,10 @@
 
 import Foundation
 
+public struct KBAPIRequestVoidParameters: Encodable {
+	fileprivate init () {}
+}
+
 public struct KBAPIRequestHTTPMethod: Hashable {
 	public let rawValue: String;
 	
@@ -18,6 +22,7 @@ public struct KBAPIRequestHTTPMethod: Hashable {
 
 public protocol KBAPIRequest {
 	typealias HTTPMethod = KBAPIRequestHTTPMethod;
+	typealias VoidParameters = KBAPIRequestVoidParameters;
 	typealias RequestSerializer = KBAPIRequestSerializerProtocol;
 	typealias ResponseSerializer = KBAPIResponseSerializerProtocol;
 	
@@ -25,7 +30,7 @@ public protocol KBAPIRequest {
 	typealias URLEncodingSerializer = KBAPIURLEncodingSerializer;
 	typealias JSONResponseSerializer = KBAPIJSONResponseSerializer;
 	
-	associatedtype Parameters = Void where Parameters: Encodable;
+	associatedtype Parameters = VoidParameters where Parameters: Encodable;
 	associatedtype ResponseType;
 	associatedtype ResponseSerializerType where ResponseSerializerType: ResponseSerializer, ResponseSerializerType.ResponseType == ResponseType;
 	
@@ -96,6 +101,12 @@ public extension KBAPIRequest {
 	}
 }
 
+public extension KBAPIRequest where Parameters == VoidParameters {
+	public var parameters: Parameters {
+		return VoidParameters ();
+	}
+}
+
 public extension KBAPIRequest where Parameters: ExpressibleByNilLiteral {
 	public var parameters: Parameters {
 		return nil;
@@ -113,12 +124,6 @@ public extension KBAPIRequest where Parameters: ExpressibleByDictionaryLiteral {
 		return [:];
 	}
 }
-
-//extension __KBAPIRequest: KBAPIRequest {
-//	@nonobjc public var httpMethod: HTTPMethod {
-//		return HTTPMethod (rawValue: self.__httpMethod.rawValue);
-//	}
-//}
 
 fileprivate extension URL {
 	fileprivate static let none = URL (string: "")!;

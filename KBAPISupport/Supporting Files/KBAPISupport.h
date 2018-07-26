@@ -24,8 +24,11 @@
 //  THE SOFTWARE.
 //
 
-#import <KBAPISupport/KBAtomicCounter.h>
-#import <KBAPISupport/KBAPIRequest.h>
+#import <KBAPISupport/DispatchQueue+syncSafe.h>
+
+#if __has_include (<KBAPISupport/KBAPISupport+ObjC.h>)
+#	import <KBAPISupport/KBAPISupport+ObjC.h>
+#endif
 
 #if __has_include (<KBAPISupport/KBAPISupport-Swift.h>)
 #	import <KBAPISupport/KBAPISupport-Swift.h>
