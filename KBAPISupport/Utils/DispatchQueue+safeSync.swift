@@ -9,23 +9,32 @@
 import Dispatch
 
 public extension DispatchQueue {
-	public func safeSync <T> (execute work: () throws -> T) rethrows -> T {
-		func rethrower (_ error: Error) throws {
-			throw error;
-		}
-		
+	public func safeSync (execute work: () -> ()) {
+		__dispatch_sync_safe (self, work);
+	}
+
+	public func safeSync <T> (execute work: () -> T) -> T {
 		var result: T?;
-		var error: Error?;
+		__dispatch_sync_safe (self) {
+			result = work ();
+		};
+		return result!;
+	}
+	
+	public func safeSync <T> (execute work: () throws -> T) throws -> T {
+		var result: Result <T>?;
 		__dispatch_sync_safe (self) {
 			do {
-				result = try work ();
-			} catch let err {
-				error = err;
+				result = .success (try work ());
+			} catch {
+				result = .failure (error);
 			}
 		};
-		if let error = error {
-			try rethrower (error);
-		}		
-		return result!;
+		switch (result!) {
+		case .success (let result):
+			return result;
+		case .failure (let error):
+			throw error;
+		}
 	}
 }
