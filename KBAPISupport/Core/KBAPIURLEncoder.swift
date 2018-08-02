@@ -29,18 +29,36 @@ private protocol KBAPIURLEncoderUnkeyedContainer: KBAPIURLEncoderContainer, Unke
 }
 private protocol KBAPIURLEncoderSingleValueContainer: KBAPIURLEncoderContainer, SingleValueEncodingContainer {}
 
+private protocol KBAPIURLEncoderResult {
+	var debugLogDescription: String { get }
+	
+	init ();
+}
+
+extension Data: KBAPIURLEncoderResult {}
+
+extension Array: KBAPIURLEncoderResult where Element == URLQueryItem {
+	fileprivate var debugLogDescription: String {
+		return "[" + self.map { "\($0.name) = \($0.value ?? "<nil>")" }.joined (separator: ", ") + "]";
+	}
+}
+
 public struct KBAPIURLEncoder: KBAPIURLEncoderProtocol {
 	public init () {}
 	
 	public func encode <T> (_ parameters: T) throws -> Data where T: Encodable {
-		let encoder = Encoder (Data ());
-		try parameters.encode (to: encoder);
-		return encoder.result;
+		return try self.encode (parameters: parameters);
 	}
 
 	public func encode <T> (_ parameters: T) throws -> [URLQueryItem] where T: Encodable {
-		let encoder = Encoder ([URLQueryItem] ());
+		return try self.encode (parameters: parameters);
+	}
+	
+	private func encode <T, R> (parameters: T) throws -> R where T: Encodable, R: KBAPIURLEncoderResult {
+		log.info ("Parameters: \(parameters)");
+		let encoder = Encoder (R ());
 		try parameters.encode (to: encoder);
+		log.debug ("Encoded parameters: \(encoder.result.debugLogDescription)");
 		return encoder.result;
 	}
 }
@@ -96,9 +114,10 @@ extension KBAPIURLEncoder.Encoder: KBAPIURLEncoderImplementation, Encoder {
 	fileprivate func appendResultValue (_ value: String?, for codingPath: [CodingKey]) {
 		self.appendResultValue (value, for: codingPath.urlencodedParameterName);
 	}
+	
 	fileprivate func appendResultValue (_ value: String?, for parameterName: String) {
 		let itemDescription = value.map { "\"\(parameterName)\" = \"\($0)\"" } ?? "\"\(parameterName)\"";
-		fatalError ("Cannot append \(itemDescription) item to \(self.result)");
+		log.fault ("Cannot append \(itemDescription) item to \(self.result)");
 	}
 }
 
@@ -202,7 +221,8 @@ extension KBAPIURLEncoder.Encoder where Result == [URLQueryItem] {
 fileprivate extension CodingKey {
 	fileprivate static var `super`: Self {
 		guard let result = Self (stringValue: "super") ?? Self (intValue: 0) else {
-			fatalError ("Cannot instantiate \"super\" / zero key");
+			log.fault ("Cannot instantiate \"super\" / zero key");
+			return Self (stringValue: "super")!;
 		}
 		return result;
 	}
@@ -384,3 +404,5 @@ fileprivate extension Array where Element == CodingKey {
 		return nameHead + "[" + nameTail.map { $0.stringValue }.joined (separator: "][") + "]";
 	}
 }
+
+private let log = KBLoggerWrapper ();

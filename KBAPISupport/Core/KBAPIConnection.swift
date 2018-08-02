@@ -89,7 +89,8 @@ fileprivate extension KBAPIConnection {
 		private unowned let session: URLSession;
 
 		fileprivate private (set) lazy var task: URLSessionTask = {
-			fatalError ("URL session task is not created yet");
+			log.fault ("URL session task is not created yet");
+			return URLSessionTask ();
 		} ();
 		
 		fileprivate init (session: URLSession, request: Request) {
@@ -137,3 +138,5 @@ extension URLSession {
 		return KBAPIConnection (request: request, session: self);
 	}
 }
+
+private let log = KBLoggerWrapper ();

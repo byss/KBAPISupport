@@ -24,6 +24,7 @@ open class KBAPIRawResponseSerializer: KBAPIResponseSerializerProtocol {
 	public init () {}
 
 	open func decode (from data: Data) throws -> Data {
+		log.debug ("Encoded response: \(data.debugLogDescription)");
 		return data;
 	}
 }
@@ -38,7 +39,16 @@ open class KBAPIRawJSONResponseSerializer: KBAPIResponseSerializerProtocol {
 	}
 
 	open func decode (from data: Data) throws -> Any {
-		return try JSONSerialization.jsonObject (with: data, options: self.options);
+		log.debug ("Encoded response: \(data.debugLogDescription)");
+		do {
+			let result = try JSONSerialization.jsonObject (with: data, options: self.options);
+			log.info ("Decoded value: \(result)");
+			return result;
+		} catch {
+			log.warning ("Decoding error: \(error)");
+			throw error;
+		}
+		
 	}
 }
 
@@ -52,6 +62,16 @@ open class KBAPIJSONResponseSerializer <Response>: KBAPIResponseSerializerProtoc
 	}
 
 	open func decode (from data: Data) throws -> Response {
-		return try self.jsonDecoder.decode (from: data);
+		log.debug ("Encoded response: \(data.debugLogDescription)");
+		do {
+			let result: Response = try self.jsonDecoder.decode (from: data);
+			log.info ("Result: \(type (of: result)) instance");
+			return result;
+		} catch {
+			log.warning ("Decoding error: \(error)");
+			throw error;
+		}
 	}
 }
+
+private let log = KBLoggerWrapper ();

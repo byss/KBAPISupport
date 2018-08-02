@@ -95,7 +95,8 @@ public extension KBAPIRequest {
 	
 	public var url: URL {
 		guard let url = URL (string: self.path, relativeTo: self.baseURL) else {
-			fatalError ("Cannot construct URL for \(self)");
+			log.fault ("Cannot construct URL for \(self)");
+			return NSURL () as URL;
 		}
 		return url;
 	}
@@ -128,3 +129,5 @@ public extension KBAPIRequest where Parameters: ExpressibleByDictionaryLiteral {
 fileprivate extension URL {
 	fileprivate static let none = URL (string: "")!;
 }
+
+private let log = KBLoggerWrapper ();

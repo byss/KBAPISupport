@@ -41,7 +41,15 @@ public extension KBAPIRequestSerializerProtocol {
 		var result = URLRequest (url: req.url);
 		result.httpMethod = req.httpMethod.rawValue;
 		result.allHTTPHeaderFields = req.httpHeaders.merging (self.commonHeaders) { a, b in a };
-		try self.serializeParameters (req.parameters, asBodyData: self.shouldSerializeRequestParametersAsBodyData (for: req), into: &result);
+		log.info ("Request: \(req.httpMethod.rawValue) \(req.url)");
+		do {
+			try self.serializeParameters (req.parameters, asBodyData: self.shouldSerializeRequestParametersAsBodyData (for: req), into: &result);
+		} catch {
+			log.warning ("Encoding error: \(error)");
+			throw error;
+		}
+		result.allHTTPHeaderFields.map { headers in log.info ("Headers: [\(headers.map { "\($0.key): \($0.value)" }.joined (separator: ", "))]") };
+		log.debug ("Serialized: \(result.makeCurlCommand ())");
 		return result;
 	}
 }
@@ -64,13 +72,15 @@ open class KBAPIURLEncodingSerializer: KBAPIRequestSerializerProtocol {
 		}
 		
 		guard var urlComponents = request.url.flatMap ({ URLComponents (url: $0, resolvingAgainstBaseURL: false) }) else {
-			fatalError ("Request URL is not set or is invalid");
+			log.fault ("Request URL is not set or is invalid");
+			return;
 		}
 		
 		let encodedParameters = try self.urlEncoder.encode (parameters) as [URLQueryItem];
 		urlComponents.queryItems = urlComponents.queryItems.map { $0 + encodedParameters } ?? encodedParameters;
 		guard let resultURL = urlComponents.url else {
-			fatalError ("\(self.urlEncoder) did return invalid url query items");
+			log.fault ("\(self.urlEncoder) did return invalid url query items");
+			return;
 		}
 		request.url = resultURL;
 	}
@@ -106,3 +116,5 @@ fileprivate extension Bundle {
 		return preferredLocalizations.enumerated ().map { "\($0.element); q=\(String (format: "%.1f", 1.0 / Double (1 << $0.offset)))" }.joined (separator: ", ");
 	}
 }
+
+private let log = KBLoggerWrapper ();
