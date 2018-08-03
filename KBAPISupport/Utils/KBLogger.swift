@@ -259,8 +259,9 @@ private extension KBLogger {
 		"",
 		"[WARNING]",
 		"KBAPISupport reports only critical, game-breaking errors using `KBLogLevel.fault`, so setting `abortsOnFault` to `false`",
-		"is not recommended. This option should only be used as a last resort for thing like bug workarounds or such. Please",
+		"is not recommended. This option should only be used as a last resort for things like bug workarounds or such. Please",
 		"consider turning is off as soon as possible because it can lead to an unimaginable amount of undesired behaviour.",
+		"[/WARNING]",
 		"",
 		"",
 		separator: "\n"
@@ -271,9 +272,11 @@ private extension KBLogger {
 fileprivate extension Bundle {
 	fileprivate static let logger = Bundle (for: KBLoggerWrapper.self);
 	
+#if DEBUG
 	fileprivate var overrideDefaultLogLevel: KBLogLevel? {
 		return (self.object (forInfoDictionaryKey: .overrideDefaultLevelInfoDictionaryKey) as? String).flatMap (KBLogLevel.init);
 	}
+#endif
 }
 
 fileprivate extension String {

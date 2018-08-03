@@ -51,7 +51,11 @@ public extension KBAPIRequestSerializerProtocol {
 			throw error;
 		}
 		result.allHTTPHeaderFields.map { headers in log.info ("Headers: [\(headers.map { "\($0.key): \($0.value)" }.joined (separator: ", "))]") };
+#if DEBUG
 		log.debug ("Serialized: \(result.makeCurlCommand ())");
+#else
+		log.debug ("Serialized: \(result)");
+#endif
 		return result;
 	}
 

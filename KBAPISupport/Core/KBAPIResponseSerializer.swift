@@ -72,8 +72,6 @@ open class KBAPIRawResponseSerializer: KBAPIResponseSerializerProtocol {
 	}
 	
 	open func decode (from data: Data?, response: URLResponse) throws -> Data {
-		log.info ("URL response: \(response)");
-		log.info ("Encoded response: \(data.map { $0.debugLogDescription } ?? "nil")");
 		return try self.decode (from: data);
 	}
 }
@@ -100,8 +98,6 @@ open class KBAPIRawJSONResponseSerializer: KBAPIResponseSerializerProtocol {
 	}
 
 	open func decode (from data: Data?, response: URLResponse) throws -> Any {
-		log.info ("URL response: \(response)");
-		log.info ("Encoded response: \(data.map { $0.debugLogDescription } ?? "nil")");
 		return try self.decode (from: data);
 	}
 }
@@ -120,8 +116,6 @@ open class KBAPIJSONResponseSerializer <Response>: KBAPIResponseSerializerProtoc
 	}
 
 	open func decode (from data: Data?, response: URLResponse) throws -> Response {
-		log.info ("URL response: \(response)");
-		log.info ("Encoded response: \(data.map { $0.debugLogDescription } ?? "nil")");
 		do {
 			let result: Response = try self.jsonDecoder.decode (from: data, response: response);
 			log.info ("Result: \(type (of: result)) instance");
