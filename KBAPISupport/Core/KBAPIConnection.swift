@@ -32,16 +32,16 @@ open class KBAPIConnection <Request> where Request: KBAPIRequest {
 	public typealias RequestType = Request;
 	public typealias ResponseType = Request.ResponseType;
 	
+	public var request: Request {
+		return self.taskWrapper.request;
+	}
+	
 	private var queue: DispatchQueue {
 		return KBAPIConnectionQueue;
 	}
 	
 	private let taskWrapper: SessionTaskWrapper;
 	
-	private var request: Request {
-		return self.taskWrapper.request;
-	}
-
 	open class func withRequest (_ request: Request) -> KBAPIConnection {
 		return KBAPIConnection (request: request);
 	}

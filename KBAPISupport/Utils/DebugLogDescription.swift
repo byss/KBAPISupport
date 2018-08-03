@@ -1,5 +1,5 @@
 //
-//  Data+debugLogDescription.swift
+//  DebugLogDescription.swift
 //  KBAPISupport
 //
 //  Created by Kirill Bystrov on 7/31/18.
@@ -8,19 +8,9 @@
 
 import Foundation
 
-fileprivate extension UInt8 {
-	fileprivate static let asciiZeroCode = "0".utf8.first!;
-	fileprivate static let asciiACode = "A".utf8.first!;
-}
-
-private func hexdigit (_ x: UInt8) -> UInt16 {
-	switch (x) {
-	case 0 ..< 10:
-		return numericCast (x + .asciiZeroCode);
-	case 0xA ..< 0x10:
-		return numericCast (x + .asciiACode);
-	default:
-		return 0;
+internal extension Array where Element == URLQueryItem {
+	internal var debugLogDescription: String {
+		return "[" + self.map { "\($0.name) = \($0.value ?? "<nil>")" }.joined (separator: ", ") + "]";
 	}
 }
 
@@ -89,4 +79,20 @@ private struct UnsafePointerCollection <Element>: RandomAccessCollection {
 
 fileprivate extension Int {
 	fileprivate static let maximumDataDebugLogDescriptionLength = 1024;
+}
+
+fileprivate extension UInt8 {
+	fileprivate static let asciiZeroCode = "0".utf8.first!;
+	fileprivate static let asciiACode = "A".utf8.first!;
+}
+
+private func hexdigit (_ x: UInt8) -> UInt16 {
+	switch (x) {
+	case 0 ..< 10:
+		return numericCast (x + .asciiZeroCode);
+	case 0xA ..< 0x10:
+		return numericCast (x + .asciiACode);
+	default:
+		return 0;
+	}
 }

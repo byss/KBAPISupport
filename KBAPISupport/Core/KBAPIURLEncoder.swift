@@ -13,7 +13,7 @@ public protocol KBAPIURLEncoderProtocol: KBAPIEncoder {
 }
 
 private protocol KBAPIURLEncoderContainer {
-	associatedtype ResultType;
+	associatedtype ResultType where ResultType: KBAPIURLEncoderResult;
 	
 	typealias EncoderType = KBAPIURLEncoder.Encoder <ResultType>;
 
@@ -30,20 +30,43 @@ private protocol KBAPIURLEncoderUnkeyedContainer: KBAPIURLEncoderContainer, Unke
 private protocol KBAPIURLEncoderSingleValueContainer: KBAPIURLEncoderContainer, SingleValueEncodingContainer {}
 
 private protocol KBAPIURLEncoderResult {
-	var debugLogDescription: String { get }
-	
 	init ();
+	
+	mutating func appendResultValue (_ value: String?, for parameterName: String);
 }
 
-extension Data: KBAPIURLEncoderResult {}
+extension Data: KBAPIURLEncoderResult {
+	private static let interitemDelimiter = "&".utf8;
+	private static let nameValueDelimiter = "=".utf8;
+	
+	fileprivate mutating func appendResultValue (_ value: String?, for parameterName: String) {
+		let components = [
+			self.currentInteritemDelimiterData,
+			parameterName.utf8,
+			value.map { _ in Data.nameValueDelimiter },
+			value?.utf8,
+		].compactMap { $0 };
+		
+		self.reserveCapacity (self.count + components.reduce (into: 0) { $0 += $1.count });
+		for component in components {
+			self.append (contentsOf: component);
+		}
+	}
+	
+	private var currentInteritemDelimiterData: String.UTF8View? {
+		return self.isEmpty ? nil : Data.interitemDelimiter;
+	}
+}
 
 extension Array: KBAPIURLEncoderResult where Element == URLQueryItem {
-	fileprivate var debugLogDescription: String {
-		return "[" + self.map { "\($0.name) = \($0.value ?? "<nil>")" }.joined (separator: ", ") + "]";
+	fileprivate mutating func appendResultValue (_ value: String?, for parameterName: String) {
+		self.append (URLQueryItem (name: parameterName, value: value));
 	}
 }
 
 public struct KBAPIURLEncoder: KBAPIURLEncoderProtocol {
+	public var userInfo = [CodingUserInfoKey: Any] ();
+	
 	public init () {}
 	
 	public func encode <T> (_ parameters: T) throws -> Data where T: Encodable {
@@ -55,29 +78,30 @@ public struct KBAPIURLEncoder: KBAPIURLEncoderProtocol {
 	}
 	
 	private func encode <T, R> (parameters: T) throws -> R where T: Encodable, R: KBAPIURLEncoderResult {
-		log.info ("Parameters: \(parameters)");
-		let encoder = Encoder (R ());
+		let encoder = Encoder (R (), userInfo: self.userInfo);
 		try parameters.encode (to: encoder);
-		log.debug ("Encoded parameters: \(encoder.result.debugLogDescription)");
 		return encoder.result;
 	}
 }
 
 extension KBAPIURLEncoder {
-	fileprivate class Encoder <Result> {
+	fileprivate class Encoder <Result> where Result: KBAPIURLEncoderResult {
 		fileprivate typealias ResultType = Result;
+		
+		fileprivate let userInfo: [CodingUserInfoKey: Any];
 		
 		fileprivate private (set) var result: Result;
 		fileprivate var codingPath: [CodingKey] {
 			return [];
 		}
 		
-		fileprivate init (_ result: Result) {
+		fileprivate init (_ result: Result, userInfo: [CodingUserInfoKey: Any]) {
+			self.userInfo = userInfo;
 			self.result = result;
 		}
 	}
 	
-	fileprivate struct SuperEncoder <Result> {
+	fileprivate struct SuperEncoder <Result> where Result: KBAPIURLEncoderResult {
 		fileprivate typealias Parent = Encoder <Result>;
 		
 		fileprivate let codingPath: [CodingKey];
@@ -116,8 +140,7 @@ extension KBAPIURLEncoder.Encoder: KBAPIURLEncoderImplementation, Encoder {
 	}
 	
 	fileprivate func appendResultValue (_ value: String?, for parameterName: String) {
-		let itemDescription = value.map { "\"\(parameterName)\" = \"\($0)\"" } ?? "\"\(parameterName)\"";
-		log.fault ("Cannot append \(itemDescription) item to \(self.result)");
+		self.result.appendResultValue (value, for: parameterName);
 	}
 }
 
@@ -125,6 +148,10 @@ extension KBAPIURLEncoder.SuperEncoder: KBAPIURLEncoderImplementation, Encoder {
 	fileprivate typealias UnkeyedContainer = Parent.UnkeyedContainer;
 	fileprivate typealias SingleValueContainer = Parent.SingleValueContainer;
 
+	fileprivate var userInfo: [CodingUserInfoKey : Any] {
+		return self.rootEncoder.userInfo;
+	}
+	
 	fileprivate static func makeContainer <Key> (keyedBy type: Key.Type, for encoder: KBAPIURLEncoder.SuperEncoder <ResultType>, baseCodingPath: [CodingKey]) -> KeyedEncodingContainer <Key> {
 		return Parent.makeContainer (keyedBy: type, for: encoder.rootEncoder, baseCodingPath: encoder.codingPath + baseCodingPath);
 	}
@@ -135,10 +162,6 @@ extension KBAPIURLEncoder.SuperEncoder: KBAPIURLEncoderImplementation, Encoder {
 }
 
 extension KBAPIURLEncoderImplementation where Self: Encoder {
-	fileprivate var userInfo: [CodingUserInfoKey: Any] {
-		return [:];
-	}
-	
 	fileprivate func encodeNilValue (for codingPath: [CodingKey]) {
 		self.appendResultValue (nil, for: codingPath);
 	}
@@ -188,33 +211,6 @@ extension KBAPIURLEncoderImplementation where Self: Encoder {
 	
 	fileprivate func singleValueContainer (baseCodingPath: [CodingKey]) -> SingleValueEncodingContainer {
 		return SingleValueContainer.init (for: self.rootEncoder, baseCodingPath: baseCodingPath);
-	}
-}
-
-extension KBAPIURLEncoder.Encoder where Result == Data {
-	private static let interitemDelimiter = "&".utf8;
-	private static let nameValueDelimiter = "=".utf8;
-	
-	fileprivate func appendResultValue (_ value: String?, for parameterName: String) {
-		let components = [
-			self.currentInteritemDelimiterData,
-			parameterName.utf8,
-			value.map { _ in KBAPIURLEncoder.Encoder.nameValueDelimiter },
-			value?.utf8,
-		].compactMap { $0 };
-		
-		self.result.reserveCapacity (self.result.count + components.reduce (into: 0) { $0 += $1.count });
-		components.forEach { self.result.append (contentsOf: $0) };
-	}
-	
-	private var currentInteritemDelimiterData: String.UTF8View? {
-		return self.result.isEmpty ? nil : KBAPIURLEncoder.Encoder.interitemDelimiter;
-	}
-}
-
-extension KBAPIURLEncoder.Encoder where Result == [URLQueryItem] {
-	fileprivate func appendResultItem (name: String, value: String?) {
-		self.result.append (URLQueryItem (name: name, value: value));
 	}
 }
 

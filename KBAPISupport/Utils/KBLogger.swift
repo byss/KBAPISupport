@@ -175,7 +175,11 @@ internal final class KBLoggerWrapper: KBLoggerProtocol {
 		self.reloadLoggerCallbacks [Unmanaged.passUnretained (logger).toOpaque ()] = nil;
 	}
 	
-	internal init (subsystem: String = .loggerBundleIdentifier, category: String = NSString (string: #file).deletingPathExtension) {
+	internal convenience init (_ filename: String = #file) {
+		self.init (category: URL (fileURLWithPath: filename).deletingPathExtension ().lastPathComponent);
+	}
+	
+	internal init (subsystem: String = .loggerBundleIdentifier, category: String) {
 		let makeLoggerBlock = makeLogger (subsystem: subsystem, category: category);
 		self.logger = makeLoggerBlock ();
 		KBLoggerWrapper.registerLogger (self) {

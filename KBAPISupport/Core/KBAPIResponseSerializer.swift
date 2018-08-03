@@ -8,11 +8,11 @@
 
 import Foundation
 
-public protocol KBAPIDecoder {
+public protocol KBAPIDecoder: KBAPICoder {
 	func decode <T> (from data: Data) throws -> T where T: Decodable;
 }
 
-public protocol KBAPIResponseSerializerProtocol {
+public protocol KBAPIResponseSerializerProtocol: KBAPICoder {
 	associatedtype ResponseType;
 	
 	func decode (from data: Data) throws -> ResponseType;
@@ -21,10 +21,12 @@ public protocol KBAPIResponseSerializerProtocol {
 open class KBAPIRawResponseSerializer: KBAPIResponseSerializerProtocol {
 	public typealias ResponseType = Data;
 	
+	open var userInfo = [CodingUserInfoKey: Any] ();
+	
 	public init () {}
 
 	open func decode (from data: Data) throws -> Data {
-		log.debug ("Encoded response: \(data.debugLogDescription)");
+		log.info ("Encoded response: \(data.debugLogDescription)");
 		return data;
 	}
 }
@@ -32,6 +34,7 @@ open class KBAPIRawResponseSerializer: KBAPIResponseSerializerProtocol {
 open class KBAPIRawJSONResponseSerializer: KBAPIResponseSerializerProtocol {
 	public typealias ResponseType = Any;
 	
+	open var userInfo = [CodingUserInfoKey: Any] ();
 	open var options: JSONSerialization.ReadingOptions;
 	
 	public init (options: JSONSerialization.ReadingOptions = .allowFragments) {
@@ -39,7 +42,7 @@ open class KBAPIRawJSONResponseSerializer: KBAPIResponseSerializerProtocol {
 	}
 
 	open func decode (from data: Data) throws -> Any {
-		log.debug ("Encoded response: \(data.debugLogDescription)");
+		log.info ("Encoded response: \(data.debugLogDescription)");
 		do {
 			let result = try JSONSerialization.jsonObject (with: data, options: self.options);
 			log.info ("Decoded value: \(result)");
@@ -55,14 +58,18 @@ open class KBAPIRawJSONResponseSerializer: KBAPIResponseSerializerProtocol {
 open class KBAPIJSONResponseSerializer <Response>: KBAPIResponseSerializerProtocol where Response: Decodable {
 	public typealias ResponseType = Response;
 	
-	open let jsonDecoder: KBAPIJSONDecoderProtocol;
+	open var jsonDecoder: KBAPIJSONDecoderProtocol;
+	open var userInfo: [CodingUserInfoKey: Any] {
+		get { return self.jsonDecoder.userInfo }
+		set { self.jsonDecoder.userInfo = newValue }
+	}
 	
 	public init (jsonDecoder: KBAPIJSONDecoderProtocol = JSONDecoder.defaultForResponseSerialization) {
 		self.jsonDecoder = jsonDecoder;
 	}
 
 	open func decode (from data: Data) throws -> Response {
-		log.debug ("Encoded response: \(data.debugLogDescription)");
+		log.info ("Encoded response: \(data.debugLogDescription)");
 		do {
 			let result: Response = try self.jsonDecoder.decode (from: data);
 			log.info ("Result: \(type (of: result)) instance");

@@ -8,8 +8,14 @@
 
 import Foundation
 
+public protocol KBAPICoder {
+	var userInfo: [CodingUserInfoKey: Any] { get set }
+}
+
 public struct KBAPIRequestVoidParameters: Encodable {
-	fileprivate init () {}
+	public static let instance = KBAPIRequestVoidParameters ();
+	
+	private init () {}
 }
 
 public struct KBAPIRequestHTTPMethod: Hashable {
@@ -104,7 +110,7 @@ public extension KBAPIRequest {
 
 public extension KBAPIRequest where Parameters == VoidParameters {
 	public var parameters: Parameters {
-		return VoidParameters ();
+		return VoidParameters.instance;
 	}
 }
 

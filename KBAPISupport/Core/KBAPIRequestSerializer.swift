@@ -8,11 +8,11 @@
 
 import Foundation
 
-public protocol KBAPIEncoder {
+public protocol KBAPIEncoder: KBAPICoder {
 	func encode <T> (_ parameters: T) throws -> Data where T: Encodable;
 }
 
-public protocol KBAPIRequestSerializerProtocol {
+public protocol KBAPIRequestSerializerProtocol: KBAPICoder {
 	func shouldSerializeRequestParametersAsBodyData <R> (for request: R) -> Bool where R: KBAPIRequest;
 	func serializeRequest <R> (_ request: R) throws -> URLRequest where R: KBAPIRequest;
 	func serializeParameters <P> (_ parameters: P, asBodyData: Bool, into request: inout URLRequest) throws where P: Encodable;
@@ -41,9 +41,11 @@ public extension KBAPIRequestSerializerProtocol {
 		var result = URLRequest (url: req.url);
 		result.httpMethod = req.httpMethod.rawValue;
 		result.allHTTPHeaderFields = req.httpHeaders.merging (self.commonHeaders) { a, b in a };
-		log.info ("Request: \(req.httpMethod.rawValue) \(req.url)");
+		log.info ("Request: \(req.httpMethod.rawValue) \(req.url.absoluteString)");
+		let parameters = req.parameters;
+		log.info ("Parameters: \(parameters)");
 		do {
-			try self.serializeParameters (req.parameters, asBodyData: self.shouldSerializeRequestParametersAsBodyData (for: req), into: &result);
+			try self.serializeParameters (parameters, asBodyData: self.shouldSerializeRequestParametersAsBodyData (for: req), into: &result);
 		} catch {
 			log.warning ("Encoding error: \(error)");
 			throw error;
@@ -55,9 +57,13 @@ public extension KBAPIRequestSerializerProtocol {
 }
 
 open class KBAPIURLEncodingSerializer: KBAPIRequestSerializerProtocol {
-	open var urlEncoder: KBAPIURLEncoder;
+	open var urlEncoder: KBAPIURLEncoderProtocol;
+	open var userInfo: [CodingUserInfoKey: Any] {
+		get { return self.urlEncoder.userInfo }
+		set { self.urlEncoder.userInfo = newValue }
+	}
 	
-	public init (urlEncoder: KBAPIURLEncoder = URLEncoder ()) {
+	public init (urlEncoder: KBAPIURLEncoderProtocol = URLEncoder ()) {
 		self.urlEncoder = urlEncoder;
 	}
 	
@@ -68,7 +74,9 @@ open class KBAPIURLEncodingSerializer: KBAPIRequestSerializerProtocol {
 		
 		guard !asBodyData else {
 			request.addValue ("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type");
-			return request.httpBody = try self.urlEncoder.encode (parameters);
+			let encodedParameters: Data = try self.urlEncoder.encode (parameters);
+			log.debug ("Encoded parameters: \(encodedParameters.debugLogDescription)");
+			return request.httpBody = encodedParameters;
 		}
 		
 		guard var urlComponents = request.url.flatMap ({ URLComponents (url: $0, resolvingAgainstBaseURL: false) }) else {
@@ -77,6 +85,7 @@ open class KBAPIURLEncodingSerializer: KBAPIRequestSerializerProtocol {
 		}
 		
 		let encodedParameters = try self.urlEncoder.encode (parameters) as [URLQueryItem];
+		log.debug ("Encoded parameters: \(encodedParameters.debugLogDescription)");
 		urlComponents.queryItems = urlComponents.queryItems.map { $0 + encodedParameters } ?? encodedParameters;
 		guard let resultURL = urlComponents.url else {
 			log.fault ("\(self.urlEncoder) did return invalid url query items");
@@ -87,9 +96,16 @@ open class KBAPIURLEncodingSerializer: KBAPIRequestSerializerProtocol {
 }
 
 open class KBAPIJSONSerializer: KBAPIURLEncodingSerializer {
-	open let jsonEncoder: KBAPIJSONEncoderProtocol;
+	open var jsonEncoder: KBAPIJSONEncoderProtocol;
+	open override var userInfo: [CodingUserInfoKey: Any] {
+		get { return super.userInfo }
+		set {
+			super.userInfo = newValue;
+			self.jsonEncoder.userInfo = newValue;
+		}
+	}
 
-	public init (urlEncoder: KBAPIURLEncoder? = nil, jsonEncoder: KBAPIJSONEncoderProtocol = JSONEncoder.defaultForRequestSerialization) {
+	public init (urlEncoder: KBAPIURLEncoderProtocol? = nil, jsonEncoder: KBAPIJSONEncoderProtocol = JSONEncoder.defaultForRequestSerialization) {
 		self.jsonEncoder = jsonEncoder;
 		if let urlEncoder = urlEncoder {
 			super.init (urlEncoder: urlEncoder);
@@ -103,7 +119,9 @@ open class KBAPIJSONSerializer: KBAPIURLEncodingSerializer {
 			return try super.serializeParameters (parameters, asBodyData: asBodyData, into: &request);
 		}
 		request.addValue ("application/json", forHTTPHeaderField: "Content-Type");
-		request.httpBody = try self.jsonEncoder.encode (parameters);
+		let encodedParameters: Data = try self.jsonEncoder.encode (parameters);
+		log.debug ("Encoded parameters: \(encodedParameters.debugLogDescription)");
+		request.httpBody = encodedParameters;
 	}
 }
 
