@@ -12,8 +12,12 @@ public protocol KBAPICoder {
 	var userInfo: [CodingUserInfoKey: Any] { get set }
 }
 
-public struct KBAPIRequestVoidParameters: Encodable {
+public struct KBAPIRequestVoidParameters: Encodable, CustomStringConvertible {
 	public static let instance = KBAPIRequestVoidParameters ();
+	
+	public var description: String {
+		return "none";
+	}
 	
 	private init () {}
 }

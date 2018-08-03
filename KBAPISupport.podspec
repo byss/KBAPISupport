@@ -29,6 +29,7 @@ Pod::Spec.new do |spec|
 	spec.kb_subspec 'Utils'
 	spec.kb_subspec 'Core', :requires => 'Utils'
 	spec.kb_subspec 'ObjC', :requires => 'Core'
-	
+	spec.kb_subspec 'UIKit', :requires => 'Core'
+
 	spec.default_subspecs = 'Core'
 end

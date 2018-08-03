@@ -54,6 +54,10 @@ public extension KBAPIRequestSerializerProtocol {
 		log.debug ("Serialized: \(result.makeCurlCommand ())");
 		return result;
 	}
+
+	public func serializeParameters <P> (_ parameters: P, asBodyData: Bool, into request: inout URLRequest) throws where P: Encodable {
+		log.fault ("\(Self.self) does not implement \(#function)");
+	}
 }
 
 open class KBAPIURLEncodingSerializer: KBAPIRequestSerializerProtocol {

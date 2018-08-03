@@ -30,6 +30,10 @@
 #	import <KBAPISupport/KBAPISupport+ObjC.h>
 #endif
 
+#if __has_include (<KBAPISupport/KBAPISupport+UIKit.h>)
+#	import <KBAPISupport/KBAPISupport+UIKit.h>
+#endif
+
 #if __has_include (<KBAPISupport/KBAPISupport-Swift.h>)
 #	import <KBAPISupport/KBAPISupport-Swift.h>
 #endif

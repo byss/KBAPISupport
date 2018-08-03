@@ -42,8 +42,13 @@ extension JSONEncoder: KBAPIJSONEncoderProtocol {
 }
 
 extension JSONDecoder: KBAPIJSONDecoderProtocol {
-	public func decode <T> (from data: Data) throws -> T where T: Decodable {
+	open func decode <T> (from data: Data) throws -> T where T: Decodable {
 		return try self.decode (T.self, from: data);
+	}
+	
+	open func decode <T> (from data: Data?, response: URLResponse) throws -> T where T: Decodable {
+		self.userInfo [.urlResponseKey] = response;
+		return try self.decode (from: data);
 	}
 	
 	public static var defaultForResponseSerialization: JSONDecoder {

@@ -8,14 +8,56 @@
 
 import Foundation
 
+public extension CodingUserInfoKey {
+	public static let urlResponseKey = CodingUserInfoKey (rawValue: "urlResponse")!;
+}
+
 public protocol KBAPIDecoder: KBAPICoder {
 	func decode <T> (from data: Data) throws -> T where T: Decodable;
+	func decode <T> (from data: Data?) throws -> T where T: Decodable;
+	func decode <T> (from data: Data?, response: URLResponse) throws -> T where T: Decodable;
 }
 
 public protocol KBAPIResponseSerializerProtocol: KBAPICoder {
 	associatedtype ResponseType;
 	
 	func decode (from data: Data) throws -> ResponseType;
+	func decode (from data: Data?) throws -> ResponseType;
+	func decode (from data: Data?, response: URLResponse) throws -> ResponseType;
+}
+
+public extension KBAPIDecoder {
+	public func decode <T> (from data: Data) throws -> T where T: Decodable {
+		return try self.decode (from: nil);
+	}
+	
+	public func decode <T> (from data: Data?) throws -> T where T: Decodable {
+		guard let data = data else {
+			throw DecodingError.dataCorrupted (DecodingError.Context (codingPath: [], debugDescription: "No data supplied"));
+		}
+		return try self.decode (from: data);
+	}
+
+	public func decode <T> (from data: Data?, response: URLResponse) throws -> T where T: Decodable {
+		return try self.decode (from: data);
+	}
+}
+
+public extension KBAPIResponseSerializerProtocol {
+	public func decode (from data: Data) throws -> ResponseType {
+		return try self.decode (from: nil);
+	}
+	
+	public func decode (from data: Data?) throws -> ResponseType {
+		guard let data = data else {
+			throw DecodingError.dataCorrupted (DecodingError.Context (codingPath: [], debugDescription: "No data supplied"));
+		}
+		return try self.decode (from: data);
+	}
+
+	public func decode (from data: Data?, response: URLResponse) throws -> ResponseType {
+		return try self.decode (from: data);
+	}
 }
 
 open class KBAPIRawResponseSerializer: KBAPIResponseSerializerProtocol {
@@ -25,9 +67,14 @@ open class KBAPIRawResponseSerializer: KBAPIResponseSerializerProtocol {
 	
 	public init () {}
 
-	open func decode (from data: Data) throws -> Data {
-		log.info ("Encoded response: \(data.debugLogDescription)");
+	public func decode (from data: Data) throws -> Data {
 		return data;
+	}
+	
+	open func decode (from data: Data?, response: URLResponse) throws -> Data {
+		log.info ("URL response: \(response)");
+		log.info ("Encoded response: \(data.map { $0.debugLogDescription } ?? "nil")");
+		return try self.decode (from: data);
 	}
 }
 
@@ -42,7 +89,6 @@ open class KBAPIRawJSONResponseSerializer: KBAPIResponseSerializerProtocol {
 	}
 
 	open func decode (from data: Data) throws -> Any {
-		log.info ("Encoded response: \(data.debugLogDescription)");
 		do {
 			let result = try JSONSerialization.jsonObject (with: data, options: self.options);
 			log.info ("Decoded value: \(result)");
@@ -51,7 +97,12 @@ open class KBAPIRawJSONResponseSerializer: KBAPIResponseSerializerProtocol {
 			log.warning ("Decoding error: \(error)");
 			throw error;
 		}
-		
+	}
+
+	open func decode (from data: Data?, response: URLResponse) throws -> Any {
+		log.info ("URL response: \(response)");
+		log.info ("Encoded response: \(data.map { $0.debugLogDescription } ?? "nil")");
+		return try self.decode (from: data);
 	}
 }
 
@@ -68,10 +119,11 @@ open class KBAPIJSONResponseSerializer <Response>: KBAPIResponseSerializerProtoc
 		self.jsonDecoder = jsonDecoder;
 	}
 
-	open func decode (from data: Data) throws -> Response {
-		log.info ("Encoded response: \(data.debugLogDescription)");
+	open func decode (from data: Data?, response: URLResponse) throws -> Response {
+		log.info ("URL response: \(response)");
+		log.info ("Encoded response: \(data.map { $0.debugLogDescription } ?? "nil")");
 		do {
-			let result: Response = try self.jsonDecoder.decode (from: data);
+			let result: Response = try self.jsonDecoder.decode (from: data, response: response);
 			log.info ("Result: \(type (of: result)) instance");
 			return result;
 		} catch {
