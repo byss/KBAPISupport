@@ -239,18 +239,16 @@ internal struct KBLogger: KBLoggerProtocol {
 		}
 	}
 	
-#if DEBUG
-	#if swift(>=4.2)
+#if swift(>=4.2)
 	@usableFromInline
 	internal func log (_ level: Level, message: String) {
 		os_log ("%@", log: self.logHandle, type: level.osLogType, message);
 	}
-	#else
+#else
 	@_versioned
 	internal func log (_ level: Level, message: String) {
 		os_log ("%@", log: self.logHandle, type: level.osLogType, message);
 	}
-	#endif
 #endif
 
 #if DEBUG
