@@ -10,7 +10,7 @@ import UIKit
 
 extension UIImageView: UIImageLoading {}
 extension UIImageView: UIImageLoadingImplementation {
-	@_versioned
+	@usableFromInline
 	internal func handleLoadedImage (_ image: UIImage) {
 		self.image = image;
 	}
@@ -18,7 +18,7 @@ extension UIImageView: UIImageLoadingImplementation {
 
 extension UIButton: UIImageLoading {}
 extension UIButton: UIImageLoadingImplementation {
-	@_versioned
+	@usableFromInline
 	internal func handleLoadedImage (_ image: UIImage) {
 		self.setImage (image, for: .normal);
 	}
@@ -26,7 +26,7 @@ extension UIButton: UIImageLoadingImplementation {
 
 extension UIBarButtonItem: UIImageLoading {}
 extension UIBarButtonItem: UIImageLoadingImplementation {
-	@_versioned
+	@usableFromInline
 	internal func handleLoadedImage (_ image: UIImage) {
 		self.image = image;
 	}

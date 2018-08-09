@@ -28,48 +28,48 @@ internal protocol UIImageLoadingImplementation: UIImageLoading, NSObjectProtocol
 }
 
 extension UIImageLoadingImplementation {
-	@_inlineable
+	@inlinable
 	public func setImage (url: URL) {
 		self.setImage (using: UIImage.withURL, with: url);
 	}
 
-	@_inlineable
+	@inlinable
 	public func setImage (url: URL, completion: @escaping (Result <UIImage>) -> UIImage?) {
 		self.setImage (using: UIImage.withURL, with: url, completion: completion);
 	}
 
-	@_inlineable
+	@inlinable
 	public func setImage (with request: URLRequest) {
 		self.setImage (using: UIImage.withRequest, with: request);
 	}
 	
-	@_inlineable
+	@inlinable
 	public func setImage (with request: URLRequest, completion: @escaping (Result <UIImage>) -> UIImage?) {
 		self.setImage (using: UIImage.withRequest, with: request, completion: completion);
 	}
 
-	@_inlineable
+	@inlinable
 	public func setImage <R> (with request: R) where R: KBAPIRequest, R.ResponseType == UIImage {
 		self.setImage (using: UIImage.withRequest, with: request);
 	}
 	
-	@_inlineable
+	@inlinable
 	public func cancelImageLoading () {
 		self.currentImageConnection?.cancel ();
 		self.currentImageConnection = nil;
 	}
 
-	@_inlineable
+	@inlinable
 	public func setImage <R> (with request: R, completion: @escaping (Result <UIImage>) -> UIImage?) where R: KBAPIRequest, R.ResponseType == UIImage {
 		self.setImage (using: UIImage.withRequest, with: request, completion: completion);
 	}
 	
-	@_versioned
+	@usableFromInline
 	internal func setImage <T> (using connection: (T, @escaping (Result <UIImage>) -> ()) -> KBAPIConnectionProtocol, with argument: T) {
 		self.setImage (using: connection, with: argument) { $0.value };
 	}
 
-	@_versioned
+	@usableFromInline
 	internal func setImage <T> (using connection: (T, @escaping (Result <UIImage>) -> ()) -> KBAPIConnectionProtocol, with argument: T, completion: @escaping (Result <UIImage>) -> UIImage?) {
 		self.currentImageConnection?.cancel ();
 		self.currentImageConnection = connection (argument) { [weak self] in
@@ -81,7 +81,7 @@ extension UIImageLoadingImplementation {
 		};
 	}
 
-	@_versioned
+	@usableFromInline
 	internal var currentImageConnection: KBAPIConnectionProtocol? {
 		get { return objc_getAssociatedObject (self, &currentImageConnectionKey) as? KBAPIConnectionProtocol }
 		set { objc_setAssociatedObject (self, &currentImageConnectionKey, newValue, .OBJC_ASSOCIATION_ASSIGN) }
