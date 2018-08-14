@@ -1,8 +1,8 @@
 //
-//  Result.swift
+//  DispatchQueue+safeSync.mm
 //  KBAPISupport
 //
-//  Created by Kirill Bystrov on 7/19/18.
+//  Created by Kirill Bystrov on 7/26/18.
 //  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,39 +24,14 @@
 //  THE SOFTWARE.
 //
 
-import Swift
+#import "DispatchQueue+safeSync.h"
+#import "DispatchQueue+identifier.h"
 
-public enum Result <Value> {
-	case success (Value);
-	case failure (Error);
-}
-
-public extension Result {
-	public var isSuccess: Bool {
-		guard case .success = self else {
-			return false;
-		}
-		return true;
-	}
-	
-	public var isFailure: Bool {
-		guard case .failure = self else {
-			return false;
-		}
-		return true;
-	}
-	
-	public var value: Value? {
-		guard case .success (let value) = self else {
-			return nil;
-		}
-		return value;
-	}
-	
-	public var error: Error? {
-		guard case .failure (let error) = self else {
-			return nil;
-		}
-		return error;
+DISPATCH_NONNULL_ALL DISPATCH_NOTHROW DISPATCH_REFINED_FOR_SWIFT
+void dispatch_sync_safe (dispatch_queue_t queue, DISPATCH_NOESCAPE dispatch_block_t block) {
+	if (dispatch_queue_get_identifier (queue) == dispatch_current_queue_get_identifier ()) {
+		block ();
+	} else {
+		dispatch_sync (queue, block);
 	}
 }
