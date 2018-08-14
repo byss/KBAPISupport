@@ -1,5 +1,5 @@
 //
-//  UIImageLoading.swift
+//  KBImageLoading.swift
 //  KBAPISupport
 //
 //  Created by Kirill Bystrov on 8/3/18.
@@ -24,51 +24,51 @@
 //  THE SOFTWARE.
 //
 
-import UIKit.UIImage
+import Swift
 
-public protocol UIImageLoading {
+public protocol KBImageLoading {
 	func setImage (url: URL);
-	func setImage (url: URL, completion: @escaping (Result <UIImage>) -> UIImage?);
+	func setImage (url: URL, completion: @escaping (Result <KBImage>) -> KBImage?);
 	func setImage (with request: URLRequest);
-	func setImage (with request: URLRequest, completion: @escaping (Result <UIImage>) -> UIImage?);
-	func setImage <R> (with request: R) where R: KBAPIRequest, R.ResponseType == UIImage;
-	func setImage <R> (with request: R, completion: @escaping (Result <UIImage>) -> UIImage?) where R: KBAPIRequest, R.ResponseType == UIImage;
+	func setImage (with request: URLRequest, completion: @escaping (Result <KBImage>) -> KBImage?);
+	func setImage <R> (with request: R) where R: KBAPIRequest, R.ResponseType == KBImage;
+	func setImage <R> (with request: R, completion: @escaping (Result <KBImage>) -> KBImage?) where R: KBAPIRequest, R.ResponseType == KBImage;
 	func cancelImageLoading ();
 }
 
-internal protocol UIImageLoadingImplementation: UIImageLoading, NSObjectProtocol {
+internal protocol KBImageLoadingImplementation: KBImageLoading, NSObjectProtocol {
 	var currentImageConnection: KBAPIConnectionProtocol? { get set }
 
-	func setImage <T> (using connection: (T, @escaping (Result <UIImage>) -> ()) -> KBAPIConnectionProtocol, with argument: T);
-	func setImage <T> (using connection: (T, @escaping (Result <UIImage>) -> ()) -> KBAPIConnectionProtocol, with argument: T, completion: @escaping (Result <UIImage>) -> UIImage?);
+	func setImage <T> (using connection: (T, @escaping (Result <KBImage>) -> ()) -> KBAPIConnectionProtocol, with argument: T);
+	func setImage <T> (using connection: (T, @escaping (Result <KBImage>) -> ()) -> KBAPIConnectionProtocol, with argument: T, completion: @escaping (Result <KBImage>) -> KBImage?);
 	
-	func handleLoadedImage (_ image: UIImage);
+	func handleLoadedImage (_ image: KBImage);
 }
 
-extension UIImageLoadingImplementation {
+extension KBImageLoadingImplementation {
 	@inlinable
 	public func setImage (url: URL) {
-		self.setImage (using: UIImage.withURL, with: url);
+		self.setImage (using: KBImage.withURL, with: url);
 	}
 
 	@inlinable
-	public func setImage (url: URL, completion: @escaping (Result <UIImage>) -> UIImage?) {
-		self.setImage (using: UIImage.withURL, with: url, completion: completion);
+	public func setImage (url: URL, completion: @escaping (Result <KBImage>) -> KBImage?) {
+		self.setImage (using: KBImage.withURL, with: url, completion: completion);
 	}
 
 	@inlinable
 	public func setImage (with request: URLRequest) {
-		self.setImage (using: UIImage.withRequest, with: request);
+		self.setImage (using: KBImage.withRequest, with: request);
 	}
 	
 	@inlinable
-	public func setImage (with request: URLRequest, completion: @escaping (Result <UIImage>) -> UIImage?) {
-		self.setImage (using: UIImage.withRequest, with: request, completion: completion);
+	public func setImage (with request: URLRequest, completion: @escaping (Result <KBImage>) -> KBImage?) {
+		self.setImage (using: KBImage.withRequest, with: request, completion: completion);
 	}
 
 	@inlinable
-	public func setImage <R> (with request: R) where R: KBAPIRequest, R.ResponseType == UIImage {
-		self.setImage (using: UIImage.withRequest, with: request);
+	public func setImage <R> (with request: R) where R: KBAPIRequest, R.ResponseType == KBImage {
+		self.setImage (using: KBImage.withRequest, with: request);
 	}
 	
 	@inlinable
@@ -78,17 +78,17 @@ extension UIImageLoadingImplementation {
 	}
 
 	@inlinable
-	public func setImage <R> (with request: R, completion: @escaping (Result <UIImage>) -> UIImage?) where R: KBAPIRequest, R.ResponseType == UIImage {
-		self.setImage (using: UIImage.withRequest, with: request, completion: completion);
+	public func setImage <R> (with request: R, completion: @escaping (Result <KBImage>) -> KBImage?) where R: KBAPIRequest, R.ResponseType == KBImage {
+		self.setImage (using: KBImage.withRequest, with: request, completion: completion);
 	}
 	
 	@usableFromInline
-	internal func setImage <T> (using connection: (T, @escaping (Result <UIImage>) -> ()) -> KBAPIConnectionProtocol, with argument: T) {
+	internal func setImage <T> (using connection: (T, @escaping (Result <KBImage>) -> ()) -> KBAPIConnectionProtocol, with argument: T) {
 		self.setImage (using: connection, with: argument) { $0.value };
 	}
 
 	@usableFromInline
-	internal func setImage <T> (using connection: (T, @escaping (Result <UIImage>) -> ()) -> KBAPIConnectionProtocol, with argument: T, completion: @escaping (Result <UIImage>) -> UIImage?) {
+	internal func setImage <T> (using connection: (T, @escaping (Result <KBImage>) -> ()) -> KBAPIConnectionProtocol, with argument: T, completion: @escaping (Result <KBImage>) -> KBImage?) {
 		self.currentImageConnection?.cancel ();
 		self.currentImageConnection = connection (argument) { [weak self] in
 			guard let strongSelf = self else {

@@ -23,11 +23,13 @@
 		4336C05A210A5F2300893B1C /* DispatchQueue+safeSync.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4336C059210A5F2300893B1C /* DispatchQueue+safeSync.mm */; };
 		4336C05C210A600100893B1C /* DispatchQueue+safeSync.h in Headers */ = {isa = PBXBuildFile; fileRef = 4336C05B210A5F2E00893B1C /* DispatchQueue+safeSync.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		436C8211211454750016C991 /* DebugLogDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436C8210211454750016C991 /* DebugLogDescription.swift */; };
-		436C8214211454AF0016C991 /* UIImage+KBAPISupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436C8213211454AF0016C991 /* UIImage+KBAPISupport.swift */; };
-		436C8220211477CB0016C991 /* UIImageLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436C821F211477CB0016C991 /* UIImageLoading.swift */; };
-		436C8222211478070016C991 /* UIKit+UIImageLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436C8221211478070016C991 /* UIKit+UIImageLoading.swift */; };
+		436C8214211454AF0016C991 /* KBImage+KBAPISupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436C8213211454AF0016C991 /* KBImage+KBAPISupport.swift */; };
+		436C8220211477CB0016C991 /* KBImageLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436C821F211477CB0016C991 /* KBImageLoading.swift */; };
+		436C8222211478070016C991 /* UIKit+KBImageLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436C8221211478070016C991 /* UIKit+KBImageLoading.swift */; };
 		43A11C382122D61A00CD5E73 /* KBAPIRequestHTTPMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A11C362122D61A00CD5E73 /* KBAPIRequestHTTPMethod.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43A11C392122D61A00CD5E73 /* KBAPIRequestHTTPMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A11C372122D61A00CD5E73 /* KBAPIRequestHTTPMethod.m */; };
+		43A11C3B2122FB1300CD5E73 /* KBImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A11C3A2122FB1300CD5E73 /* KBImage.swift */; };
+		43A11C3D2122FD8E00CD5E73 /* AppKit+KBImageLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A11C3C2122FD8E00CD5E73 /* AppKit+KBImageLoading.swift */; };
 		43B0BED32101F85E00061E65 /* KBAPIJSONCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0BED22101F85E00061E65 /* KBAPIJSONCoder.swift */; };
 		43B0BED52101F9F400061E65 /* KBAPIURLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0BED42101F9F400061E65 /* KBAPIURLEncoder.swift */; };
 		43B98985211066DB006DFFC5 /* KBLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B98984211066DB006DFFC5 /* KBLogger.swift */; };
@@ -55,11 +57,13 @@
 		4336C05B210A5F2E00893B1C /* DispatchQueue+safeSync.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DispatchQueue+safeSync.h"; sourceTree = "<group>"; };
 		4336C05D210A636500893B1C /* KBAPISupport.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = KBAPISupport.modulemap; sourceTree = "<group>"; };
 		436C8210211454750016C991 /* DebugLogDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugLogDescription.swift; sourceTree = "<group>"; };
-		436C8213211454AF0016C991 /* UIImage+KBAPISupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+KBAPISupport.swift"; sourceTree = "<group>"; };
-		436C821F211477CB0016C991 /* UIImageLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageLoading.swift; sourceTree = "<group>"; };
-		436C8221211478070016C991 /* UIKit+UIImageLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+UIImageLoading.swift"; sourceTree = "<group>"; };
+		436C8213211454AF0016C991 /* KBImage+KBAPISupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KBImage+KBAPISupport.swift"; sourceTree = "<group>"; };
+		436C821F211477CB0016C991 /* KBImageLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBImageLoading.swift; sourceTree = "<group>"; };
+		436C8221211478070016C991 /* UIKit+KBImageLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+KBImageLoading.swift"; sourceTree = "<group>"; };
 		43A11C362122D61A00CD5E73 /* KBAPIRequestHTTPMethod.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KBAPIRequestHTTPMethod.h; sourceTree = "<group>"; };
 		43A11C372122D61A00CD5E73 /* KBAPIRequestHTTPMethod.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KBAPIRequestHTTPMethod.m; sourceTree = "<group>"; };
+		43A11C3A2122FB1300CD5E73 /* KBImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBImage.swift; sourceTree = "<group>"; };
+		43A11C3C2122FD8E00CD5E73 /* AppKit+KBImageLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppKit+KBImageLoading.swift"; sourceTree = "<group>"; };
 		43B0BED22101F85E00061E65 /* KBAPIJSONCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAPIJSONCoder.swift; sourceTree = "<group>"; };
 		43B0BED42101F9F400061E65 /* KBAPIURLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAPIURLEncoder.swift; sourceTree = "<group>"; };
 		43B98984211066DB006DFFC5 /* KBLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBLogger.swift; sourceTree = "<group>"; };
@@ -126,14 +130,16 @@
 			path = Private;
 			sourceTree = "<group>";
 		};
-		436C82122114547F0016C991 /* UIKit */ = {
+		436C82122114547F0016C991 /* ImageLoading */ = {
 			isa = PBXGroup;
 			children = (
-				436C821F211477CB0016C991 /* UIImageLoading.swift */,
-				436C8213211454AF0016C991 /* UIImage+KBAPISupport.swift */,
-				436C8221211478070016C991 /* UIKit+UIImageLoading.swift */,
+				43A11C3A2122FB1300CD5E73 /* KBImage.swift */,
+				436C8213211454AF0016C991 /* KBImage+KBAPISupport.swift */,
+				436C821F211477CB0016C991 /* KBImageLoading.swift */,
+				436C8221211478070016C991 /* UIKit+KBImageLoading.swift */,
+				43A11C3C2122FD8E00CD5E73 /* AppKit+KBImageLoading.swift */,
 			);
-			path = UIKit;
+			path = ImageLoading;
 			sourceTree = "<group>";
 		};
 		43BDFDB020FFB7730078A7F7 /* Core */ = {
@@ -172,7 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				43BDFDB020FFB7730078A7F7 /* Core */,
-				436C82122114547F0016C991 /* UIKit */,
+				436C82122114547F0016C991 /* ImageLoading */,
 				4336C036210A0F4D00893B1C /* ObjC */,
 				4332306920FE1C1F001C67D0 /* Utils */,
 				43D1BD8B1C9A11DA00A807F8 /* Supporting Files */,
@@ -275,18 +281,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43A11C3B2122FB1300CD5E73 /* KBImage.swift in Sources */,
 				4315B9CD2100F182007B0088 /* DispatchQueue+safeSync.swift in Sources */,
 				436C8211211454750016C991 /* DebugLogDescription.swift in Sources */,
 				4315B9CB2100E8BC007B0088 /* Result.swift in Sources */,
 				4315B9C521008DC3007B0088 /* URLEncode.swift in Sources */,
 				4332306C20FE2301001C67D0 /* KBArray.mm in Sources */,
-				436C8214211454AF0016C991 /* UIImage+KBAPISupport.swift in Sources */,
+				436C8214211454AF0016C991 /* KBImage+KBAPISupport.swift in Sources */,
 				4336C043210A212B00893B1C /* DispatchQueue+identifier.mm in Sources */,
+				43A11C3D2122FD8E00CD5E73 /* AppKit+KBImageLoading.swift in Sources */,
 				43B0BED52101F9F400061E65 /* KBAPIURLEncoder.swift in Sources */,
 				4336C05A210A5F2300893B1C /* DispatchQueue+safeSync.mm in Sources */,
 				43B0BED32101F85E00061E65 /* KBAPIJSONCoder.swift in Sources */,
 				4315B9C3210085E1007B0088 /* KBAPIRequestSerializer.swift in Sources */,
-				436C8222211478070016C991 /* UIKit+UIImageLoading.swift in Sources */,
+				436C8222211478070016C991 /* UIKit+KBImageLoading.swift in Sources */,
 				4315B9C92100DB16007B0088 /* KBAPIResponseSerializer.swift in Sources */,
 				43B98985211066DB006DFFC5 /* KBLogger.swift in Sources */,
 				43BDFDB420FFB7DB0078A7F7 /* KBAPIRequest.swift in Sources */,
@@ -294,7 +302,7 @@
 				43A11C392122D61A00CD5E73 /* KBAPIRequestHTTPMethod.m in Sources */,
 				4315B9C121001DE4007B0088 /* KBAPIRequest.mm in Sources */,
 				43BDFDB220FFB7870078A7F7 /* KBAPIConnection.swift in Sources */,
-				436C8220211477CB0016C991 /* UIImageLoading.swift in Sources */,
+				436C8220211477CB0016C991 /* KBImageLoading.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,13 +372,16 @@
 				INFOPLIST_FILE = "$(SRCROOT)/$(TARGET_NAME)/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LLVM_LTO = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				ONLY_ACTIVE_ARCH = YES;
 				RUN_CLANG_STATIC_ANALYZER = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = appletvos;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 10.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Debug;
 		};
@@ -432,13 +443,16 @@
 				INFOPLIST_FILE = "$(SRCROOT)/$(TARGET_NAME)/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LLVM_LTO = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				RUN_CLANG_STATIC_ANALYZER = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = appletvos;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 10.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Release;
 		};

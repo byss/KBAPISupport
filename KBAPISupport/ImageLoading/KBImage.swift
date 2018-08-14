@@ -1,9 +1,6 @@
 //
-//  KBAPISupport.h
-//  KBAPISupport
-//
-//  Created by Kirill byss Bystrov on 3/17/16.
-//  Copyright © 2016 Kirill byss Bystrov. All rights reserved.
+//  KBImage.swift
+//  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,17 +21,16 @@
 //  THE SOFTWARE.
 //
 
-#import <KBAPISupport/DispatchQueue+safeSync.h>
-#import <KBAPISupport/KBAPIRequestHTTPMethod.h>
+#if os (iOS) || os (tvOS)
 
-#if __has_include (<KBAPISupport/KBAPISupport+ObjC.h>)
-#	import <KBAPISupport/KBAPISupport+ObjC.h>
-#endif
+import UIKit.UIImage
+public typealias KBImage = UIImage;
 
-#if __has_include (<KBAPISupport/KBAPISupport+UIKit.h>)
-#	import <KBAPISupport/KBAPISupport+UIKit.h>
-#endif
+#elseif os (OSX)
 
-#if __has_include (<KBAPISupport/KBAPISupport-Swift.h>)
-#	import <KBAPISupport/KBAPISupport-Swift.h>
+import AppKit.NSImage
+public typealias KBImage = NSImage;
+
+#else
+#error("Unsupported platform")
 #endif

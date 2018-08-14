@@ -44,13 +44,13 @@ public protocol KBAPIJSONDecoderProtocol: KBAPIDecoder {
 extension JSONEncoder: KBAPIJSONEncoderProtocol {
 	public static var defaultForRequestSerialization: JSONEncoder {
 		let result = JSONEncoder ();
-		#if DEBUG
-		if #available(iOS 11.0, *) {
+#if DEBUG
+		if #available(iOS 11.0, macOS 10.13, tvOS 11.0, *) {
 			result.outputFormatting = [.prettyPrinted, .sortedKeys];
 		} else {
 			result.outputFormatting = [.prettyPrinted];
 		}
-		#endif
+#endif
 		result.keyEncodingStrategy = .convertToSnakeCase;
 		result.dateEncodingStrategy = .secondsSince1970;
 		result.dataEncodingStrategy = .base64;

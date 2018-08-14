@@ -1,8 +1,5 @@
 //
-//  UIKit+UIImageLoading.swift
-//  KBAPISupport
-//
-//  Created by Kirill Bystrov on 8/3/18.
+//  AppKit+KBImageLoading.swift
 //  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,28 +21,24 @@
 //  THE SOFTWARE.
 //
 
-import UIKit
+#if os (macOS)
 
-extension UIImageView: UIImageLoading {}
-extension UIImageView: UIImageLoadingImplementation {
+import AppKit
+
+extension NSImageView: KBImageLoading {}
+extension NSImageView: KBImageLoadingImplementation {
 	@usableFromInline
-	internal func handleLoadedImage (_ image: UIImage) {
+	internal func handleLoadedImage (_ image: KBImage) {
 		self.image = image;
 	}
 }
 
-extension UIButton: UIImageLoading {}
-extension UIButton: UIImageLoadingImplementation {
+extension NSButton: KBImageLoading {}
+extension NSButton: KBImageLoadingImplementation {
 	@usableFromInline
-	internal func handleLoadedImage (_ image: UIImage) {
-		self.setImage (image, for: .normal);
-	}
-}
-
-extension UIBarButtonItem: UIImageLoading {}
-extension UIBarButtonItem: UIImageLoadingImplementation {
-	@usableFromInline
-	internal func handleLoadedImage (_ image: UIImage) {
+	internal func handleLoadedImage (_ image: KBImage) {
 		self.image = image;
 	}
 }
+
+#endif

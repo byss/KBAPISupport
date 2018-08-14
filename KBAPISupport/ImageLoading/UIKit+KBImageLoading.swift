@@ -1,9 +1,9 @@
 //
-//  KBAPISupport.h
+//  UIKit+KBImageLoading.swift
 //  KBAPISupport
 //
-//  Created by Kirill byss Bystrov on 3/17/16.
-//  Copyright © 2016 Kirill byss Bystrov. All rights reserved.
+//  Created by Kirill Bystrov on 8/3/18.
+//  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,17 +24,32 @@
 //  THE SOFTWARE.
 //
 
-#import <KBAPISupport/DispatchQueue+safeSync.h>
-#import <KBAPISupport/KBAPIRequestHTTPMethod.h>
+#if os (iOS) || os (tvOS)
 
-#if __has_include (<KBAPISupport/KBAPISupport+ObjC.h>)
-#	import <KBAPISupport/KBAPISupport+ObjC.h>
-#endif
+import UIKit
 
-#if __has_include (<KBAPISupport/KBAPISupport+UIKit.h>)
-#	import <KBAPISupport/KBAPISupport+UIKit.h>
-#endif
+extension UIImageView: KBImageLoading {}
+extension UIImageView: KBImageLoadingImplementation {
+	@usableFromInline
+	internal func handleLoadedImage (_ image: KBImage) {
+		self.image = image;
+	}
+}
 
-#if __has_include (<KBAPISupport/KBAPISupport-Swift.h>)
-#	import <KBAPISupport/KBAPISupport-Swift.h>
+extension UIButton: KBImageLoading {}
+extension UIButton: KBImageLoadingImplementation {
+	@usableFromInline
+	internal func handleLoadedImage (_ image: KBImage) {
+		self.setImage (image, for: .normal);
+	}
+}
+
+extension UIBarButtonItem: KBImageLoading {}
+extension UIBarButtonItem: KBImageLoadingImplementation {
+	@usableFromInline
+	internal func handleLoadedImage (_ image: KBImage) {
+		self.image = image;
+	}
+}
+
 #endif

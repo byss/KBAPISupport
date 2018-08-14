@@ -21,16 +21,25 @@ Pod::Spec.new do |spec|
 	spec.swift_version = '4.2'
 	
 	spec.ios.deployment_target = '10.0'
+	spec.tvos.deployment_target = '10.0'
 	spec.osx.deployment_target = '10.12'
 	spec.watchos.deployment_target = '4.0'
-	spec.tvos.deployment_target = '10.0'
 
 	spec.module_map   = "#{spec.name}/Supporting Files/#{spec.name}.modulemap"
 
 	spec.kb_subspec 'Utils'
 	spec.kb_subspec 'Core', :requires => 'Utils'
 	spec.kb_subspec 'ObjC', :requires => 'Core'
-	spec.kb_subspec 'UIKit', :requires => 'Core'
+	spec.kb_subspec 'ImageLoading', :requires => 'Core' do |sspec|
+		sspec.ios.frameworks = 'UIKit'
+		spec.ios.deployment_target = '10.0'
+
+		sspec.tvos.frameworks = 'UIKit'
+		spec.tvos.deployment_target = '10.0'
+
+		sspec.osx.frameworks = 'AppKit'
+		spec.osx.deployment_target = '10.12'
+	end
 
 	spec.default_subspecs = 'Core'
 end

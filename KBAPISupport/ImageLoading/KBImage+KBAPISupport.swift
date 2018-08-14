@@ -1,5 +1,5 @@
 //
-//  UIImage+KBAPISupport.swift
+//  KBImage+KBAPISupport.swift
 //  KBAPISupport
 //
 //  Created by Kirill Bystrov on 8/3/18.
@@ -24,21 +24,22 @@
 //  THE SOFTWARE.
 //
 
-import UIKit
 
-public extension UIImage {
+import Foundation
+
+public extension KBImage {
 	@discardableResult
-	public static func withURL (_ url: URL, completion: @escaping (Result <UIImage>) -> ()) -> KBAPIConnectionProtocol {
+	public static func withURL (_ url: URL, completion: @escaping (Result <KBImage>) -> ()) -> KBAPIConnectionProtocol {
 		return self.withRequest (URLRequest (url: url), completion: completion);
 	}
 	
 	@discardableResult
-	public static func withRequest (_ request: URLRequest, completion: @escaping (Result <UIImage>) -> ()) -> KBAPIConnectionProtocol {
-		return self.withRequest (UIImageRequest (request), completion: completion);
+	public static func withRequest (_ request: URLRequest, completion: @escaping (Result <KBImage>) -> ()) -> KBAPIConnectionProtocol {
+		return self.withRequest (KBImageRequest (request), completion: completion);
 	}
 	
 	@discardableResult
-	public static func withRequest <R> (_ request: R, completion: @escaping (Result <UIImage>) -> ()) -> KBAPIConnectionProtocol where R: KBAPIRequest, R.ResponseType == UIImage {
+	public static func withRequest <R> (_ request: R, completion: @escaping (Result <KBImage>) -> ()) -> KBAPIConnectionProtocol where R: KBAPIRequest, R.ResponseType == KBImage {
 		let result = KBAPIConnection.withRequest (request);
 		defer {
 			result.start (completion: completion);
@@ -47,25 +48,25 @@ public extension UIImage {
 	}
 }
 
-private struct UIImageRequest: KBAPIRequest {
+private struct KBImageRequest: KBAPIRequest {
 	fileprivate typealias SerializerType = Serializer;
-	fileprivate typealias ResponseType = UIImage;
+	fileprivate typealias ResponseType = KBImage;
 	fileprivate typealias ResponseSerializerType = ResponseSerializer;
 	
 
 	fileprivate struct Serializer: RequestSerializer {
 		private struct InternalError: Error {}
 		
-		fileprivate typealias RequestType = UIImageRequest;
+		fileprivate typealias RequestType = KBImageRequest;
 		
 		fileprivate var userInfo = [CodingUserInfoKey: Any] ();
 
-		fileprivate func serializeRequest (_ request: UIImageRequest) throws -> URLRequest {
+		fileprivate func serializeRequest (_ request: KBImageRequest) throws -> URLRequest {
 			return request.wrapped;
 		}
 		
 		fileprivate func serializeRequest <R> (_ request: R) throws -> URLRequest where R: KBAPIRequest {
-			guard let request = request as? UIImageRequest else {
+			guard let request = request as? KBImageRequest else {
 				throw InternalError ();
 			}
 			return try self.serializeRequest (request);
@@ -73,13 +74,13 @@ private struct UIImageRequest: KBAPIRequest {
 	}
 	
 	fileprivate struct ResponseSerializer: KBAPIResponseSerializerProtocol {
-		fileprivate typealias ResponseType = UIImage;
+		fileprivate typealias ResponseType = KBImage;
 		
 		fileprivate var userInfo = [CodingUserInfoKey: Any] ();
 		
-		fileprivate func decode (from data: Data) throws -> UIImage {
+		fileprivate func decode (from data: Data) throws -> KBImage {
 			log.info ("Encoded response: \(data.description)");
-			guard let result = UIImage (data: data) else {
+			guard let result = KBImage (data: data) else {
 				log.warning ("Cannot decode image from response data");
 				throw CocoaError.error (.coderReadCorrupt);
 			}

@@ -25,6 +25,7 @@
 //
 
 import os
+import Foundation
 
 public enum KBLogLevel {
 	case debug;
