@@ -26,6 +26,8 @@
 		436C8214211454AF0016C991 /* UIImage+KBAPISupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436C8213211454AF0016C991 /* UIImage+KBAPISupport.swift */; };
 		436C8220211477CB0016C991 /* UIImageLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436C821F211477CB0016C991 /* UIImageLoading.swift */; };
 		436C8222211478070016C991 /* UIKit+UIImageLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436C8221211478070016C991 /* UIKit+UIImageLoading.swift */; };
+		43A11C382122D61A00CD5E73 /* KBAPIRequestHTTPMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A11C362122D61A00CD5E73 /* KBAPIRequestHTTPMethod.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43A11C392122D61A00CD5E73 /* KBAPIRequestHTTPMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A11C372122D61A00CD5E73 /* KBAPIRequestHTTPMethod.m */; };
 		43B0BED32101F85E00061E65 /* KBAPIJSONCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0BED22101F85E00061E65 /* KBAPIJSONCoder.swift */; };
 		43B0BED52101F9F400061E65 /* KBAPIURLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0BED42101F9F400061E65 /* KBAPIURLEncoder.swift */; };
 		43B98985211066DB006DFFC5 /* KBLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B98984211066DB006DFFC5 /* KBLogger.swift */; };
@@ -56,6 +58,8 @@
 		436C8213211454AF0016C991 /* UIImage+KBAPISupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+KBAPISupport.swift"; sourceTree = "<group>"; };
 		436C821F211477CB0016C991 /* UIImageLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageLoading.swift; sourceTree = "<group>"; };
 		436C8221211478070016C991 /* UIKit+UIImageLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+UIImageLoading.swift"; sourceTree = "<group>"; };
+		43A11C362122D61A00CD5E73 /* KBAPIRequestHTTPMethod.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KBAPIRequestHTTPMethod.h; sourceTree = "<group>"; };
+		43A11C372122D61A00CD5E73 /* KBAPIRequestHTTPMethod.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KBAPIRequestHTTPMethod.m; sourceTree = "<group>"; };
 		43B0BED22101F85E00061E65 /* KBAPIJSONCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAPIJSONCoder.swift; sourceTree = "<group>"; };
 		43B0BED42101F9F400061E65 /* KBAPIURLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAPIURLEncoder.swift; sourceTree = "<group>"; };
 		43B98984211066DB006DFFC5 /* KBLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBLogger.swift; sourceTree = "<group>"; };
@@ -139,6 +143,8 @@
 				43B0BED22101F85E00061E65 /* KBAPIJSONCoder.swift */,
 				4315B9C2210085E1007B0088 /* KBAPIRequestSerializer.swift */,
 				4315B9C82100DB16007B0088 /* KBAPIResponseSerializer.swift */,
+				43A11C362122D61A00CD5E73 /* KBAPIRequestHTTPMethod.h */,
+				43A11C372122D61A00CD5E73 /* KBAPIRequestHTTPMethod.m */,
 				43BDFDB320FFB7DB0078A7F7 /* KBAPIRequest.swift */,
 				43BDFDB120FFB7870078A7F7 /* KBAPIConnection.swift */,
 			);
@@ -195,6 +201,7 @@
 				4336C050210A3BCE00893B1C /* KBAPISupport.h in Headers */,
 				4336C05C210A600100893B1C /* DispatchQueue+syncSafe.h in Headers */,
 				4315B9C021001DE4007B0088 /* KBAPIRequest.h in Headers */,
+				43A11C382122D61A00CD5E73 /* KBAPIRequestHTTPMethod.h in Headers */,
 				4332306D20FE2301001C67D0 /* KBArray.h in Headers */,
 				4336C042210A212B00893B1C /* DispatchQueue+identifier.h in Headers */,
 			);
@@ -284,6 +291,7 @@
 				43B98985211066DB006DFFC5 /* KBLogger.swift in Sources */,
 				43BDFDB420FFB7DB0078A7F7 /* KBAPIRequest.swift in Sources */,
 				43B9898B2110AFD4006DFFC5 /* URLRequest+curl.swift in Sources */,
+				43A11C392122D61A00CD5E73 /* KBAPIRequestHTTPMethod.m in Sources */,
 				4315B9C121001DE4007B0088 /* KBAPIRequest.mm in Sources */,
 				43BDFDB220FFB7870078A7F7 /* KBAPIConnection.swift in Sources */,
 				436C8220211477CB0016C991 /* UIImageLoading.swift in Sources */,

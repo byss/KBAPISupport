@@ -7,17 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <KBAPISupport/KBAPIRequestHTTPMethod.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
-typedef NSString *KBAPIRequestHTTPMethod NS_TYPED_EXTENSIBLE_ENUM NS_REFINED_FOR_SWIFT;
-
-extern KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodHEAD;
-extern KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodGET;
-extern KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodPOST;
-extern KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodPUT;
-extern KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodPATCH;
-extern KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodDELETE;
 
 NS_REFINED_FOR_SWIFT
 @interface KBAPIRequest: NSObject

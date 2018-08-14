@@ -8,13 +8,6 @@
 
 #import "KBAPIRequest.h"
 
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodHEAD = @"HEAD";
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodGET = @"GET";
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodPOST = @"POST";
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodPUT = @"PUT";
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodPATCH = @"PATCH";
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodDELETE = @"DELETE";
-
 static NSURL *const NSURLNone = [[NSURL alloc] initWithString:@""];
 
 @implementation KBAPIRequest
