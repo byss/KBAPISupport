@@ -24,7 +24,7 @@
 //  THE SOFTWARE.
 //
 
-#import <KBAPISupport/DispatchQueue+syncSafe.h>
+#import <KBAPISupport/DispatchQueue+safeSync.h>
 
 #if __has_include (<KBAPISupport/KBAPISupport+ObjC.h>)
 #	import <KBAPISupport/KBAPISupport+ObjC.h>
