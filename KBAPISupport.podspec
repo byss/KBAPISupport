@@ -1,8 +1,9 @@
 class Pod::Specification
 	def kb_subspec (name, requires: nil, &block)
 		self.subspec name do |sspec|
-			sspec.source_files = "#{sspec.name}/*.{h,mm,swift}", "#{sspec.name}/Private/*.{h,mm,swift}", "#{self.name}/Supporting Files/#{self.name}.h"
-			sspec.private_header_files = "#{sspec.name}/Private/*.h"
+			sspec.source_files = "#{sspec.name}/{Public,Internal,Private}/*.{h,mm,swift}", "#{self.name}/Supporting Files/#{self.name}.h"
+			sspec.public_header_files = "#{sspec.name}/Public/*.h"
+			sspec.private_header_files = "#{sspec.name}/Internal/*.h"
 			sspec.dependency "#{self.name}/#{requires}" if requires
 			yield sspec if block_given?
 		end
@@ -25,7 +26,12 @@ Pod::Spec.new do |spec|
 	spec.osx.deployment_target = '10.12'
 	spec.watchos.deployment_target = '4.0'
 
-	spec.module_map   = "#{spec.name}/Supporting Files/#{spec.name}.modulemap"
+	spec.module_map          = "#{spec.name}/Supporting Files/#{spec.name}.modulemap"
+	spec.pod_target_xcconfig = {
+		'COPY_HEADERS_RUN_UNIFDEF' => 'YES',
+		'COPY_HEADERS_UNIFDEF_FLAGS' => '-U__cplusplus',
+		'CLANG_CXX_LANGUAGE_STANDARD' => 'gnu++17',
+	}
 
 	spec.kb_subspec 'Core'
 	spec.kb_subspec 'ObjC', :requires => 'Core'

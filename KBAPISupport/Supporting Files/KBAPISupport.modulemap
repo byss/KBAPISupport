@@ -1,6 +1,7 @@
 framework module KBAPISupport {
 	umbrella header "KBAPISupport.h"
-	
-	export *
-	module * { export * }
+}
+
+explicit module KBAPISupport.Private {
+	header "DispatchQueue+safeSync.h"
 }

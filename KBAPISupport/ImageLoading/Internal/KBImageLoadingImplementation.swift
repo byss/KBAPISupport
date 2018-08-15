@@ -1,8 +1,5 @@
 //
-//  KBImageLoading.swift
-//  KBAPISupport
-//
-//  Created by Kirill Bystrov on 8/3/18.
+//  KBImageLoadingImplementation.swift
 //  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,19 +21,7 @@
 //  THE SOFTWARE.
 //
 
-#if os (iOS) || os (macOS) || os (tvOS)
-
-import Swift
-
-public protocol KBImageLoading {
-	func setImage (url: URL);
-	func setImage (url: URL, completion: @escaping (Result <KBImage>) -> KBImage?);
-	func setImage (with request: URLRequest);
-	func setImage (with request: URLRequest, completion: @escaping (Result <KBImage>) -> KBImage?);
-	func setImage <R> (with request: R) where R: KBAPIRequest, R.ResponseType == KBImage;
-	func setImage <R> (with request: R, completion: @escaping (Result <KBImage>) -> KBImage?) where R: KBAPIRequest, R.ResponseType == KBImage;
-	func cancelImageLoading ();
-}
+import Foundation
 
 internal protocol KBImageLoadingImplementation: KBImageLoading, NSObjectProtocol {
 	var currentImageConnection: KBAPIConnectionProtocol? { get set }
@@ -109,5 +94,3 @@ extension KBImageLoadingImplementation {
 }
 
 private var currentImageConnectionKey: () = ();
-
-#endif

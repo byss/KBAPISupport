@@ -24,18 +24,12 @@
 //  THE SOFTWARE.
 //
 
-#import <KBAPISupport/DispatchQueue+safeSync.h>
-
 #if __has_include (<KBAPISupport/KBAPIRequestHTTPMethod.h>)
 #	import <KBAPISupport/KBAPIRequestHTTPMethod.h>
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+ObjC.h>)
 #	import <KBAPISupport/KBAPISupport+ObjC.h>
-#endif
-
-#if __has_include (<KBAPISupport/KBAPISupport+UIKit.h>)
-#	import <KBAPISupport/KBAPISupport+UIKit.h>
 #endif
 
 #if __has_include (<KBAPISupport/KBAPISupport-Swift.h>)

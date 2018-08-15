@@ -1,5 +1,5 @@
 //
-//  URLEncode.swift
+//  DispatchQueue+safeSync.swift
 //  KBAPISupport
 //
 //  Created by Kirill Bystrov on 7/19/18.
@@ -24,23 +24,39 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
+import Dispatch
+import KBAPISupport.Private
 
-private func sequence (from: Unicode.Scalar, through: Unicode.Scalar) -> [Unicode.Scalar] {
-	return stride (from: from.value, through: through.value, by: 1).compactMap { Unicode.Scalar ($0) };
-}
+internal extension DispatchQueue {
+	@inlinable @inline (__always)
+	internal func safeSync (execute work: () -> ()) {
+		__dispatch_sync_safe (self, work);
+	}
 
-private let allowedCharset = CharacterSet (
-	sequence (from: "0", through: "9") +
-	sequence (from: "A", through: "Z") +
-	sequence (from: "a", through: "z") +
-	["-", ".", "_"]
-);
-
-public func urlencoded <S> (_ string: S) -> String where S: StringProtocol, S.Index == String.Index {
-	return string.addingPercentEncoding (withAllowedCharacters: allowedCharset) ?? String (string);
-}
-
-public func urlencoded (_ string: String) -> String {
-	return string.addingPercentEncoding (withAllowedCharacters: allowedCharset) ?? string;
+	@inlinable @inline (__always)
+	internal func safeSync <T> (execute work: () -> T) -> T {
+		var result: T?;
+		__dispatch_sync_safe (self) {
+			result = work ();
+		};
+		return result!;
+	}
+	
+	@inlinable @inline (__always)
+	internal func safeSync <T> (execute work: () throws -> T) throws -> T {
+		var result: Result <T>?;
+		__dispatch_sync_safe (self) {
+			do {
+				result = .success (try work ());
+			} catch {
+				result = .failure (error);
+			}
+		};
+		switch (result!) {
+		case .success (let result):
+			return result;
+		case .failure (let error):
+			throw error;
+		}
+	}
 }

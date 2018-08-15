@@ -38,3 +38,33 @@ extern KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodPATCH;
 extern KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodDELETE;
 
 NS_ASSUME_NONNULL_END
+
+#if __cplusplus
+
+namespace KB::APIRequest {
+	using HTTPMethod = KBAPIRequestHTTPMethod;
+}
+
+#	define _HTTP_METHOD(_Meth) KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethod ## _Meth
+
+#	define HTTP_METHODS_FOREACH(args...) \
+	args (HEAD); \
+	args (GET); \
+	args (POST); \
+	args (PUT); \
+	args (PATCH); \
+	args (DELETE);
+
+#	define DECLARE_HTTP_METHOD(_Meth) \
+	extern _HTTP_METHOD(_Meth); \
+	namespace KB::APIRequest { \
+		HTTPMethod constexpr HTTPMethod ## _Meth = @ #_Meth; \
+	}
+
+NS_ASSUME_NONNULL_BEGIN
+
+HTTP_METHODS_FOREACH (DECLARE_HTTP_METHOD)
+
+NS_ASSUME_NONNULL_END
+
+#endif

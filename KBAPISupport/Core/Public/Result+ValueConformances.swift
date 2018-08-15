@@ -21,7 +21,7 @@
 //  THE SOFTWARE.
 //
 
-import Swift
+import Foundation
 
 extension Result where Wrapped: AnyObject {
 	public static func === (lhs: Result, rhs: Result) -> Bool {

@@ -1,5 +1,5 @@
 //
-//  KBAPIRequestHTTPMethod.m
+//  KBAPIRequestHTTPMethod.mm
 //  KBAPISupport
 //
 //  Created by Kirill Bystrov on 8/14/18.
@@ -26,9 +26,14 @@
 
 #import "KBAPIRequestHTTPMethod.h"
 
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodHEAD = @"HEAD";
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodGET = @"GET";
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodPOST = @"POST";
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodPUT = @"PUT";
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodPATCH = @"PATCH";
-KBAPIRequestHTTPMethod const KBAPIRequestHTTPMethodDELETE = @"DELETE";
+#define HTTP_METHODS_FOREACH(args...) \
+	args (HEAD); \
+	args (GET); \
+	args (POST); \
+	args (PUT); \
+	args (PATCH); \
+	args (DELETE);
+
+#define ALLOCATE_HTTP_METHOD(_Meth) _HTTP_METHOD(_Meth) = @ #_Meth
+
+HTTP_METHODS_FOREACH (ALLOCATE_HTTP_METHOD)
