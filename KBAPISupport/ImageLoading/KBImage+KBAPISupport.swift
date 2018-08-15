@@ -24,6 +24,7 @@
 //  THE SOFTWARE.
 //
 
+#if os (iOS) || os (macOS) || os (tvOS)
 
 import Foundation
 
@@ -100,3 +101,5 @@ private struct KBImageRequest: KBAPIRequest {
 }
 
 private let log = KBLoggerWrapper ();
+
+#endif

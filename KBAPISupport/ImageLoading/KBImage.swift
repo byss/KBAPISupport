@@ -31,6 +31,10 @@ public typealias KBImage = UIImage;
 import AppKit.NSImage
 public typealias KBImage = NSImage;
 
+#elseif os (watchOS)
+
+#warning ("watchOS is not supported yet")
+
 #else
-#error("Unsupported platform")
+#error ("Unsupported platform")
 #endif

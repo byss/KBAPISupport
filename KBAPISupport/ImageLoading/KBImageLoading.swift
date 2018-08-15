@@ -24,6 +24,8 @@
 //  THE SOFTWARE.
 //
 
+#if os (iOS) || os (macOS) || os (tvOS)
+
 import Swift
 
 public protocol KBImageLoading {
@@ -107,3 +109,5 @@ extension KBImageLoadingImplementation {
 }
 
 private var currentImageConnectionKey: () = ();
+
+#endif

@@ -27,8 +27,7 @@ Pod::Spec.new do |spec|
 
 	spec.module_map   = "#{spec.name}/Supporting Files/#{spec.name}.modulemap"
 
-	spec.kb_subspec 'Utils'
-	spec.kb_subspec 'Core', :requires => 'Utils'
+	spec.kb_subspec 'Core'
 	spec.kb_subspec 'ObjC', :requires => 'Core'
 	spec.kb_subspec 'ImageLoading', :requires => 'Core' do |sspec|
 		sspec.ios.frameworks = 'UIKit'

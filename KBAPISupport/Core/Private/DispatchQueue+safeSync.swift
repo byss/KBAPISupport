@@ -1,5 +1,5 @@
 //
-//  Result.swift
+//  DispatchQueue+safeSync.swift
 //  KBAPISupport
 //
 //  Created by Kirill Bystrov on 7/19/18.
@@ -24,39 +24,35 @@
 //  THE SOFTWARE.
 //
 
-import Swift
+import Dispatch
 
-public enum Result <Value> {
-	case success (Value);
-	case failure (Error);
-}
+internal extension DispatchQueue {
+	internal func safeSync (execute work: () -> ()) {
+		__dispatch_sync_safe (self, work);
+	}
 
-public extension Result {
-	public var isSuccess: Bool {
-		guard case .success = self else {
-			return false;
-		}
-		return true;
+	internal func safeSync <T> (execute work: () -> T) -> T {
+		var result: T?;
+		__dispatch_sync_safe (self) {
+			result = work ();
+		};
+		return result!;
 	}
 	
-	public var isFailure: Bool {
-		guard case .failure = self else {
-			return false;
+	internal func safeSync <T> (execute work: () throws -> T) throws -> T {
+		var result: Result <T>?;
+		__dispatch_sync_safe (self) {
+			do {
+				result = .success (try work ());
+			} catch {
+				result = .failure (error);
+			}
+		};
+		switch (result!) {
+		case .success (let result):
+			return result;
+		case .failure (let error):
+			throw error;
 		}
-		return true;
-	}
-	
-	public var value: Value? {
-		guard case .success (let value) = self else {
-			return nil;
-		}
-		return value;
-	}
-	
-	public var error: Error? {
-		guard case .failure (let error) = self else {
-			return nil;
-		}
-		return error;
 	}
 }

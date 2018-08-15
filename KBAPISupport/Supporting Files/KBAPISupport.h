@@ -25,7 +25,10 @@
 //
 
 #import <KBAPISupport/DispatchQueue+safeSync.h>
-#import <KBAPISupport/KBAPIRequestHTTPMethod.h>
+
+#if __has_include (<KBAPISupport/KBAPIRequestHTTPMethod.h>)
+#	import <KBAPISupport/KBAPIRequestHTTPMethod.h>
+#endif
 
 #if __has_include (<KBAPISupport/KBAPISupport+ObjC.h>)
 #	import <KBAPISupport/KBAPISupport+ObjC.h>
