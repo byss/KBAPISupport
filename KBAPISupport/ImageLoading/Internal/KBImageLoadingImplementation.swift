@@ -21,6 +21,8 @@
 //  THE SOFTWARE.
 //
 
+#if os (iOS) || os (macOS) || os (tvOS)
+
 import Foundation
 
 internal protocol KBImageLoadingImplementation: KBImageLoading, NSObjectProtocol {
@@ -94,3 +96,5 @@ extension KBImageLoadingImplementation {
 }
 
 private var currentImageConnectionKey: () = ();
+
+#endif

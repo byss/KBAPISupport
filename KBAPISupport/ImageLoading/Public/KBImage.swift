@@ -57,7 +57,9 @@ public extension KBImage {
 }
 
 #elseif os (watchOS)
-	#warning ("watchOS is not fully supported yet")
+	#if DEBUG
+		#warning ("watchOS is not fully supported yet")
+	#endif
 #else
 	#error ("Unsupported platform")
 #endif
