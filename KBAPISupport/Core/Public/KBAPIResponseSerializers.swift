@@ -1,5 +1,5 @@
 //
-//  KBAPIResponseSerializer.swift
+//  KBAPIResponseSerializers.swift
 //  KBAPISupport
 //
 //  Created by Kirill Bystrov on 7/19/18.
@@ -25,24 +25,6 @@
 //
 
 import Foundation
-
-public extension CodingUserInfoKey {
-	public static let urlResponseKey = CodingUserInfoKey (rawValue: "urlResponse")!;
-}
-
-public protocol KBAPIDecoder: KBAPICoder {
-	func decode <T> (from data: Data) throws -> T where T: Decodable;
-	func decode <T> (from data: Data?) throws -> T where T: Decodable;
-	func decode <T> (from data: Data?, response: URLResponse) throws -> T where T: Decodable;
-}
-
-public protocol KBAPIResponseSerializerProtocol: KBAPICoder {
-	associatedtype ResponseType;
-	
-	func decode (from data: Data) throws -> ResponseType;
-	func decode (from data: Data?) throws -> ResponseType;
-	func decode (from data: Data?, response: URLResponse) throws -> ResponseType;
-}
 
 public extension KBAPIDecoder {
 	public func decode <T> (from data: Data) throws -> T where T: Decodable {
@@ -76,6 +58,10 @@ public extension KBAPIResponseSerializerProtocol {
 	public func decode (from data: Data?, response: URLResponse) throws -> ResponseType {
 		return try self.decode (from: data);
 	}
+}
+
+public extension CodingUserInfoKey {
+	public static let urlResponseKey = CodingUserInfoKey (rawValue: "urlResponse")!;
 }
 
 open class KBAPIRawResponseSerializer: KBAPIResponseSerializerProtocol {

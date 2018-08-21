@@ -1,5 +1,5 @@
 //
-//  KBAPIRequestSerializer.swift
+//  KBAPIRequestSerializers.swift
 //  KBAPISupport
 //
 //  Created by Kirill Bystrov on 7/19/18.
@@ -25,21 +25,6 @@
 //
 
 import Foundation
-
-public protocol KBAPIEncoder: KBAPICoder {
-	func encode <T> (_ parameters: T) throws -> Data where T: Encodable;
-}
-
-public protocol KBAPIRequestSerializerProtocol: KBAPICoder {
-	func shouldSerializeRequestParametersAsBodyData <R> (for request: R) -> Bool where R: KBAPIRequest;
-	func serializeRequest <R> (_ request: R) throws -> URLRequest where R: KBAPIRequest;
-	func serializeParameters <P> (_ parameters: P, asBodyData: Bool, into request: inout URLRequest) throws where P: Encodable;
-}
-
-private let KBAPIRequestCommonHeaders = [
-	"Accept": "application/json",
-	"Accept-Encoding": "gzip, deflate",
-];
 
 public extension KBAPIRequestSerializerProtocol {
 	private var commonHeaders: [String: String] {
@@ -160,5 +145,10 @@ fileprivate extension Bundle {
 		return preferredLocalizations.enumerated ().map { "\($0.element); q=\(String (format: "%.1f", 1.0 / Double (1 << $0.offset)))" }.joined (separator: ", ");
 	}
 }
+
+private let KBAPIRequestCommonHeaders = [
+	"Accept": "application/json",
+	"Accept-Encoding": "gzip, deflate",
+];
 
 private let log = KBLoggerWrapper ();
