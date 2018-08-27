@@ -94,6 +94,7 @@ open class KBAPIConnection <Request> where Request: KBAPIRequest {
 		} catch {
 			completion.call (with: error);
 		}
+		self.taskWrapper.invalidateTask ();
 	}
 }
 
@@ -138,9 +139,7 @@ fileprivate extension KBAPIConnection {
 		fileprivate mutating func makeTask <C> (for connection: KBAPIConnection, completion: C) throws -> URLSessionTask where C: CompletionWrapper, C.ResponseType == ResponseType {
 			let serializedRequest = try self.request.serializer.serializeRequest (self.request);
 			let task = self.session.dataTask (with: serializedRequest, completionHandler: { data, response, error in
-				connection.queue.safeSync {
-					connection.taskDidFinish (data: data, response: response, error: error, completion: completion);
-				};
+				connection.queue.safeSync { connection.taskDidFinish (data: data, response: response, error: error, completion: completion) };
 			});
 			self.taskPointer = UnsafePointer (Unmanaged.passUnretained (task).toOpaque ().assumingMemoryBound (to: URLSessionTask.self));
 			return task;
