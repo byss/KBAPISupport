@@ -27,6 +27,8 @@
 import Foundation
 
 public protocol KBAPIConnectionProtocol: AnyObject {
+	var isCancelled: Bool { get }
+	
 	func cancel ();
 }
 
@@ -46,6 +48,7 @@ open class KBAPIConnection <Request> where Request: KBAPIRequest {
 		return KBAPIConnectionQueue;
 	}
 	
+	private var taskWasCancelled = false;
 	private var taskWrapper: SessionTaskWrapper;
 	
 	open class func withRequest (_ request: Request) -> KBAPIConnection {
@@ -95,7 +98,15 @@ open class KBAPIConnection <Request> where Request: KBAPIRequest {
 }
 
 extension KBAPIConnection: KBAPIConnectionProtocol {
+	open var isCancelled: Bool {
+		return self.taskWasCancelled || (self.taskWrapper.isTaskValid && (self.task.state == .canceling));
+	}
+	
 	open func cancel () {
+		guard !self.isCancelled else {
+			return;
+		}
+		self.taskWasCancelled = true;
 		self.task.cancel ();
 	}
 }
@@ -105,15 +116,19 @@ fileprivate extension KBAPIConnection {
 		fileprivate let request: Request;
 		
 		fileprivate var task: URLSessionTask {
-			guard self.taskPointer != 0 else {
+			guard let taskPointer = self.taskPointer else {
 				log.fault ("URL session task is not created yet");
 				return URLSessionTask ();
 			}
-			return unsafeBitCast (self.taskPointer, to: URLSessionTask.self);
+			return taskPointer.pointee;
+		}
+		
+		fileprivate var isTaskValid: Bool {
+			return self.taskPointer != nil;
 		}
 		
 		private unowned let session: URLSession;
-		private var taskPointer = 0;
+		private var taskPointer: UnsafePointer <URLSessionTask>?;
 		
 		fileprivate init (session: URLSession, request: Request) {
 			self.session = session;
@@ -127,8 +142,12 @@ fileprivate extension KBAPIConnection {
 					connection.taskDidFinish (data: data, response: response, error: error, completion: completion);
 				};
 			});
-			self.taskPointer = Int (bitPattern: Unmanaged.passUnretained (task).toOpaque ());
+			self.taskPointer = UnsafePointer (Unmanaged.passUnretained (task).toOpaque ().assumingMemoryBound (to: URLSessionTask.self));
 			return task;
+		}
+		
+		fileprivate mutating func invalidateTask () {
+			self.taskPointer = nil;
 		}
 	}
 }
