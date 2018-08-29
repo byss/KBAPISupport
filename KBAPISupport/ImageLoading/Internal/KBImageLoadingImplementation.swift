@@ -95,6 +95,6 @@ extension KBImageLoadingImplementation {
 	}
 }
 
-private var currentImageConnectionKey: () = ();
+private var currentImageConnectionKey = "currentImageConnection";
 
 #endif
