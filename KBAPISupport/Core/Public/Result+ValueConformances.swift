@@ -74,6 +74,17 @@ extension Result: Equatable where Wrapped: Equatable {
 }
 
 extension Result: Hashable where Wrapped: Hashable {
+	public var hashValue: Int {
+		switch (self) {
+		case .success (let value):
+			return value.hashValue;
+		default:
+			var hasher = Hasher ();
+			self.hash (into: &hasher);
+			return hasher.finalize ();
+		}
+	}
+	
 	public func hash (into hasher: inout Hasher) {
 		switch (self) {
 		case .success (let value):

@@ -47,7 +47,7 @@ static NSURL *const NSURLNone = [[NSURL alloc] initWithString:@""];
 }
 
 - (NSURL *) URL {
-	return (NSURL *) [[NSURL alloc] initWithString:self.path relativeToURL:self.baseURL];
+	return [(NSURL *) [[NSURL alloc] initWithString:self.path relativeToURL:self.baseURL] autorelease];
 }
 
 - (NSDictionary <NSString *, id> *) parameters {

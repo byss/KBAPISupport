@@ -44,10 +44,6 @@ open class KBAPIConnection <Request> where Request: KBAPIRequest {
 		return self.taskWrapper.task;
 	}
 	
-	private var queue: DispatchQueue {
-		return KBAPIConnectionQueue;
-	}
-	
 	private var taskWasCancelled = false;
 	private var taskWrapper: SessionTaskWrapper;
 	
@@ -60,15 +56,11 @@ open class KBAPIConnection <Request> where Request: KBAPIRequest {
 	}
 
 	public func start () {
-		self.queue.async {
-			self.start (completion: EmptyCompletionWrapper ());
-		}
+		DispatchQueue.defaultConcurrent.async { self.start (completion: EmptyCompletionWrapper ()) };
 	}
 
-	public func start (completion: @escaping (Result <ResponseType>) -> ()) {
-		self.queue.async {
-			self.start (completion: CompletionBlockWrapper (completion));
-		}
+	public func start (callbackQueue: DispatchQueue = .main, completion: @escaping (Result <ResponseType>) -> ()) {
+		DispatchQueue.defaultConcurrent.async { self.start (completion: CompletionBlockWrapper (completion, callbackQueue: callbackQueue)) };
 	}
 	
 	private func start <C> (completion: C) where C: CompletionWrapper, C.ResponseType == ResponseType {
@@ -139,7 +131,9 @@ fileprivate extension KBAPIConnection {
 		fileprivate mutating func makeTask <C> (for connection: KBAPIConnection, completion: C) throws -> URLSessionTask where C: CompletionWrapper, C.ResponseType == ResponseType {
 			let serializedRequest = try self.request.serializer.serializeRequest (self.request);
 			let task = self.session.dataTask (with: serializedRequest, completionHandler: { data, response, error in
-				connection.queue.safeSync { connection.taskDidFinish (data: data, response: response, error: error, completion: completion) };
+				DispatchQueue.defaultConcurrent.async {
+					connection.taskDidFinish (data: data, response: response, error: error, completion: completion);
+				};
 			});
 			self.taskPointer = UnsafePointer (Unmanaged.passUnretained (task).toOpaque ().assumingMemoryBound (to: URLSessionTask.self));
 			return task;
@@ -162,15 +156,15 @@ fileprivate extension KBAPIConnection {
 		fileprivate typealias ResponseType = KBAPIConnection.ResponseType;
 		
 		private let block: (Result <ResponseType>) -> ();
+		private let callbackQueue: DispatchQueue;
 		
-		fileprivate init (_ block: @escaping (Result <ResponseType>) -> ()) {
+		fileprivate init (_ block: @escaping (Result <ResponseType>) -> (), callbackQueue: DispatchQueue) {
 			self.block = block;
+			self.callbackQueue = callbackQueue;
 		}
 		
 		fileprivate func call (with result: Result <ResponseType>) {
-			DispatchQueue.main.safeSync {
-				self.block (result);
-			}
+			self.callbackQueue.sync { self.block (result) };
 		}
 	}
 }
@@ -194,10 +188,28 @@ extension CompletionWrapper {
 }
 
 extension URLSession {
+	public convenience init (apiConfiguration configuration: URLSessionConfiguration) {
+		self.init (configuration: configuration, delegate: nil, delegateQueue: .defaultSerial);
+	}
+	
 	open func connection <R> (with request: R) -> KBAPIConnection <R> where R: KBAPIRequest {
 		return KBAPIConnection (request: request, session: self);
 	}
 }
 
-private let KBAPIConnectionQueue = DispatchQueue (label: "KBAPISupport", qos: .userInitiated, attributes: .concurrent);
+fileprivate extension OperationQueue {
+	fileprivate static let defaultSerial = OperationQueue (underlying: .defaultSerial);
+
+	private convenience init (underlying: DispatchQueue) {
+		self.init ();
+		self.name = underlying.label;
+		self.underlyingQueue = underlying;
+	}
+}
+
+fileprivate extension DispatchQueue {
+	fileprivate static let defaultSerial = DispatchQueue (label: "KBAPISupport.serial", qos: .userInitiated);
+	fileprivate static let defaultConcurrent = DispatchQueue (label: "KBAPISupport.concurrent", qos: .userInitiated, attributes: .concurrent);
+}
+
 private let log = KBLoggerWrapper ();
