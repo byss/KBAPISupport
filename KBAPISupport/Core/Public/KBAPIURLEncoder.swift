@@ -36,9 +36,9 @@ private protocol KBAPIURLEncoderContainer {
 	typealias EncoderType = KBAPIURLEncoder.Encoder <ResultType>;
 
 	var encoder: EncoderType { get }
-	var baseCodingPath: [CodingKey] { get }
+	var baseCodingPath: CodingPath { get }
 	
-	init (for encoder: EncoderType, baseCodingPath: [CodingKey]);
+	init (for encoder: EncoderType, baseCodingPath: CodingPath);
 }
 
 private protocol KBAPIURLEncoderKeyedContainer: KBAPIURLEncoderContainer, KeyedEncodingContainerProtocol {}
@@ -109,7 +109,7 @@ extension KBAPIURLEncoder {
 		fileprivate let userInfo: [CodingUserInfoKey: Any];
 		
 		fileprivate private (set) var result: Result;
-		fileprivate var codingPath: [CodingKey] {
+		fileprivate var codingPath: CodingPath {
 			return [];
 		}
 		
@@ -122,10 +122,10 @@ extension KBAPIURLEncoder {
 	fileprivate struct SuperEncoder <Result> where Result: KBAPIURLEncoderResult {
 		fileprivate typealias Parent = Encoder <Result>;
 		
-		fileprivate let codingPath: [CodingKey];
+		fileprivate let codingPath: CodingPath;
 		fileprivate unowned let rootEncoder: Parent;
 		
-		fileprivate init (root rootEncoder: Parent, codingPath: [CodingKey]) {
+		fileprivate init (root rootEncoder: Parent, codingPath: CodingPath) {
 			self.rootEncoder = rootEncoder;
 			self.codingPath = codingPath;
 		}
@@ -139,9 +139,9 @@ private protocol KBAPIURLEncoderImplementation {
 	
 	var rootEncoder: KBAPIURLEncoder.Encoder <ResultType> { get };
 	
-	static func makeContainer <Key> (keyedBy type: Key.Type, for encoder: Self, baseCodingPath: [CodingKey]) -> KeyedEncodingContainer <Key>;
+	static func makeContainer <Key> (keyedBy type: Key.Type, for encoder: Self, baseCodingPath: CodingPath) -> KeyedEncodingContainer <Key>;
 	
-	func appendResultValue (_ value: String?, for codingPath: [CodingKey]);
+	func appendResultValue (_ value: String?, for codingPath: CodingPath);
 }
 
 extension KBAPIURLEncoder.Encoder: KBAPIURLEncoderImplementation, Encoder {
@@ -149,11 +149,11 @@ extension KBAPIURLEncoder.Encoder: KBAPIURLEncoderImplementation, Encoder {
 		return self;
 	}
 	
-	fileprivate static func makeContainer <Key> (keyedBy type: Key.Type, for encoder: KBAPIURLEncoder.Encoder <Result>, baseCodingPath: [CodingKey]) -> KeyedEncodingContainer <Key> {
+	fileprivate static func makeContainer <Key> (keyedBy type: Key.Type, for encoder: KBAPIURLEncoder.Encoder <Result>, baseCodingPath: CodingPath) -> KeyedEncodingContainer <Key> {
 		return KeyedEncodingContainer (KeyedContainer (for: encoder, baseCodingPath: baseCodingPath));
 	}
 	
-	fileprivate func appendResultValue (_ value: String?, for codingPath: [CodingKey]) {
+	fileprivate func appendResultValue (_ value: String?, for codingPath: CodingPath) {
 		self.appendResultValue (value, for: codingPath.urlencodedParameterName);
 	}
 	
@@ -170,41 +170,30 @@ extension KBAPIURLEncoder.SuperEncoder: KBAPIURLEncoderImplementation, Encoder {
 		return self.rootEncoder.userInfo;
 	}
 	
-	fileprivate static func makeContainer <Key> (keyedBy type: Key.Type, for encoder: KBAPIURLEncoder.SuperEncoder <ResultType>, baseCodingPath: [CodingKey]) -> KeyedEncodingContainer <Key> {
+	fileprivate static func makeContainer <Key> (keyedBy type: Key.Type, for encoder: KBAPIURLEncoder.SuperEncoder <ResultType>, baseCodingPath: CodingPath) -> KeyedEncodingContainer <Key> {
 		return Parent.makeContainer (keyedBy: type, for: encoder.rootEncoder, baseCodingPath: encoder.codingPath + baseCodingPath);
 	}
 	
-	fileprivate func appendResultValue (_ value: String?, for codingPath: [CodingKey]) {
+	fileprivate func appendResultValue (_ value: String?, for codingPath: CodingPath) {
 		self.rootEncoder.appendResultValue (value, for: self.codingPath + codingPath);
 	}
 }
 
 extension KBAPIURLEncoderImplementation where Self: Encoder {
-	fileprivate func encodeNilValue (for codingPath: [CodingKey]) {
+	fileprivate func encodeNilValue (for codingPath: CodingPath) {
 		self.appendResultValue (nil, for: codingPath);
 	}
 	
-	fileprivate func encodeValue <T> (_ value: T, for codingPath: [CodingKey]) where T: Encodable {
-		let valueString: String;
-		switch (value) {
-		case let boolValue as Bool:
-			valueString = (boolValue ? "1" : "0");
-		case let string as String:
-			valueString = string;
-		case let convertible as CustomStringConvertible:
-			valueString = convertible.description;
-		default:
-			valueString = "\(value)";
-		}
-		self.appendResultValue (valueString, for: codingPath);
+	fileprivate func encodeValue <T> (_ value: T, for codingPath: CodingPath) where T: Encodable {
+		self.appendResultValue (String (urlRequestSerialized: value), for: codingPath);
 	}
 	
-	fileprivate func encodeValue <T> (_ value: T, for codingPath: [CodingKey]) where T: Encodable, T: StringProtocol {
-		self.appendResultValue (String (value), for: codingPath);
+	fileprivate func encodeValue <T> (_ value: T, for codingPath: CodingPath) where T: Encodable, T: StringProtocol {
+		self.appendResultValue (String (urlRequestSerialized: value), for: codingPath);
 	}
 	
-	fileprivate func encodeValue <T> (_ value: T, for codingPath: [CodingKey]) where T: Encodable, T: FixedWidthInteger {
-		self.appendResultValue (String (value), for: codingPath);
+	fileprivate func encodeValue <T> (_ value: T, for codingPath: CodingPath) where T: Encodable, T: FixedWidthInteger {
+		self.appendResultValue (String (urlRequestSerialized: value), for: codingPath);
 	}
 	
 	fileprivate func container <Key> (keyedBy type: Key.Type) -> KeyedEncodingContainer <Key> {
@@ -219,31 +208,21 @@ extension KBAPIURLEncoderImplementation where Self: Encoder {
 		return self.singleValueContainer (baseCodingPath: self.codingPath);
 	}
 	
-	fileprivate func container <Key> (keyedBy type: Key.Type, baseCodingPath: [CodingKey]) -> KeyedEncodingContainer <Key> {
+	fileprivate func container <Key> (keyedBy type: Key.Type, baseCodingPath: CodingPath) -> KeyedEncodingContainer <Key> {
 		return Self.makeContainer (keyedBy: type, for: self, baseCodingPath: baseCodingPath);
 	}
 	
-	fileprivate func unkeyedContainer (baseCodingPath: [CodingKey]) -> UnkeyedEncodingContainer {
+	fileprivate func unkeyedContainer (baseCodingPath: CodingPath) -> UnkeyedEncodingContainer {
 		return UnkeyedContainer.init (for: self.rootEncoder, baseCodingPath: baseCodingPath);
 	}
 	
-	fileprivate func singleValueContainer (baseCodingPath: [CodingKey]) -> SingleValueEncodingContainer {
+	fileprivate func singleValueContainer (baseCodingPath: CodingPath) -> SingleValueEncodingContainer {
 		return SingleValueContainer.init (for: self.rootEncoder, baseCodingPath: baseCodingPath);
 	}
 }
 
-fileprivate extension CodingKey {
-	fileprivate static var `super`: Self {
-		guard let result = Self (stringValue: "super") ?? Self (intValue: 0) else {
-			log.fault ("Cannot instantiate \"super\" / zero key");
-			return Self (stringValue: "super")!;
-		}
-		return result;
-	}
-}
-
 extension KBAPIURLEncoderKeyedContainer {
-	fileprivate var codingPath: [CodingKey] {
+	fileprivate var codingPath: CodingPath {
 		return self.baseCodingPath;
 	}
 	
@@ -271,48 +250,21 @@ extension KBAPIURLEncoderKeyedContainer {
 		return self.encoder.unkeyedContainer (baseCodingPath: self.codingPath (forKey: key));
 	}
 	
-	fileprivate func superEncoder () -> Encoder {
-		return self.superEncoder (forKey: .super);
-	}
-	
 	fileprivate func superEncoder (forKey key: Key) -> Swift.Encoder {
 		return KBAPIURLEncoder.SuperEncoder (root: self.encoder.rootEncoder, codingPath: self.codingPath (forKey: key));
 	}
 	
-	private func codingPath (forKey key: Key) -> [CodingKey] {
+	private func codingPath (forKey key: Key) -> CodingPath {
 		return self.baseCodingPath + [key];
 	}
 }
 
-private struct ContainerIndexKey: CodingKey {
-	fileprivate var intValue: Int? {
-		return self.value;
-	}
-	fileprivate var stringValue: String {
-		return "\(self.value)";
-	}
-	
-	private let value: Int;
-	
-	fileprivate init? (intValue: Int) {
-		return nil;
-	}
-	
-	fileprivate init? (stringValue: String) {
-		return nil;
-	}
-	
-	fileprivate init (_ value: Int) {
-		self.value = value;
-	}
-}
-
 extension KBAPIURLEncoderUnkeyedContainer {
-	fileprivate var codingPath: [CodingKey] {
-		return self.baseCodingPath + [ContainerIndexKey (self.count)];
+	fileprivate var codingPath: CodingPath {
+		return self.baseCodingPath + [ContainerIndexKey (intValue: self.count)];
 	}
 
-	fileprivate mutating func advanceCodingPath () -> [CodingKey] {
+	fileprivate mutating func advanceCodingPath () -> CodingPath {
 		let oldCodingPath = self.codingPath;
 		self.count += 1;
 		return oldCodingPath;
@@ -347,7 +299,7 @@ extension KBAPIURLEncoderUnkeyedContainer {
 }
 
 extension KBAPIURLEncoderSingleValueContainer {
-	fileprivate var codingPath: [CodingKey] {
+	fileprivate var codingPath: CodingPath {
 		return self.baseCodingPath;
 	}
 	
@@ -371,9 +323,9 @@ extension KBAPIURLEncoderSingleValueContainer {
 fileprivate extension KBAPIURLEncoder.Encoder {
 	fileprivate struct KeyedContainer <Key>: KBAPIURLEncoderKeyedContainer where Key: CodingKey {
 		fileprivate unowned let encoder: KBAPIURLEncoder.Encoder <ResultType>;
-		fileprivate let baseCodingPath: [CodingKey];
+		fileprivate let baseCodingPath: CodingPath;
 		
-		fileprivate init (for encoder: KBAPIURLEncoder.Encoder <ResultType>, baseCodingPath: [CodingKey]) {
+		fileprivate init (for encoder: KBAPIURLEncoder.Encoder <ResultType>, baseCodingPath: CodingPath) {
 			self.encoder = encoder;
 			self.baseCodingPath = baseCodingPath;
 		}
@@ -381,11 +333,11 @@ fileprivate extension KBAPIURLEncoder.Encoder {
 	
 	fileprivate struct UnkeyedContainer: KBAPIURLEncoderUnkeyedContainer {
 		fileprivate unowned let encoder: KBAPIURLEncoder.Encoder <ResultType>;
-		fileprivate let baseCodingPath: [CodingKey];
+		fileprivate let baseCodingPath: CodingPath;
 		
 		fileprivate var count = 0;
 		
-		fileprivate init (for encoder: KBAPIURLEncoder.Encoder <ResultType>, baseCodingPath: [CodingKey]) {
+		fileprivate init (for encoder: KBAPIURLEncoder.Encoder <ResultType>, baseCodingPath: CodingPath) {
 			self.encoder = encoder;
 			self.baseCodingPath = baseCodingPath;
 		}
@@ -393,9 +345,9 @@ fileprivate extension KBAPIURLEncoder.Encoder {
 	
 	fileprivate struct SingleValueContainer: KBAPIURLEncoderSingleValueContainer {
 		fileprivate unowned let encoder: KBAPIURLEncoder.Encoder <ResultType>;
-		fileprivate let baseCodingPath: [CodingKey];
+		fileprivate let baseCodingPath: CodingPath;
 		
-		fileprivate init (for encoder: KBAPIURLEncoder.Encoder <ResultType>, baseCodingPath: [CodingKey]) {
+		fileprivate init (for encoder: KBAPIURLEncoder.Encoder <ResultType>, baseCodingPath: CodingPath) {
 			self.encoder = encoder;
 			self.baseCodingPath = baseCodingPath;
 		}
@@ -404,19 +356,6 @@ fileprivate extension KBAPIURLEncoder.Encoder {
 
 public extension KBAPIURLEncodingSerializer {
 	public typealias URLEncoder = KBAPIURLEncoder;
-}
-
-fileprivate extension Array where Element == CodingKey {
-	fileprivate var urlencodedParameterName: String {
-		guard let nameHead = self.first?.stringValue else {
-			return "";
-		}
-		let nameTail = self.dropFirst ();
-		guard !nameTail.isEmpty else {
-			return nameHead;
-		}
-		return nameHead + "[" + nameTail.map { $0.stringValue }.joined (separator: "][") + "]";
-	}
 }
 
 private let log = KBLoggerWrapper ();

@@ -78,7 +78,7 @@ open class KBAPIConnection <Request> where Request: KBAPIRequest {
 				throw error;
 			} else if let response = response {
 				log.info ("URL response: \(response)");
-				log.info ("Encoded response: \(data.map { $0.debugLogDescription } ?? "nil")");
+				log.info ("Encoded response: \(data.debugLogDescription)");
 				try completion.call (with: self.request.responseSerializer.decode (from: data, response: response));
 			} else {
 				log.fault ("Invalid state: URL response and error are both nil");

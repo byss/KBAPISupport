@@ -26,13 +26,29 @@
 
 import Foundation
 
-internal extension Array where Element == URLQueryItem {
+internal protocol DebugLogStringConvertible {
+	var debugLogDescription: String { get }
+}
+
+extension Optional: DebugLogStringConvertible where Wrapped: DebugLogStringConvertible {
+	internal var debugLogDescription: String {
+		return self?.debugLogDescription ?? "nil";
+	}
+}
+
+extension Array: DebugLogStringConvertible where Element == URLQueryItem {
 	internal var debugLogDescription: String {
 		return "[" + self.map { "\($0.name) = \($0.value ?? "<nil>")" }.joined (separator: ", ") + "]";
 	}
 }
 
-internal extension Data {
+extension InputStream: DebugLogStringConvertible {
+	internal var debugLogDescription: String {
+		return self.debugDescription;
+	}
+}
+
+extension Data: DebugLogStringConvertible {
 	internal var debugLogDescription: String {
 		if let stringDescription = String (decodingUTF8: self, maximumLength: .maximumDataDebugLogDescriptionLength) {
 			return stringDescription;

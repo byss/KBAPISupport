@@ -25,6 +25,7 @@
 //
 
 import Foundation
+import MobileCoreServices
 
 public extension KBAPIRequestSerializerProtocol {
 	private var commonHeaders: [String: String] {
@@ -116,13 +117,14 @@ open class KBAPIJSONSerializer: KBAPIURLEncodingSerializer {
 		}
 	}
 
-	public init (urlEncoder: KBAPIURLEncoderProtocol? = nil, jsonEncoder: KBAPIJSONEncoderProtocol = JSONEncoder.defaultForRequestSerialization) {
+	public init (jsonEncoder: KBAPIJSONEncoderProtocol = JSONEncoder.defaultForRequestSerialization) {
 		self.jsonEncoder = jsonEncoder;
-		if let urlEncoder = urlEncoder {
-			super.init (urlEncoder: urlEncoder);
-		} else {
-			super.init ();
-		}
+		super.init ();
+	}
+	
+	public init (urlEncoder: KBAPIURLEncoderProtocol, jsonEncoder: KBAPIJSONEncoderProtocol = JSONEncoder.defaultForRequestSerialization) {
+		self.jsonEncoder = jsonEncoder;
+		super.init (urlEncoder: urlEncoder);
 	}
 	
 	open override func serializeParameters <P> (_ parameters: P, asBodyData: Bool, into request: inout URLRequest) throws where P: Encodable {
@@ -136,63 +138,41 @@ open class KBAPIJSONSerializer: KBAPIURLEncodingSerializer {
 	}
 }
 
-open class KBAPIMultipartFormDataRequestSerializer: KBAPIRequestSerializerProtocol {
-	public struct UploadedFile {
-		public let data: Data
-		public let filename: String
-		public let contentType: String
-		
-		public init (data: Data, filename: String = "file.bin", contentType: String = "appication/octet-stream") {
-			self.data = data
-			self.filename = filename
-			self.contentType = contentType
-		}
-		
-		fileprivate var escapedFilename: String {
-			let allowedCharacters = CharacterSet.urlQueryAllowed
-			return String (String.UnicodeScalarView (self.filename.unicodeScalars.compactMap { allowedCharacters.contains ($0) ? $0 : "_" })).replacingOccurrences (of: "\"", with: "\\\"")
-		}
-		
-		fileprivate func multipartFormData (boundary: String, fieldName: String) -> Data {
-			let headerData = (
-				"--\(boundary)\r\n" +
-				"Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(self.escapedFilename)\"\r\n" +
-				"Content-Type: \(self.contentType)\r\n" +
-				"\r\n"
-			).data (using: .utf8)!
-			let footerData = "\r\n".data (using: .utf8)!
-			return headerData + self.data + footerData;
+open class KBAPIMultipartFormDataRequestSerializer: KBAPIURLEncodingSerializer {
+	open var multipartFormDataEncoder: KBAPIMultipartFormDataEncoderProtocol;
+	
+	open override var userInfo: [CodingUserInfoKey: Any] {
+		get { return super.userInfo }
+		set {
+			var userInfo = newValue;
+			userInfo [.multipartFormBoundary] = self.boundary;
+			super.userInfo = userInfo;
 		}
 	}
 	
-	private enum Error: Swift.Error {
-		case unsupportedDestination;
-		case unsupportedParameters;
-	}
-	
-	open var userInfo = [CodingUserInfoKey: Any] ();
-	private let boundary: String
-	
-	public init () {
-		let randomValue = (UInt64 (arc4random ()) << 32) | UInt64 (arc4random ());
-		self.boundary = "KBAPISupport_boundary_hi_there_who_reads_this_\(String (randomValue, radix: 16, uppercase: true))";
+	private var boundary: String {
+		return self.multipartFormDataEncoder.boundary;
 	}
 
-	open func serializeParameters <P> (_ parameters: P, asBodyData: Bool, into request: inout URLRequest) throws where P: Encodable {
+	public init () {
+		let boundary = "KBAPISupport_boundary_hi_there_who_reads_this_\(String (UInt64 ((arc4random ()) << 32) | UInt64 (arc4random ()), radix: 16, uppercase: true))";
+		self.multipartFormDataEncoder = KBAPIMultipartFormDataEncoder (boundary: boundary);
+		super.init ();
+	}
+
+	open override func serializeParameters <P> (_ parameters: P, asBodyData: Bool, into request: inout URLRequest) throws where P: Encodable {
 		guard asBodyData else {
-			throw Error.unsupportedDestination;
+			return try super.serializeParameters (parameters, asBodyData: asBodyData, into: &request);
 		}
-		guard let parameters = parameters as? [String: UploadedFile] else {
-			throw Error.unsupportedParameters;
-		}
-		try self.serializeUploadedFiles (parameters, into: &request);
+		request.addValue ("multipart/form-data; boundary=\(self.boundary)", forHTTPHeaderField: "Content-Type");
+		let streamedParameters: InputStream? = try self.multipartFormDataEncoder.encode (parameters);
+		log.debug ("Encoded parameters: \(streamedParameters.debugLogDescription)");
+		request.httpBodyStream = streamedParameters;
 	}
-	
-	private func serializeUploadedFiles (_ uploadedFiles: [String: UploadedFile], into request: inout URLRequest) throws {
-		request.httpBody = uploadedFiles.compactMap {
-			$0.value.multipartFormData (boundary: self.boundary, fieldName: $0.key)
-		}.reduce (into: Data ()) { $0 += $1 } + "--\(self.boundary)--\r\n".data (using: .utf8)!;
-	}
+}
+
+public extension CodingUserInfoKey {
+	public static let multipartFormBoundary = CodingUserInfoKey (rawValue: "multipartFormBoundary")!;
 }
 
 fileprivate extension Bundle {
