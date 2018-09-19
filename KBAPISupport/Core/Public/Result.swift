@@ -44,6 +44,7 @@ public protocol ResultProtocolExtra: ResultProtocol {
 	init <R> (_ other: R) where R: ResultProtocolExtra, R.Wrapped == Wrapped;
 
 	func converted <R> () -> R where R: ResultProtocol, R.Wrapped == Wrapped;
+	func converted <R> (to anotherResultType: R.Type) -> R where R: ResultProtocol, R.Wrapped == Wrapped;
 
 	func map <T> (_ block: (Wrapped) throws -> Result <T>) rethrows -> Result <T>;
 	func map <T> (_ block: (Wrapped) throws -> T) rethrows -> Result <T>;
@@ -63,14 +64,14 @@ public extension ResultProtocol {
 	}
 }
 
+private struct ResultConversionError: Error {}
+
 public extension ResultProtocolExtra {
 	public init <R> (_ other: R) where R: ResultProtocol, R.Wrapped == Wrapped {
 		if let value = other.value {
 			self.init (value);
-		} else if let error = other.error {
-			self.init (error);
 		} else {
-			fatalError ("\(other) has invalid state (both value and error are nil)");
+			self.init (other.error ?? ResultConversionError ());
 		}
 	}
 	
@@ -80,6 +81,10 @@ public extension ResultProtocolExtra {
 	
 	public func converted <R> () -> R where R: ResultProtocol, R.Wrapped == Wrapped {
 		return self.map (R.init, error: R.init);
+	}
+
+	public func converted <R> (to anotherResultType: R.Type = R.self) -> R where R: ResultProtocol, R.Wrapped == Wrapped {
+		return self.map (anotherResultType.init, error: anotherResultType.init);
 	}
 
 	public func map <T> (_ block: (Wrapped) throws -> Result <T>) rethrows -> Result <T> {
