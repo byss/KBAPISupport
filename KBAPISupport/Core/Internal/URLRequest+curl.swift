@@ -29,7 +29,7 @@
 import Foundation
 
 public extension URLRequest {
-	public func makeCurlCommand (verbose: Bool = true) -> String {
+	public func makeCurlCommand (targetSession session: URLSession = .shared, verbose: Bool = true) -> String {
 		guard let url = self.url else {
 			return "# <nourl>";
 		}
@@ -41,27 +41,42 @@ public extension URLRequest {
 		if let method = self.httpMethod {
 			result += "-X '\(method)' ";
 		}
-		for header in self.allHTTPHeaderFields ?? [:] {
+		
+		let resultingHeaders: [String: String];
+		switch (self.allHTTPHeaderFields, session.configuration.httpAdditionalHeaders as? [String: String]) {
+		case (nil, nil):
+			resultingHeaders = [:];
+		case (.some (let headers), nil), (nil, .some (let headers)):
+			resultingHeaders = headers;
+		case (.some (let requestHeaders), .some (let sessionHeaders)):
+			resultingHeaders = requestHeaders.merging (sessionHeaders) { x, _ in x };
+		}
+		
+		for header in resultingHeaders {
 			result += "-H '\(header.key): \(header.value)' ";
 		}
-		for cookie in HTTPCookieStorage.shared.cookies (for: url) ?? [] {
+		for cookie in session.configuration.httpCookieStorage?.cookies (for: url) ?? [] {
 			result += "-b '\(cookie.name)=\(cookie.value)' ";
 		}
+		
 		if let body = self.httpBody {
-			result += "-d '\(String (data: body, encoding: .utf8)!)' ";
+			if (body.count < 0x1000) {
+				result += "-d '\(String (data: body, encoding: .utf8)!)' ";
+			} else {
+				return "# request body is too long";
+			}
+		} else if self.httpBodyStream != nil {
+			return "# request body is streamed";
 		}
+		
 		result += "'\(url.absoluteString)'";
 		return result;
 	}
 }
 
 public extension NSURLRequest {
-	@objc var curlCommand: String {
-		return (self as URLRequest).makeCurlCommand (verbose: false);
-	}
-	
-	@objc var verboseCurlCommand: String {
-		return (self as URLRequest).makeCurlCommand (verbose: true);
+	@objc public func makeCurlCommand (targetSession session: URLSession, verbose: Bool) -> String {
+		return (self as URLRequest).makeCurlCommand (targetSession: session, verbose: false);
 	}
 }
 
