@@ -28,10 +28,6 @@ import Foundation
 import MobileCoreServices
 
 public extension KBAPIRequestSerializerProtocol {
-	private var commonHeaders: [String: String] {
-		return KBAPIRequestCommonHeaders;
-	}
-	
 	public func shouldSerializeRequestParametersAsBodyData <R> (for request: R) -> Bool where R: KBAPIRequest {
 		switch (request.httpMethod) {
 		case .get, .delete:
@@ -44,8 +40,11 @@ public extension KBAPIRequestSerializerProtocol {
 	public func serializeRequest <R> (_ req: R) throws -> URLRequest where R: KBAPIRequest {
 		var result = URLRequest (url: req.url);
 		result.httpMethod = req.httpMethod.rawValue;
-		result.allHTTPHeaderFields = req.httpHeaders.merging (self.commonHeaders) { a, b in a };
 		log.info ("Request: \(req.httpMethod.rawValue) \(req.url.absoluteString)");
+
+		result.allHTTPHeaderFields = req.httpHeaders.merging (KBAPIRequestDefaultHeaders) { a, b in a };
+		result.allHTTPHeaderFields.map { headers in log.info ("Headers: [\(headers.map { "\($0.key): \($0.value)" }.joined (separator: ", "))]") };
+		
 		let parameters = req.parameters;
 		log.info ("Parameters: \(parameters)");
 		do {
@@ -54,7 +53,6 @@ public extension KBAPIRequestSerializerProtocol {
 			log.warning ("Encoding error: \(error)");
 			throw error;
 		}
-		result.allHTTPHeaderFields.map { headers in log.info ("Headers: [\(headers.map { "\($0.key): \($0.value)" }.joined (separator: ", "))]") };
 		return result;
 	}
 
@@ -180,9 +178,5 @@ fileprivate extension Bundle {
 	}
 }
 
-private let KBAPIRequestCommonHeaders = [
-	"Accept": "application/json",
-	"Accept-Encoding": "gzip, deflate",
-];
-
+private let KBAPIRequestDefaultHeaders = __bridge_KBAPIRequestDefaultHeaders ();
 private let log = KBLoggerWrapper ();

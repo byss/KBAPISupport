@@ -1,8 +1,5 @@
 //
-//  KBAPIRequest.mm
-//  KBAPISupport
-//
-//  Created by Kirill Bystrov on 7/19/18.
+//  KBAPIRequestSerializationBase.m
 //  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,37 +21,9 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPIRequest.h"
+#import "KBAPIRequestSerializationBase.h"
 
-static NSURL *const NSURLNone = [[NSURL alloc] initWithString:@""];
-
-@implementation KBAPIRequest
-
-@dynamic responseClass;
-@dynamic serializer;
-
-- (KBAPIRequestHTTPMethod) HTTPMethod {
-	return KBAPIRequestHTTPMethodGET;
-}
-
-- (NSDictionary <NSString *, NSString *> *) HTTPHeaders {
-	return @{};
-}
-
-- (NSURL *) baseURL {
-	return NSURLNone;
-}
-
-- (NSString *) path {
-	return @"";
-}
-
-- (NSURL *) URL {
-	return [(NSURL *) [[NSURL alloc] initWithString:self.path relativeToURL:self.baseURL] autorelease];
-}
-
-- (NSDictionary <NSString *, id> *) parameters {
-	return @{};
-}
-
-@end
+NSDictionary <NSString *, NSString *> *const KBAPIRequestDefaultHeaders = @{
+	@"Accept": @"application/json",
+	@"Accept-Encoding": @"gzip, deflate",
+};

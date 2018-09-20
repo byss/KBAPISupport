@@ -1,8 +1,5 @@
 //
-//  KBAPIRequest.mm
-//  KBAPISupport
-//
-//  Created by Kirill Bystrov on 7/19/18.
+//  KBAPIResponseSerializers.h
 //  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,37 +21,23 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPIRequest.h"
+#import <KBAPISupport/KBAPICoder.h>
 
-static NSURL *const NSURLNone = [[NSURL alloc] initWithString:@""];
+NS_ASSUME_NONNULL_BEGIN
 
-@implementation KBAPIRequest
+NS_REFINED_FOR_SWIFT
+@interface KBAPIResponseSerializer: NSObject <KBAPICoder>
 
-@dynamic responseClass;
-@dynamic serializer;
+@property (nonatomic, readonly) Class responseClass;
 
-- (KBAPIRequestHTTPMethod) HTTPMethod {
-	return KBAPIRequestHTTPMethodGET;
-}
++ (instancetype) new NS_UNAVAILABLE;
+- (instancetype) init NS_UNAVAILABLE;
 
-- (NSDictionary <NSString *, NSString *> *) HTTPHeaders {
-	return @{};
-}
+- (instancetype) initWithResponseClass: (Class) responseClass NS_DESIGNATED_INITIALIZER;
 
-- (NSURL *) baseURL {
-	return NSURLNone;
-}
-
-- (NSString *) path {
-	return @"";
-}
-
-- (NSURL *) URL {
-	return [(NSURL *) [[NSURL alloc] initWithString:self.path relativeToURL:self.baseURL] autorelease];
-}
-
-- (NSDictionary <NSString *, id> *) parameters {
-	return @{};
-}
+- (nullable id) decodeObjectFromData: (NSData *) data error: (NSError *__autoreleasing *__nullable) error;
+- (nullable id) decodeObjectFromData: (NSData *) data reponse: (NSURLResponse *) response error: (NSError *__autoreleasing *__nullable) error;
 
 @end
+
+NS_ASSUME_NONNULL_END

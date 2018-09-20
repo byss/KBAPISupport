@@ -1,8 +1,5 @@
 //
-//  KBAPIRequest.mm
-//  KBAPISupport
-//
-//  Created by Kirill Bystrov on 7/19/18.
+//  KBAPIRequestBridge.swift
 //  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,37 +21,21 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPIRequest.h"
+import Foundation
 
-static NSURL *const NSURLNone = [[NSURL alloc] initWithString:@""];
+internal struct KBAPIRequestBridge <ResponseType>: KBAPIRequest where ResponseType: NSObject, ResponseType: Decodable {
+	internal typealias ResponseSerializerType = JSONResponseSerializer <ResponseType>;
 
-@implementation KBAPIRequest
+	internal var serializer: RequestSerializer {
+		return self.request.serializer;
+	}
+	
+	internal var responseSerializer: ResponseSerializerType;
 
-@dynamic responseClass;
-@dynamic serializer;
-
-- (KBAPIRequestHTTPMethod) HTTPMethod {
-	return KBAPIRequestHTTPMethodGET;
+	private let request: __KBAPIRequest;
+	
+	internal init (_ request: __KBAPIRequest) {
+		self.request = request;
+		self.responseSerializer = ResponseSerializerType ();
+	}
 }
-
-- (NSDictionary <NSString *, NSString *> *) HTTPHeaders {
-	return @{};
-}
-
-- (NSURL *) baseURL {
-	return NSURLNone;
-}
-
-- (NSString *) path {
-	return @"";
-}
-
-- (NSURL *) URL {
-	return [(NSURL *) [[NSURL alloc] initWithString:self.path relativeToURL:self.baseURL] autorelease];
-}
-
-- (NSDictionary <NSString *, id> *) parameters {
-	return @{};
-}
-
-@end

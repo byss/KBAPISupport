@@ -1,3 +1,5 @@
 framework module KBAPISupport {
 	umbrella header "KBAPISupport.h"
+	
+	private header "KBAPIRequestSerializationBase.h"
 }

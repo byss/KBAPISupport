@@ -1,8 +1,5 @@
 //
-//  KBAPIRequest.mm
-//  KBAPISupport
-//
-//  Created by Kirill Bystrov on 7/19/18.
+//  KBAPIResponseSerializers.m
 //  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,37 +21,34 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPIRequest.h"
+#import "KBAPIResponseSerializers.h"
 
-static NSURL *const NSURLNone = [[NSURL alloc] initWithString:@""];
+@implementation KBAPIResponseSerializer
 
-@implementation KBAPIRequest
+@synthesize userInfo = _userInfo;
 
-@dynamic responseClass;
-@dynamic serializer;
-
-- (KBAPIRequestHTTPMethod) HTTPMethod {
-	return KBAPIRequestHTTPMethodGET;
+- (instancetype) init {
+	return nil;
 }
 
-- (NSDictionary <NSString *, NSString *> *) HTTPHeaders {
-	return @{};
+- (instancetype) initWithResponseClass: (Class) responseClass {
+	if (self = [super init]) {
+		_responseClass = responseClass;
+	}
+	return self;
 }
 
-- (NSURL *) baseURL {
-	return NSURLNone;
+- (void) dealloc {
+	[_userInfo release];
+	[super dealloc];
 }
 
-- (NSString *) path {
-	return @"";
+- (id) decodeObjectFromData: (NSData *) data error: (NSError **) error {
+	return nil; // TODO
 }
 
-- (NSURL *) URL {
-	return [(NSURL *) [[NSURL alloc] initWithString:self.path relativeToURL:self.baseURL] autorelease];
-}
-
-- (NSDictionary <NSString *, id> *) parameters {
-	return @{};
+- (id) decodeObjectFromData: (NSData *) data reponse: (NSURLResponse *) response error: (NSError **) error {
+	return [self decodeObjectFromData:data error:error];
 }
 
 @end

@@ -1,8 +1,5 @@
 //
-//  KBAPIRequest.mm
-//  KBAPISupport
-//
-//  Created by Kirill Bystrov on 7/19/18.
+//  KBAPIRequestSerializers.h
 //  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,37 +21,27 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPIRequest.h"
+#import <KBAPISupport/KBAPICoder.h>
 
-static NSURL *const NSURLNone = [[NSURL alloc] initWithString:@""];
+NS_ASSUME_NONNULL_BEGIN
 
-@implementation KBAPIRequest
+NS_REFINED_FOR_SWIFT
+@interface KBAPIRequestSerializer: NSObject <KBAPICoder>
 
-@dynamic responseClass;
-@dynamic serializer;
-
-- (KBAPIRequestHTTPMethod) HTTPMethod {
-	return KBAPIRequestHTTPMethodGET;
-}
-
-- (NSDictionary <NSString *, NSString *> *) HTTPHeaders {
-	return @{};
-}
-
-- (NSURL *) baseURL {
-	return NSURLNone;
-}
-
-- (NSString *) path {
-	return @"";
-}
-
-- (NSURL *) URL {
-	return [(NSURL *) [[NSURL alloc] initWithString:self.path relativeToURL:self.baseURL] autorelease];
-}
-
-- (NSDictionary <NSString *, id> *) parameters {
-	return @{};
-}
+- (BOOL) shouldSerializeRequestParametersAsBodyDataForRequest: (KBAPIRequest *) request;
+- (nullable NSURLRequest *) serializeRequest: (KBAPIRequest *) request error: (NSError *__autoreleasing *) error;
+- (BOOL) serializeParameters: (NSDictionary <NSString *, id> *) parameters asBodyData: (BOOL) asBodyData intoRequest: (NSMutableURLRequest *) request error: (NSError *__autoreleasing *__nullable) error;
 
 @end
+
+NS_REFINED_FOR_SWIFT
+@interface KBAPIURLEncodingSerializer: KBAPIRequestSerializer
+
+@end
+
+NS_REFINED_FOR_SWIFT
+@interface KBAPIJSONSerializer: KBAPIURLEncodingSerializer
+
+@end
+
+NS_ASSUME_NONNULL_END

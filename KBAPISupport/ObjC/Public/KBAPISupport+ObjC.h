@@ -25,3 +25,6 @@
 //
 
 #import <KBAPISupport/KBAPIRequest.h>
+#import <KBAPISupport/KBAPICoder.h>
+#import <KBAPISupport/KBAPIRequestSerializers.h>
+#import <KBAPISupport/KBAPIResponseSerializers.h>

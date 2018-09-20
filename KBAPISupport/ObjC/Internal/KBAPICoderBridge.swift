@@ -1,8 +1,5 @@
 //
-//  KBAPIRequest.mm
-//  KBAPISupport
-//
-//  Created by Kirill Bystrov on 7/19/18.
+//  KBAPICoderBridge.swift
 //  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,37 +21,27 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPIRequest.h"
+import Foundation
 
-static NSURL *const NSURLNone = [[NSURL alloc] initWithString:@""];
-
-@implementation KBAPIRequest
-
-@dynamic responseClass;
-@dynamic serializer;
-
-- (KBAPIRequestHTTPMethod) HTTPMethod {
-	return KBAPIRequestHTTPMethodGET;
+public extension KBAPICoder where Self: __KBAPICoder {
+	public var userInfo: [CodingUserInfoKey : Any] {
+		get {
+			let rawUserInfo = self.__userInfo;
+			var result = [CodingUserInfoKey: Any] (minimumCapacity: rawUserInfo.count);
+			for (key, value) in rawUserInfo {
+				guard let key = CodingUserInfoKey (rawValue: key) else {
+					continue;
+				}
+				result [key] = value;
+			}
+			return result;
+		}
+		set {
+			var rawUserInfo = [String: Any] (minimumCapacity: newValue.count);
+			for (key, value) in newValue {
+				rawUserInfo [key.rawValue] = value;
+			}
+			self.__userInfo = rawUserInfo;
+		}
+	}
 }
-
-- (NSDictionary <NSString *, NSString *> *) HTTPHeaders {
-	return @{};
-}
-
-- (NSURL *) baseURL {
-	return NSURLNone;
-}
-
-- (NSString *) path {
-	return @"";
-}
-
-- (NSURL *) URL {
-	return [(NSURL *) [[NSURL alloc] initWithString:self.path relativeToURL:self.baseURL] autorelease];
-}
-
-- (NSDictionary <NSString *, id> *) parameters {
-	return @{};
-}
-
-@end

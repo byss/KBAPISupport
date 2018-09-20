@@ -1,8 +1,5 @@
 //
-//  KBAPIRequest.mm
-//  KBAPISupport
-//
-//  Created by Kirill Bystrov on 7/19/18.
+//  KBAPIRequestSerializationBase.h
 //  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,37 +21,14 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPIRequest.h"
+#import <Foundation/Foundation.h>
 
-static NSURL *const NSURLNone = [[NSURL alloc] initWithString:@""];
+NS_ASSUME_NONNULL_BEGIN
 
-@implementation KBAPIRequest
+extern NSDictionary <NSString *, NSString *> *const KBAPIRequestDefaultHeaders NS_SWIFT_UNAVAILABLE ("Needs bridging");
 
-@dynamic responseClass;
-@dynamic serializer;
-
-- (KBAPIRequestHTTPMethod) HTTPMethod {
-	return KBAPIRequestHTTPMethodGET;
+NS_REFINED_FOR_SWIFT NS_INLINE NSDictionary <NSString *, NSString *> *bridge_KBAPIRequestDefaultHeaders (void) {
+	return KBAPIRequestDefaultHeaders;
 }
 
-- (NSDictionary <NSString *, NSString *> *) HTTPHeaders {
-	return @{};
-}
-
-- (NSURL *) baseURL {
-	return NSURLNone;
-}
-
-- (NSString *) path {
-	return @"";
-}
-
-- (NSURL *) URL {
-	return [(NSURL *) [[NSURL alloc] initWithString:self.path relativeToURL:self.baseURL] autorelease];
-}
-
-- (NSDictionary <NSString *, id> *) parameters {
-	return @{};
-}
-
-@end
+NS_ASSUME_NONNULL_END

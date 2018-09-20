@@ -29,8 +29,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class KBAPIRequestSerializer;
+
 NS_REFINED_FOR_SWIFT
 @interface KBAPIRequest: NSObject
+
+@property (nonatomic, readonly, class) Class responseClass;
 
 @property (nonatomic, readonly) KBAPIRequestHTTPMethod HTTPMethod NS_REFINED_FOR_SWIFT;
 @property (nonatomic, readonly) NSDictionary <NSString *, NSString *> *HTTPHeaders;
@@ -38,6 +42,8 @@ NS_REFINED_FOR_SWIFT
 @property (nonatomic, readonly) NSString *path;
 @property (nonatomic, readonly) NSURL *URL;
 @property (nonatomic, readonly) NSDictionary <NSString *, id> *parameters;
+
+@property (nonatomic, readonly) KBAPIRequestSerializer *serializer;
 
 @end
 

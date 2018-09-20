@@ -1,8 +1,5 @@
 //
-//  KBAPIRequest.mm
-//  KBAPISupport
-//
-//  Created by Kirill Bystrov on 7/19/18.
+//  KBAPICoder.h
 //  Copyright © 2018 Kirill byss Bystrov. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,37 +21,17 @@
 //  THE SOFTWARE.
 //
 
-#import "KBAPIRequest.h"
+#import <Foundation/Foundation.h>
 
-static NSURL *const NSURLNone = [[NSURL alloc] initWithString:@""];
+NS_ASSUME_NONNULL_BEGIN
 
-@implementation KBAPIRequest
+NS_REFINED_FOR_SWIFT
+@protocol KBAPICoder <NSObject>
 
-@dynamic responseClass;
-@dynamic serializer;
-
-- (KBAPIRequestHTTPMethod) HTTPMethod {
-	return KBAPIRequestHTTPMethodGET;
-}
-
-- (NSDictionary <NSString *, NSString *> *) HTTPHeaders {
-	return @{};
-}
-
-- (NSURL *) baseURL {
-	return NSURLNone;
-}
-
-- (NSString *) path {
-	return @"";
-}
-
-- (NSURL *) URL {
-	return [(NSURL *) [[NSURL alloc] initWithString:self.path relativeToURL:self.baseURL] autorelease];
-}
-
-- (NSDictionary <NSString *, id> *) parameters {
-	return @{};
-}
+@property (nonatomic, copy) NSDictionary <NSString *, id> *userInfo NS_REFINED_FOR_SWIFT;
 
 @end
+
+@class KBAPIRequest;
+
+NS_ASSUME_NONNULL_END
