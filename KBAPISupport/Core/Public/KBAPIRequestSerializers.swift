@@ -25,7 +25,6 @@
 //
 
 import Foundation
-import MobileCoreServices
 
 public extension KBAPIRequestSerializerProtocol {
 	public func shouldSerializeRequestParametersAsBodyData <R> (for request: R) -> Bool where R: KBAPIRequest {

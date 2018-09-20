@@ -22,7 +22,6 @@
 //
 
 import Foundation
-import MobileCoreServices
 
 public enum KBAPIFormDataCodingKeys: String, CodingKey, CaseIterable {
 	case filename;
@@ -120,14 +119,12 @@ private struct KBAPIFileUploadMetadata {
 			return;
 		}
 		
-		if (mimeType.isEmpty || (UTTypeCopyPreferredTagWithClass (kUTTagClassMIMEType, mimeType as CFString) == nil)) {
-			let pathExtension = URL (fileURLWithPath: filename).pathExtension as CFString;
-			if
-				let typeIdentifier = UTTypeCreatePreferredIdentifierForTag (kUTTagClassFilenameExtension, pathExtension, kUTTypeData)?.takeUnretainedValue (),
-				let mimeType = UTTypeCopyPreferredTagWithClass (typeIdentifier, kUTTagClassMIMEType)?.takeUnretainedValue () as String? {
+		if (UTIdentifier.preferred (forTag: .mimeType, withValue: mimeType, conformingTo: .data) == nil) {
+			let pathExtension = URL (fileURLWithPath: filename).pathExtension;
+			if let mimeType = UTIdentifier.preferred (forTag: .filenameExtension, withValue: pathExtension, conformingTo: .data)?.preferredValue (ofTag: .mimeType) {
 				self.init (unchecked: (filename, mimeType));
 			} else {
-				self.init (unchecked: (filename, "application/octet-stream"))
+				self.init (unchecked: (filename, UTIdentifier.data.preferredValue (ofTag: .mimeType)!));
 			}
 		} else {
 			self.init (unchecked: (filename, mimeType));
@@ -137,9 +134,9 @@ private struct KBAPIFileUploadMetadata {
 	fileprivate init (fileURL: URL) {
 		let filename = fileURL.lastPathComponent;
 		if
-			let typeIdentifier = (try? fileURL.resourceValues (forKeys: [.typeIdentifierKey]))?.typeIdentifier as CFString?,
-			UTTypeConformsTo (typeIdentifier, kUTTypeData),
-			let mimeType = UTTypeCopyPreferredTagWithClass (typeIdentifier, kUTTagClassMIMEType)?.takeUnretainedValue () as String? {
+			let typeIdentifier = (try? fileURL.resourceValues (forKeys: [.typeIdentifierKey]))?.typeIdentifier.flatMap (UTIdentifier.init),
+			typeIdentifier.conforms (to: .data),
+			let mimeType = typeIdentifier.preferredValue (ofTag: .mimeType) {
 			self.init (unchecked: (filename, mimeType));
 		} else {
 			self.init (filename: filename);
