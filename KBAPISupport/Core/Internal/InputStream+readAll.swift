@@ -40,3 +40,18 @@ internal extension InputStream {
 fileprivate extension Int {
 	fileprivate static let streamPassthroughBufferSize = Int (bitPattern: vm_page_size);
 }
+
+#if arch(i386) || arch(arm)
+fileprivate extension UnsafeMutablePointer where Pointee == UInt8 {
+	fileprivate init? (bitPattern: vm_size_t) {
+		self.init (bitPattern: Int (bitPattern: bitPattern));
+	}
+}
+
+fileprivate extension Int {
+	fileprivate init (bitPattern: vm_size_t) {
+		self.init (bitPattern);
+	}
+}
+#endif
+

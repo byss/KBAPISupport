@@ -133,7 +133,7 @@ fileprivate extension KBAPIConnection {
 #if DEBUG
 			log.debug ("Serialized: \(serializedRequest.makeCurlCommand (targetSession: self.session))");
 #else
-			log.debug ("Serialized: \(result)");
+			log.debug ("Serialized: \(serializedRequest)");
 #endif
 			let task = self.session.dataTask (with: serializedRequest, completionHandler: { data, response, error in
 				DispatchQueue.defaultConcurrent.async {
