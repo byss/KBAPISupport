@@ -1,7 +1,7 @@
 class Pod::Specification
 	def kb_subspec (name, requires: nil, &block)
 		self.subspec name do |sspec|
-			sspec.source_files = "#{sspec.name}/{Public,Internal,Private}/*.{h,mm,swift}", "#{self.name}/Supporting Files/#{self.name}.h"
+			sspec.source_files = "#{sspec.name}/{Public,Internal,Private}/*.{h,m,mm,swift}", "#{self.name}/Supporting Files/#{self.name}.h"
 			sspec.public_header_files = "#{sspec.name}/Public/*.h", "#{self.name}/Supporting Files/#{self.name}.h"
 			sspec.dependency "#{self.name}/#{requires}" if requires
 			yield sspec if block_given?
