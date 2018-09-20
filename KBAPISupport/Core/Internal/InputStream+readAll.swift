@@ -41,7 +41,7 @@ fileprivate extension Int {
 	fileprivate static let streamPassthroughBufferSize = Int (bitPattern: vm_page_size);
 }
 
-#if arch(i386) || arch(arm)
+#if arch (i386) || arch (arm) || arch (arm64_32)
 fileprivate extension UnsafeMutablePointer where Pointee == UInt8 {
 	fileprivate init? (bitPattern: vm_size_t) {
 		self.init (bitPattern: Int (bitPattern: bitPattern));
