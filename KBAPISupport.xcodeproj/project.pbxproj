@@ -20,6 +20,7 @@
 		432A797B212496FC00226EE0 /* KBImageLoadingImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432A797A212496FC00226EE0 /* KBImageLoadingImplementation.swift */; };
 		4332306C20FE2301001C67D0 /* KBArray.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4332306A20FE2301001C67D0 /* KBArray.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4332306D20FE2301001C67D0 /* KBArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 4332306B20FE2301001C67D0 /* KBArray.h */; };
+		4336252221535DD300ABBC68 /* InputStream+readAll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4336252121535DD300ABBC68 /* InputStream+readAll.swift */; };
 		4336C03B210A107000893B1C /* KBAPISupport+ObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = 4336C038210A0FB700893B1C /* KBAPISupport+ObjC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4336C050210A3BCE00893B1C /* KBAPISupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 4336C04F210A3BCE00893B1C /* KBAPISupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		436C8211211454750016C991 /* DebugLogDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436C8210211454750016C991 /* DebugLogDescription.swift */; };
@@ -58,6 +59,7 @@
 		432A797A212496FC00226EE0 /* KBImageLoadingImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBImageLoadingImplementation.swift; sourceTree = "<group>"; };
 		4332306A20FE2301001C67D0 /* KBArray.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = KBArray.mm; sourceTree = "<group>"; };
 		4332306B20FE2301001C67D0 /* KBArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KBArray.h; sourceTree = "<group>"; };
+		4336252121535DD300ABBC68 /* InputStream+readAll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InputStream+readAll.swift"; sourceTree = "<group>"; };
 		4336C038210A0FB700893B1C /* KBAPISupport+ObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KBAPISupport+ObjC.h"; sourceTree = "<group>"; };
 		4336C04F210A3BCE00893B1C /* KBAPISupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KBAPISupport.h; sourceTree = "<group>"; };
 		4336C05D210A636500893B1C /* KBAPISupport.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = KBAPISupport.modulemap; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				4315B9C421008DC3007B0088 /* URLEncode.swift */,
 				43B9898A2110AFD4006DFFC5 /* URLRequest+curl.swift */,
 				43A11C3F2123095A00CD5E73 /* KBLoggerWrapper.swift */,
+				4336252121535DD300ABBC68 /* InputStream+readAll.swift */,
 				4378DB7521507F6400E471CF /* KBCompoundInputStream.swift */,
 			);
 			path = Internal;
@@ -338,6 +341,7 @@
 				4391D0AD2150200A0077E129 /* KBAPIFileUpload.swift in Sources */,
 				4315B9C92100DB16007B0088 /* KBAPIResponseSerializers.swift in Sources */,
 				43A11C402123095A00CD5E73 /* KBLoggerWrapper.swift in Sources */,
+				4336252221535DD300ABBC68 /* InputStream+readAll.swift in Sources */,
 				43B98985211066DB006DFFC5 /* KBLogger.swift in Sources */,
 				43BDFDB420FFB7DB0078A7F7 /* KBAPIRequest.swift in Sources */,
 				43B9898B2110AFD4006DFFC5 /* URLRequest+curl.swift in Sources */,
