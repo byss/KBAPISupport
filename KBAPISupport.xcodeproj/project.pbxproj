@@ -94,6 +94,7 @@
 		4391D0A8214FBB3D0077E129 /* KBAPIMultipartFormDataEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAPIMultipartFormDataEncoder.swift; sourceTree = "<group>"; };
 		4391D0AA21500E9B0077E129 /* CoderUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoderUtils.swift; sourceTree = "<group>"; };
 		4391D0AC2150200A0077E129 /* KBAPIFileUpload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBAPIFileUpload.swift; sourceTree = "<group>"; };
+		439D35162174986B00F8A457 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		43A11C362122D61A00CD5E73 /* KBAPIRequestHTTPMethod.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KBAPIRequestHTTPMethod.h; sourceTree = "<group>"; };
 		43A11C372122D61A00CD5E73 /* KBAPIRequestHTTPMethod.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = KBAPIRequestHTTPMethod.mm; sourceTree = "<group>"; };
 		43A11C3A2122FB1300CD5E73 /* KBImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KBImage.swift; sourceTree = "<group>"; };
@@ -247,6 +248,7 @@
 		43D1BD761C9A115500A807F8 = {
 			isa = PBXGroup;
 			children = (
+				439D35162174986B00F8A457 /* README.md */,
 				431C82BF1E350BA000BB461F /* KBAPISupport.podspec */,
 				43D1BD821C9A115500A807F8 /* KBAPISupport */,
 				43D1BD811C9A115500A807F8 /* Products */,
