@@ -23,9 +23,16 @@
 
 import Foundation
 
+/// Type that performs serialization of arbitrary data using multipart/form-data encoding.
+/// Additionally, stream uploading is being used, which massively helps to
+/// stay responsive even when heavy amounts of traffic are being sent.
 public protocol KBAPIMultipartFormDataEncoderProtocol: KBAPIEncoder {
+	/// Boundary string used to separate message fields.
 	var boundary: String { get }
-	
+	/// Returns value represented as a compound InputStream.
+	///
+	/// - Parameter parameters: Value to encode.
+	/// - Throws: If encoded object does not conform encoding schema for given type.
 	func encode <T> (_ parameters: T) throws -> InputStream? where T: Encodable;
 }
 

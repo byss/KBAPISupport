@@ -61,14 +61,18 @@ public extension KBAPIResponseSerializerProtocol {
 }
 
 public extension CodingUserInfoKey {
+	/// Key for HTTP response stored as URLResponse. Response serializers may it e.g. to check HTTP status code.
 	public static let urlResponseKey = CodingUserInfoKey (rawValue: "urlResponse")!;
 }
 
+/// This class does not perform any deserialization. It may be used to load
+/// various non-decodable  – at least by library user – data such as images.
 open class KBAPIRawResponseSerializer: KBAPIResponseSerializerProtocol {
 	public typealias ResponseType = Data;
 	
 	open var userInfo = [CodingUserInfoKey: Any] ();
 	
+	/// Creates an instance of no-op deserializer object.
 	public init () {}
 
 	public func decode (from data: Data) throws -> Data {
@@ -80,12 +84,23 @@ open class KBAPIRawResponseSerializer: KBAPIResponseSerializerProtocol {
 	}
 }
 
+/// This serializer performs just JSON decoding and stops there. May be useful
+/// when formal values schema is too complex, does not have fixed constraints
+/// or just to implement mapping JSON to actual objects separately.
 open class KBAPIRawJSONResponseSerializer: KBAPIResponseSerializerProtocol {
 	public typealias ResponseType = Any;
 	
 	open var userInfo = [CodingUserInfoKey: Any] ();
+	/// JSON Serialization options to be used by this serializer.
+	///
+	/// - See: [JSONSerialization.ReadingOptions](https://developer.apple.com/documentation/foundation/jsonserialization/readingoptions)
 	open var options: JSONSerialization.ReadingOptions;
 	
+	/// Creates an instance of raw JSON deserializer object, optionally setting specific parser options.
+	///
+	/// - Parameter options: JSON parser options options. Default value is `JSONSerialization.ReadingOptions.allowFragments`.
+	///
+	/// - See: [JSONSerialization.ReadingOptions](https://developer.apple.com/documentation/foundation/jsonserialization/readingoptions)
 	public init (options: JSONSerialization.ReadingOptions = .allowFragments) {
 		self.options = options;
 	}
@@ -106,15 +121,20 @@ open class KBAPIRawJSONResponseSerializer: KBAPIResponseSerializerProtocol {
 	}
 }
 
+/// Convenient and easy-to-use data-to-objects transformer for `Decodable` types.
 open class KBAPIJSONResponseSerializer <Response>: KBAPIResponseSerializerProtocol where Response: Decodable {
 	public typealias ResponseType = Response;
 	
+	/// JSON decoder used to perform low-level coding opetioans.
 	open var jsonDecoder: KBAPIJSONDecoderProtocol;
 	open var userInfo: [CodingUserInfoKey: Any] {
 		get { return self.jsonDecoder.userInfo }
 		set { self.jsonDecoder.userInfo = newValue }
 	}
 	
+	/// Creates an instance of JSON to native values response serializer object.
+	///
+	/// - Parameter jsonDecoder: JSON encoder to use internally. Defaults to an `JSONDecoder.defaultForResponseSerialization`.
 	public init (jsonDecoder: KBAPIJSONDecoderProtocol = JSONDecoder.defaultForResponseSerialization) {
 		self.jsonDecoder = jsonDecoder;
 	}

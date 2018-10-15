@@ -26,15 +26,18 @@
 
 import os
 
+/// Severity level of various supplemental information significant mostly for developers.
 public enum KBLogLevel {
-	case debug;
-	case info;
-	case warning;
-	case error;
-	case fault;
+	case debug;   /// Nearly useless except rare cases of you being this framework developer
+	case info;    /// Network data interchange tracing
+	case warning; /// Perfectly manageable errors, e.g. connectivity loss.
+	case error;   /// Currently unused. ¯\_(ツ)_/¯
+	case fault;   /// The most severe errorneous states, leading to undefined behaviour and terrifying consequences.
+	              /// Mostly caused by distracted developers who forget to write single trivial line of code, nevermind.
 }
 
 public extension KBLogLevel {
+	/// Initialize `KBLogLevel` value corresponding to given `OSLogType`.
 	public init? (_ osLogType: OSLogType) {
 		switch (osLogType) {
 		case .debug:
@@ -52,6 +55,7 @@ public extension KBLogLevel {
 		}
 	}
 	
+	/// Provides equivalent `OSLogType` severity label.
 	public var osLogType: OSLogType {
 		switch (self) {
 		case .debug:
@@ -125,16 +129,25 @@ extension KBLogLevel: LosslessStringConvertible {
 }
 #endif
 
+/// A type compatible with KBAPISupport's internal logging facilities and may provide
+/// an alternate presentation or storage of the generated messages.
 public protocol KBLoggerProtocol {
 	typealias Level = KBLogLevel;
 	
+	/// OSLog-compatible subsystem identificators.
 	init (subsystem: String, category: String);
 	
+	/// Processes a message with specified severity marker.
 	func log (_ level: Level, _ message: @autoclosure () -> String);
+	/// Processes a message with `debug` level.
 	func debug (_ message: @autoclosure () -> String);
+	/// Processes a message with `info` level.
 	func info (_ message: @autoclosure () -> String);
+	/// Processes a message with `warning` level.
 	func warning (_ message: @autoclosure () -> String);
+	/// Processes a message with `error` level.
 	func error (_ message: @autoclosure () -> String);
+	/// Processes a message with `fault` level.
 	func fault (_ message: @autoclosure () -> String);
 }
 	
@@ -165,6 +178,7 @@ public extension KBLoggerProtocol {
 	}
 }
 
+/// Logging facility that is used throught all of the KBAPISupport. Modifiable, changes are reflected immediately and affect all library output.
 public var KBLoggerType: KBLoggerProtocol.Type = KBLogger.self {
 	didSet {
 		KBLoggerWrapper.loggerTypeDidUpdate ();

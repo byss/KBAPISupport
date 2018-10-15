@@ -26,31 +26,52 @@
 
 import Swift
 
+/// A type that can store either some value or the fact that is is missing and optionally provide justification for it.
 public protocol ResultProtocol {
+	/// Primary data type that is expected to be inside the container.
 	associatedtype Wrapped;
 	
+	/// Boolean flag indicating whether an actual value is being stored.
 	var isSuccess: Bool { get }
+	/// Boolean flag indicating that this storage is empty.
 	var isFailure: Bool { get }
 
+	/// Returns stored value if any, or `nil`.
 	var value: Wrapped? { get };
+	/// `Error` object containing arbitrary information about value absence.
+	///
+	/// Must always be `nil` when storage represents any "real" data, e.g. empty string for Wrapped = String,
+	/// UIColor.clear for Wrapped = UIColor and so on.
 	var error: Error? { get };
 	
+	/// Creates an instance that stores the given value.
 	init (_ value: Wrapped);
+	/// Creates an empty instance that contains `error` value relevant to the actual stored data expectations.
 	init (_ error: Error);
 }
 
+/// A type that can be initialized with or convereted to another Result-like types.
 public protocol ResultProtocolExtra: ResultProtocol {
+	/// Creates a new instance equivalent to the given value.
 	init <R> (_ other: R) where R: ResultProtocol, R.Wrapped == Wrapped;
+	/// Creates a new instance equivalent to the given value.
 	init <R> (_ other: R) where R: ResultProtocolExtra, R.Wrapped == Wrapped;
 
+	/// Convert information stored in this value into another compatible representation.
 	func converted <R> () -> R where R: ResultProtocol, R.Wrapped == Wrapped;
+	/// Convert information stored in this value into another explicitly specified representation.
 	func converted <R> (to anotherResultType: R.Type) -> R where R: ResultProtocol, R.Wrapped == Wrapped;
 
+	/// Optional-like value mapping; calculations are only performed on `Wrapped` values.
 	func map <T> (_ block: (Wrapped) throws -> Result <T>) rethrows -> Result <T>;
+	/// Optional-like value mapping; calculations are only performed on `Wrapped` values.
 	func map <T> (_ block: (Wrapped) throws -> T) rethrows -> Result <T>;
+	/// Optional-like value mapping, falling back to supplied `errorValue`.
 	func map <T> (_ block: (Wrapped) throws -> T, error errorValue: @autoclosure () -> T) rethrows -> T;
+	/// Generic state mapping; either `valueBlock` with `Wrapped` or `errorBlock` with `Error` argument is called, depending on container state.
 	func map <T> (_ valueBlock: (Wrapped) throws -> T, error errorBlock: (Error) throws -> T) rethrows -> T;
 	
+	/// Performs generic state mapping in place.
 	mutating func withMutableValue <T> (perform block: (inout Wrapped) throws -> T, error errorValue: T) rethrows -> T;
 }
 
@@ -100,8 +121,11 @@ public extension ResultProtocolExtra {
 	}
 }
 
+/// A type that represents either a wrapped value or its absence and reason for that.
 public enum Result <Wrapped> {
+	/// The presence of a value, stored as Wrapped.
 	case success (Wrapped);
+	/// The absence of a value. Error instance may contain additional details.
 	case failure (Error);
 }
 

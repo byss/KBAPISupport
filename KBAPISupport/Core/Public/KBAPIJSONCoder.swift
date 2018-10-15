@@ -26,6 +26,8 @@
 
 import Foundation
 
+/// Protocolization of Swift.JSONEncoder.
+/// - See: [Swift.JSONEncoder](https://developer.apple.com/documentation/foundation/jsonencoder) for docs.
 public protocol KBAPIJSONEncoderProtocol: KBAPIEncoder {
 	var outputFormatting: JSONEncoder.OutputFormatting { get set }
 	var keyEncodingStrategy: JSONEncoder.KeyEncodingStrategy { get set }
@@ -34,6 +36,8 @@ public protocol KBAPIJSONEncoderProtocol: KBAPIEncoder {
 	var nonConformingFloatEncodingStrategy: JSONEncoder.NonConformingFloatEncodingStrategy { get set }
 }
 
+/// Protocolization of Swift.JSONDecoder.
+/// - See: [Swift.JSONDecoder](https://developer.apple.com/documentation/foundation/jsondecoder) for docs.
 public protocol KBAPIJSONDecoderProtocol: KBAPIDecoder {
 	var keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy { get set }
 	var dateDecodingStrategy: JSONDecoder.DateDecodingStrategy { get set }
@@ -42,6 +46,12 @@ public protocol KBAPIJSONDecoderProtocol: KBAPIDecoder {
 }
 
 extension JSONEncoder: KBAPIJSONEncoderProtocol {
+	/// Default JSON options used for request serialization.
+	///  - Naming conversion: camelCase -> scake_case
+	///  - Dates format: UNIX timestamp
+	///  - Raw data encoding: Base64
+	///  - Invalid floats: custom conversion, "+/-inf" & "nan" are generated
+	///  - Debug scheme only: output is pretty-printed; object keys are sorted (iOS 11.0+ /macOS 10.13+ / tvOS 11.0+).
 	public static var defaultForRequestSerialization: JSONEncoder {
 		let result = JSONEncoder ();
 #if DEBUG
@@ -69,6 +79,11 @@ extension JSONDecoder: KBAPIJSONDecoderProtocol {
 		return try self.decode (from: data);
 	}
 	
+	/// Default JSON options used for response serialization.
+	///  - Naming conversion: scake_case -> camelCase
+	///  - Dates format: UNIX timestamp
+	///  - Raw data encoding: Base64
+	///  - Invalid floats: custom conversion, "+/-inf" & "nan" are recognized
 	public static var defaultForResponseSerialization: JSONDecoder {
 		let result = JSONDecoder ();
 		result.keyDecodingStrategy = .convertFromSnakeCase;

@@ -26,7 +26,12 @@
 
 import Foundation
 
+/// Type that performs serialization of arbitrary data into URL query string items.
 public protocol KBAPIURLEncoderProtocol: KBAPIEncoder {
+	/// Returns value represented via key-value string pairs.
+	///
+	/// - Parameter parameters: Value to encode.
+	/// - Throws: If encoded object does not conform encoding schema for given type.
 	func encode <T> (_ parameters: T) throws -> [URLQueryItem] where T: Encodable;
 }
 
@@ -82,9 +87,13 @@ extension Array: KBAPIURLEncoderResult where Element == URLQueryItem {
 	}
 }
 
+/// An object that encodes instances of a data type using either `[URLQueryItem]` representation or raw `Data`.
+/// Their textual informaition is identical, and primarily used by `KBAPIURLEncodingSerializer` to encode
+/// request parameters as URL Query or request body, respectively.
 public struct KBAPIURLEncoder: KBAPIURLEncoderProtocol {
 	public var userInfo = [CodingUserInfoKey: Any] ();
 	
+	/// Creates a new URL query encoder.
 	public init () {}
 	
 	public func encode <T> (_ parameters: T) throws -> Data where T: Encodable {
@@ -355,6 +364,7 @@ fileprivate extension KBAPIURLEncoder.Encoder {
 }
 
 public extension KBAPIURLEncodingSerializer {
+	/// Implementation details.
 	public typealias URLEncoder = KBAPIURLEncoder;
 }
 
