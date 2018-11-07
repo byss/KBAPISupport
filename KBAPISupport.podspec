@@ -17,7 +17,7 @@ end
 
 Pod::Spec.new do |spec|
 	spec.name         = 'KBAPISupport'
-	spec.version      = '3.0.0-b09'
+	spec.version      = '3.0.0'
 	spec.license      = { :type => 'MIT' }
 	spec.homepage     = "https://github.com/byss/#{spec.name}"
 	spec.authors      = { 'Kirill byss Bystrov' => 'kirrbyss@gmail.com' }
@@ -63,10 +63,6 @@ Pod::Spec.new do |spec|
 	spec.kb_subspec 'NetworkIndicator' do |sspec|
 		sspec.ios.frameworks = 'UIKit'
 		sspec.ios.deployment_target = '7.0'
-	end
-	
-	spec.subspec 'KBLogger-dependency' do |sspec|
-		sspec.dependency 'KBLogger', '~> 1.0'
 	end
 	
 	spec.default_subspecs = 'NSURLSession', 'JSON', 'ObjectMapping', 'Blocks'
