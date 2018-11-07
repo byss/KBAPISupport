@@ -44,14 +44,14 @@ public protocol KBAPIDecoder: KBAPICoder {
 	///
 	/// - Parameter data: Raw bytes of HTTP response.
 	/// - Returns: Returns a value of the type you specify, decoded from esponse data.
-	/// - Throws: If data do not conform decoding schema for given type.
+	/// - Throws: If supplied data are unable to conform decoding schema for given type.
 	func decode <T> (from data: Data) throws -> T where T: Decodable;
 	
 	/// Decodes a value of the given type.
 	///
 	/// - Parameter data: Raw bytes of HTTP response.
 	/// - Returns: Returns a value of the type you specify, decoded from esponse data.
-	/// - Throws: If data do not conform decoding schema for given type.
+	/// - Throws: If supplied data are unable to conform decoding schema for given type.
 	func decode <T> (from data: Data?) throws -> T where T: Decodable;
 	
 	/// Decodes a value of the given type.
@@ -60,7 +60,7 @@ public protocol KBAPIDecoder: KBAPICoder {
 	///   - data: Raw bytes of HTTP response.
 	///   - response: Full HTTP response, including status code and headers.
 	/// - Returns: Returns a value of the type you specify, decoded from esponse data.
-	/// - Throws: If data do not conform decoding schema for given type.
+	/// - Throws: If supplied data are unable to conform decoding schema for given type.
 	///
 	/// - Note: bundled decoders store this response info `userInfo` for key `CodingUserInfoKey.urlResponseKey`
 	///         and chain decoding to `decode(from:)`.
@@ -76,7 +76,13 @@ public protocol KBAPIDecoder: KBAPICoder {
 ///  * Creates a new URLRequest with URL address, as specified via `url` property of serialized request.
 ///    Be aware that query string is generated oinly by `KBAPIURLEncodingSerializer` and types inheriting it.
 ///  * Sets HTTP request method as specified via `httpMethod` property.
-///  * Sets common request headers, suiting for almost all use cases (currently, gzip compression only).
+///  * Sets common request headers, suiting for almost all use cases. Following request header fields are
+///    sent unconditionally at the moment of writing:
+///     - `Accept-Encoding: gzip, deflate`. Compression is always nice!
+///     - `Accept: application/json`. KBAPISupport currently does not use or provide any facilities capable
+///       of decoding data formats other than JSON (`JSONSerialization` and `JSONDecoder`).
+///     - `Accept-Language` header. Its value is derived from `Bundle.preferredLocalizations` using
+///        geometric progression `1.0, 0.5, …` for language weights.
 ///  * Appends HTTP headers specified via `httpHeaders` property of the request, owerwriting already serialized data.
 ///    Note that full set of headers is realized only when combined with URLSessionCOnfiguration's `httpAdditionalHeaders`.
 ///  * Obtains `asBodyData` from `shouldSerializeRequestParametersAsBodyData (for:)`.
@@ -123,14 +129,14 @@ public protocol KBAPIResponseSerializerProtocol: KBAPICoder {
 	///
 	/// - Parameter data: Raw bytes of HTTP response.
 	/// - Returns: Returns `ResponseType` instance represented by the given data.
-	/// - Throws: If data do not conform decoding schema for given type.
+	/// - Throws: If supplied data are unable to conform decoding schema for given type.
 	func decode (from data: Data) throws -> ResponseType;
 	
 	/// Decodes a `ResponseType` from response data.
 	///
 	/// - Parameter data: Raw bytes of HTTP response.
 	/// - Returns: Returns `ResponseType` instance represented by the given data.
-	/// - Throws: If data do not conform decoding schema for given type.
+	/// - Throws: If supplied data are unable to conform decoding schema for given type.
 	func decode (from data: Data?) throws -> ResponseType;
 	
 	/// Decodes a `ResponseType` from response data.
@@ -139,6 +145,6 @@ public protocol KBAPIResponseSerializerProtocol: KBAPICoder {
 	///   - data: Raw bytes of HTTP response.
 	///   - response: Full HTTP response, including status code and headers.
 	/// - Returns: Returns `ResponseType` instance represented by the given data.
-	/// - Throws: If data do not conform decoding schema for given type.
-func decode (from data: Data?, response: URLResponse) throws -> ResponseType;
+	/// - Throws: If supplied data are unable to conform decoding schema for given type.
+	func decode (from data: Data?, response: URLResponse) throws -> ResponseType;
 }

@@ -44,8 +44,12 @@ public extension KBAPIRequestSerializerProtocol {
 		var result = URLRequest (url: req.url);
 		result.httpMethod = req.httpMethod.rawValue;
 		log.info ("Request: \(req.httpMethod.rawValue) \(req.url.absoluteString)");
-
-		result.allHTTPHeaderFields = req.httpHeaders.merging (KBAPIRequestDefaultHeaders) { a, b in a };
+		
+		var commonRequestHeaders = KBAPIRequestDefaultHeaders;
+		if let acceptLanguageHeaderValue = Bundle.main.preferredLocalizationsHTTPHeader {
+			commonRequestHeaders ["Accept-Language"] = acceptLanguageHeaderValue;
+		}
+		result.allHTTPHeaderFields = commonRequestHeaders.merging (req.httpHeaders) { $1 };
 		result.allHTTPHeaderFields.map { headers in log.info ("Headers: [\(headers.map { "\($0.key): \($0.value)" }.joined (separator: ", "))]") };
 		
 		let parameters = req.parameters;
@@ -69,7 +73,6 @@ public extension KBAPIRequestSerializerProtocol {
 /// Got it? Got it? Huh? Shame on you. It's the least sofisticated one AND is theirs superclass at the same time!
 ///
 /// This serializer does perform the following request modifications:
-///  * Sets Accept-Language header (up to 6 preferred languages with weights of 1.0, 0.5, 0.25 etc.)
 ///  * Declares "application/x-www-form-urlencoded" Content-Type.
 ///  * Performs well-known "percent-encoded" serialization when `asBodyData` is `false`, and slightly more optimized
 ///    version of the same algorithm for `true`. Refer to the [KBAPIURLEncoder] docs/source for encoding specifics.
@@ -184,7 +187,7 @@ open class KBAPIJSONSerializer: KBAPIURLEncodingSerializer {
 ///    [RFC2388](https://tools.ietf.org/html/rfc2388) and then merge resulting pieces
 ///    into a single [InputStream].
 ///
-/// For more detais and encoding specifics pleease refer to the [KBAPIMultipartFormDataEncoder] docs/source
+/// For more detais and encoding specifics please refer to the [KBAPIMultipartFormDataEncoder] docs/source
 ///.
 /// [InputStream]: https://developer.apple.com/documentation/foundation/inputstream
 ///

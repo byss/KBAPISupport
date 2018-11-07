@@ -1,16 +1,6 @@
-## KBAPISupport
-
-Thin Swifty wrapper for NSURLSession that is strongly influenced by Moya/Alamofire.
-
-### License
-
-MIT
-
-### Quickstart
-
-````
-
+import Foundation
 import KBAPISupport
+import PlaygroundSupport
 
 /// Arbitrary Decodable type
 internal struct Client: Decodable {
@@ -23,6 +13,7 @@ internal struct Client: Decodable {
 /// Request parameters storage
 internal struct MyRequest: KBAPIRequest {
 	internal typealias ResponseType = [Client]; /// "Successful" response type
+	internal typealias ResponseSerializerType = JSONResponseSerializer <ResponseType>;
 	
 	internal let serializer: RequestSerializer = URLEncodingSerializer (); /// Serializer for reqeuest's URL, HTTP Headers and such
 	
@@ -46,26 +37,19 @@ internal struct MyRequest: KBAPIRequest {
 	*/
 }
 
+PlaygroundPage.current.needsIndefiniteExecution = true;
 
 // Class that actually performs networking
 KBAPIConnection (request: MyRequest ()).start {
 	// Response block is called asynchronously but on main thread by default
 	switch ($0) { // Response type is Optional-like enum called (surprise surpsise) Result.
-		case .success (let clients):
-			// Networking, backend and response decoding went well, `clients` array is containing `Client` struct instances  
-			print ("Let's rock!");
-			print (clients.map { $0.creditCardNumber });
+	case .success (let clients):
+		// Networking, backend and response decoding went well, `clients` array is containing `Client` struct instances
+		print ("Let's rock!");
+		print (clients.map { $0.creditCardNumber });
 		
 	case .failure (let error):
 		// Any other result is treated as error and is acccompanied by `error` value that contains more details about this incident.
 		print ("OH NOES: \(error)");
 	}
 };
-````
-
-### More docs!
-
-![KBAPISupportDemo.playground] contains the example code above, so you may tweak it and get result delivered immediately, 
-or examine other usage patterns and various tricks right in Xcode. Furthermore, `open` and `public` symbols throught the library.
-should be markup-documented quite well.
- 

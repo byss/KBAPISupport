@@ -23,6 +23,12 @@
 
 import Foundation
 
+/// Coding keys of an item that is encoded using `KBAPIMultipartFormDataEncoder`.
+///
+/// - filename: Source file name of an item.
+/// - mimeType: MIME type of the encoded data.
+/// - contentStream: `InputStream` containing item data.
+/// - data: Raw data of an item.
 public enum KBAPIFormDataCodingKeys: String, CodingKey, CaseIterable {
 	case filename;
 	case mimeType;
@@ -30,14 +36,20 @@ public enum KBAPIFormDataCodingKeys: String, CodingKey, CaseIterable {
 	case data;
 }
 
+/// A type that is serializable using `KBAPIMultipartFormDataEncoder`.
 public protocol KBAPIFileUploadProtocol: Encodable {
+	/// See `KBAPIFormDataCodingKeys`.
 	typealias FormDataCodingKeys = KBAPIFormDataCodingKeys;
 	
+	/// Source file name of an item.
 	var filename: String { get };
+	/// MIME type of the encoded data.
 	var mimeType: String { get };
+	/// `InputStream` containing item data.
 	var contentsStream: InputStream { get };
 }
 
+/// A value representing in-memory data or a file to be uploaded.
 public struct KBAPIDataUpload {
 	private typealias Metadata = KBAPIFileUploadMetadata;
 
@@ -58,6 +70,7 @@ public struct KBAPIDataUpload {
 }
 
 extension KBAPIDataUpload: Encodable {
+	/// Fallback implementation for cases when `KBAPIDataUpload` is being used with a generic `Encoder`.
 	public func encode (to encoder: Encoder) throws {
 		var metaContainer = encoder.container (keyedBy: KBAPIFormDataCodingKeys.self);
 		try metaContainer.encode (self.filename, forKey: .filename);
@@ -81,10 +94,16 @@ extension KBAPIDataUpload: KBAPIFileUploadProtocol {
 }
 
 public extension KBAPIDataUpload {
+	/// Creates an new instance containing in-memory data for upload.
+	///
+	/// - Parameter data: Raw item data to upload.
 	public init (data: Data) {
 		self.init (InputStream (data: data), metadata: Metadata ());
 	}
 	
+	/// Creates an new instance containing data at the given file URL.
+	///
+	/// - Parameter fileURL: Source of item's data.
 	public init? (fileURL: URL) {
 		guard fileURL.isFileURL else {
 			return nil;
@@ -92,10 +111,21 @@ public extension KBAPIDataUpload {
 		self.init (InputStream (url: fileURL), metadata: Metadata (fileURL: fileURL));
 	}
 	
+	/// Creates an new instance containing in-memory data for upload under the given filename.
+	///
+	/// - Parameters:
+	///   - data: Raw item data to upload.
+	///   - filename: File name associated with the item's data.
 	public init (data: Data, filename: String) {
 		self.init (InputStream (data: data), metadata: Metadata (filename: filename));
 	}
 	
+	/// Creates an new instance containing in-memory data for upload under the given filename with specified MIME type.
+	///
+	/// - Parameters:
+	///   - data: Raw item data to upload.
+	///   - filename: File name associated with the item's data.
+	///   - mimeType: MIME type of the encoded data.
 	public init (data: Data, filename: String, mimeType: String) {
 		self.init (InputStream (data: data), metadata: Metadata (filename: filename, mimeType: mimeType));
 	}

@@ -23,11 +23,26 @@
 
 import Foundation
 
+/// A type containing data of a specific request.
 public protocol KBAPIParametersProviding {
+	/// A type represeting parameters for some request.
+	///
+	/// Speaking loosely, values of this type represent requests's "identity" amnongst
+	/// other of its kind. For example, requests for user profiles are essentialy same
+	/// except the identifier of the target person, requests for blog posts in specific
+	/// dates range are idetifies by range's bounds, requests for sending a message from
+	/// one user to another usually contain different messages and so on.
+	///
+	/// Separating request parameters from immutable request part is useful, when
+	/// implementing requests as non-inheritable type (struct or enum), allowing
+	/// to implement common logic in that type and deal with request-specific
+	/// details in a request-specific type.
 	associatedtype Parameters = VoidParameters where Parameters: Encodable;
 	
+	/// See `KBAPIRequestVoidParameters`.
 	typealias VoidParameters = KBAPIRequestVoidParameters;
 	
+	/// Parameters value.
 	var parameters: Parameters { get }
 }
 
@@ -55,6 +70,7 @@ public extension KBAPIParametersProviding where Parameters: ExpressibleByDiction
 	}
 }
 
+/// A value representing absense of parameters.
 public struct KBAPIRequestVoidParameters: Encodable, CustomStringConvertible {
 	public var description: String {
 		return "none";

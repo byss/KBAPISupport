@@ -23,6 +23,7 @@
 
 import Foundation
 
+/// HTTP method of a request.
 public struct KBAPIRequestHTTPMethod {
 	public let rawValue: String;
 	
@@ -38,11 +39,17 @@ public extension KBAPIRequestHTTPMethod {
 	private typealias SelfType = KBAPIRequestHTTPMethod;
 	private typealias ObjCType = __KBAPIRequestHTTPMethod;
 	
+	/// `HEAD` method name.
 	public static let head = KBAPIRequestHTTPMethod (.HEAD);
+	/// `GET` method name.
 	public static let get = KBAPIRequestHTTPMethod (.GET);
+	/// `POST` method name.
 	public static let post = KBAPIRequestHTTPMethod (.POST);
+	/// `PUT` method name.
 	public static let put = KBAPIRequestHTTPMethod (.PUT);
+	/// `PATCH` method name.
 	public static let patch = KBAPIRequestHTTPMethod (.PATCH);
+	/// `DELETE` method name.
 	public static let delete = KBAPIRequestHTTPMethod (.DELETE);
 
 	private static let `default` = SelfType.get;
@@ -68,7 +75,7 @@ extension KBAPIRequestHTTPMethod: Equatable {
 
 extension KBAPIRequestHTTPMethod: Hashable {
 	public func hash (into hasher: inout Hasher) {
-		self.rawValue.hash (into: &hasher);
+		hasher.combine (self.rawValue);
 	}
 }
 
